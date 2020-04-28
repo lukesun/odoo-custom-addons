@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_devicegroup_list_group_user,acs.devicegroup.user,model_acs_devicegroup,base.group_user,1,1,1,1
+access_card_list_group_user,acs.card.user,model_acs_card,base.group_user,1,1,1,1
+access_device_list_group_user,acs.device.user,model_acs_device,base.group_user,1,1,1,1
+access_devicepassword_list_group_user,acs.devicepassword.user,model_acs_devicepassword,base.group_user,1,1,1,1
