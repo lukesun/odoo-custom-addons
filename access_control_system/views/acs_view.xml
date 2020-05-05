@@ -39,8 +39,8 @@
       <field name="model">acs.devicegroup</field>
       <field name="arch" type="xml">
         <tree>
-        
-          <field name="name"/>
+          <field name="devicegroup_id"/>
+          <field name="devicegroup_name"/>
         </tree>
       </field>
  </record>
@@ -51,8 +51,8 @@
         <field name="arch" type="xml">
             <form string="門禁群組設定">
                 <group>
-
-                    <field name="name"/>
+                  <field name="devicegroup_id"/>
+                  <field name="devicegroup_name"/>
                 </group>
             </form>
         </field>
@@ -63,11 +63,11 @@
       <field name="model">acs.card</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="role"/>
-          <field name="userid"/>
-          <field name="name"/>
-          <field name="phone"/>
-          <field name="cardsn"/>
+          <field name="user_role"/>
+          <field name="user_id"/>
+          <field name="user_name"/>
+          <field name="user_phone"/>
+          <field name="card_id"/>
         </tree>
       </field>
     </record>
@@ -78,22 +78,23 @@
         <field name="arch" type="xml">
             <form string="卡片設定">
                 <group>
-                    <field name="role"/>
-                    <field name="userid"/>
-                    <field name="name"/>
-                    <field name="phone"/>
+                    <field name="user_role"/>
+                    <field name="user_id"/>
+                    <field name="user_name"/>
+                    <field name="user_phone"/>
+                     <field name="card_id"/>
                 </group>
             </form>
         </field>
     </record>
 
 
-<record model="ir.ui.view" id="acs_devicepassword_list">
+<record model="ir.ui.view" id="acs_deviceaccesscode_list">
       <field name="name">通關密碼</field>
-      <field name="model">acs.devicepassword</field>
+      <field name="model">acs.deviceaccesscode</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="group"/>
+          <field name="devicegroup_name"/>
           <field name="accesscode"/>
           <field name="start_time"/>
           <field name="end_time"/>
@@ -101,13 +102,13 @@
       </field>
     </record>
 
-        <record model="ir.ui.view" id="view_form_acs_devicepassword">
+        <record model="ir.ui.view" id="view_form_acs_deviceaccesscode">
         <field name="name">每日更新通關密碼</field>
-        <field name="model">acs.devicepassword</field>
+        <field name="model">acs.deviceaccesscode</field>
         <field name="arch" type="xml">
             <form string="每日更新通關密碼">
                 <group>
-                    <field name="group"/>
+                    <field name="devicegroup_name"/>
                     <field name="accesscode"/>
                     <field name="start_time"/>
                     <field name="end_time"/>

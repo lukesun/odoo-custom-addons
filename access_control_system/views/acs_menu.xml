@@ -20,9 +20,9 @@
       <field name="view_mode">tree,form</field>
     </record>
 
-<record model="ir.actions.act_window" id="action_acs_devicepassword">
+<record model="ir.actions.act_window" id="action_acs_deviceaccesscode">
       <field name="name">每日更新通關密碼</field>
-      <field name="res_model">acs.devicepassword</field>
+      <field name="res_model">acs.deviceaccesscode</field>
       <field name="view_mode">tree,form</field>
     </record>
 
@@ -32,6 +32,6 @@
    <menuitem id="menu_acs_device"  name="卡機設定"  parent="menu_acs"  action="action_acs_device" />
    <menuitem id="menu_acs_devicegroup" name="群組設定" parent="menu_acs"  action="action_acs_devicegroup"/>
    <menuitem id="menu_acs_card" name="卡片設定" parent="menu_acs"   action="action_acs_card"/>
-   <menuitem id="menu_acs_devicepassword" name="通關密碼" parent="menu_acs"   action="action_acs_devicepassword"/>
+   <menuitem id="menu_acs_deviceaccesscode" name="通關密碼" parent="menu_acs"   action="action_acs_deviceaccesscode"/>
 
 </odoo>

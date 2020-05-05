@@ -27,11 +27,11 @@ class AcsCard(models.Model):
     _name = 'acs.card'
     _description = '卡片設定'
 
-    role = fields.Char(string="身份", required=True)
-    userid = fields.Char(string="I D", required=True)
-    name = fields.Char(string="名稱", required=True)
-    phone = fields.Char(string="電話", required=True)
-    card_id = fields.Char(string="卡片號碼", required=True)
+    user_role = fields.Char(string='身份', required=True)
+    user_id = fields.Char(string='I D', required=True)
+    user_name = fields.Char(string='名稱', required=True)
+    user_phone = fields.Char(string='電話', required=True)
+    card_id = fields.Char(string='卡片號碼', required=True)
     devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
 
 class AcsDeviceAccesscode(models.Model):
@@ -44,3 +44,4 @@ class AcsDeviceAccesscode(models.Model):
     start_time = fields.Datetime(string='有效日期', required=True)
     end_time = fields.Datetime(string='失效日期')
     devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
+
