@@ -28,7 +28,7 @@
 
 <!-- Top menu item -->
 
-   <menuitem id="menu_acs" name="門禁"/>
+   <menuitem id="menu_acs" name="門禁"/> <!--頂層選單決定模組顯示名稱-->
    <menuitem id="menu_acs_device"  name="卡機設定"  parent="menu_acs"  action="action_acs_device" />
    <menuitem id="menu_acs_devicegroup" name="群組設定" parent="menu_acs"  action="action_acs_devicegroup"/>
    <menuitem id="menu_acs_card" name="卡片設定" parent="menu_acs"   action="action_acs_card"/>
