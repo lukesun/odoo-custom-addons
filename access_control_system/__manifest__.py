@@ -14,8 +14,7 @@
     ],
 
     'demo': [
-        'demo/cards.csv',
-        'demo/devicegroup.csv',
+        'demo/demo.xml',
     ],
 }
 
