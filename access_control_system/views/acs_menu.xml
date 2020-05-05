@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<odoo>
+
+
+    <record model="ir.actions.act_window" id="action_acs_device">
+      <field name="name">門市卡機設定</field>
+      <field name="res_model">acs.device</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<record model="ir.actions.act_window" id="action_acs_devicegroup">
+      <field name="name">門禁群組列表</field>
+      <field name="res_model">acs.devicegroup</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<record model="ir.actions.act_window" id="action_acs_card">
+      <field name="name">卡片資料維護</field>
+      <field name="res_model">acs.card</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<record model="ir.actions.act_window" id="action_acs_devicepassword">
+      <field name="name">每日更新通關密碼</field>
+      <field name="res_model">acs.devicepassword</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<!-- Top menu item -->
+
+   <menuitem id="menu_acs" name="門禁"/>
+   <menuitem id="menu_acs_device"  name="卡機設定"  parent="menu_acs"  action="action_acs_device" />
+   <menuitem id="menu_acs_devicegroup" name="群組設定" parent="menu_acs"  action="action_acs_devicegroup"/>
+   <menuitem id="menu_acs_card" name="卡片設定" parent="menu_acs"   action="action_acs_card"/>
+   <menuitem id="menu_acs_devicepassword" name="通關密碼" parent="menu_acs"   action="action_acs_devicepassword"/>
+
+</odoo>
