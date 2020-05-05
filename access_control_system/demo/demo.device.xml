@@ -20,12 +20,13 @@
           </record>
 
           <record id="object2" model="acs.device">
-            <field name="name">松山一期外門</field>
-            <field name="device_id">NK02</field>
-            <field name="device_ip">192.168.0.212</field>
+            <field name="name">松山一期測試門</field>
+            <field name="device_id">NK03</field>
+            <field name="device_ip">192.168.0.213</field>
             <field name="device_type">SCR035</field>
             <field name="device_owner">NK</field>
             <field name="device_location">4F</field>
           </record>
+
     </data>
 </odoo>
