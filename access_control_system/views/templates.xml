@@ -1,5 +1,6 @@
 <odoo>
     <data>
+<!--
 
         <template id="listing">
           <ul>
@@ -10,6 +11,7 @@
             </li>
           </ul>
         </template>
+
         <template id="object">
           <h1><t t-esc="object.display_name"/></h1>
           <dl>
@@ -19,6 +21,7 @@
             </t>
           </dl>
         </template>
+-->
 
     </data>
 </odoo>
