@@ -1,6 +1,41 @@
 <?xml version="1.0"?>
 <odoo>
 
+    <record model="ir.ui.view" id="acs_locker_list">
+      <field name="name">櫃位資料列表</field>
+      <field name="model">acs.locker</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="locker_id"/>
+          <field name="locker_type"/>
+          <field name="locker_style"/>
+          <field name="locker_spec"/>
+          <field name="locker_owner"/>
+          <field name="locker_floor"/>
+          <field name="locker_vesion"/>
+          <field name="devicegroup_name"/>
+        </tree>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="acs_locker_form">
+        <field name="name">櫃位資料設定</field>
+        <field name="model">acs.locker</field>
+        <field name="arch" type="xml">
+            <form string="櫃位設定">
+                <group>
+                  <field name="locker_id"/>
+                  <field name="locker_type"/>
+                  <field name="locker_style"/>
+                  <field name="locker_spec"/>
+                  <field name="locker_owner"/>
+                  <field name="locker_floor"/>
+                  <field name="locker_vesion"/>
+                  <field name="devicegroup_name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="acs_device_list">
       <field name="name">門市卡機列表</field>
       <field name="model">acs.device</field>
@@ -115,6 +150,73 @@
                 </group>
             </form>
         </field>
+    </record>
+
+<record model="ir.ui.view" id="acs_cardlog_list">
+      <field name="name">進出紀錄</field>
+      <field name="model">acs.cardlog</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="device_owner"/>
+          <field name="device_name"/>
+          <field name="user_role"/>
+          <field name="card_id"/>
+          <field name="cardlog_type"/>
+          <field name="user_id"/>
+          <field name="user_name"/>
+          <field name="cardlog_time"/>
+          <field name="cardlog_result"/>
+        </tree>
+      </field>
+    </record>
+
+<record model="ir.ui.view" id="acs_employeecardlog_list">
+      <field name="name">打卡紀錄</field>
+      <field name="model">acs.employeecardlog</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="device_owner"/>
+          <field name="device_name"/>
+          <field name="card_id"/>
+          <field name="user_id"/>
+          <field name="user_name"/>
+          <field name="employeecardlog_type"/>
+          <field name="employeecardlog_time"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="acs_cardsettinglog_list">
+      <field name="name">卡片異動紀錄</field>
+      <field name="model">acs.cardsettinglog</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="cardsetting_type"/>
+          <field name="user_role"/>
+          <field name="user_id"/>
+          <field name="user_name"/>
+          <field name="card_id"/>
+          <field name="cardsettinglog_time"/>
+          <field name="cardsettinglog_user"/>
+        </tree>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="acs_accesscodelog_list">
+      <field name="name">個人通關密碼設定紀錄</field>
+      <field name="model">acs.accesscodelog</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="user_role"/>
+          <field name="user_id"/>
+          <field name="user_name"/>
+          <field name="devicegroup_name"/>
+          <field name="create_time"/>
+          <field name="expire_time"/>
+          <field name="accesscode"/>
+        </tree>
+      </field>
     </record>
 
 </odoo>
