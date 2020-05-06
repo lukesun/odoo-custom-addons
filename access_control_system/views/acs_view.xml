@@ -16,7 +16,7 @@
         </tree>
       </field>
     </record>
-    <record model="ir.ui.view" id="view_form_acs_device">
+    <record model="ir.ui.view" id="acs_device_form">
         <field name="name">門禁設定</field>
         <field name="model">acs.device</field>
         <field name="arch" type="xml">
@@ -45,7 +45,7 @@
       </field>
  </record>
     
- <record model="ir.ui.view" id="view_form_acs_devicegroup">
+ <record model="ir.ui.view" id="acs_devicegroup_form">
         <field name="name">門禁群組設定</field>
         <field name="model">acs.devicegroup</field>
         <field name="arch" type="xml">
@@ -72,7 +72,7 @@
       </field>
     </record>
 
-        <record model="ir.ui.view" id="view_form_acs_card">
+        <record model="ir.ui.view" id="acs_card_form">
         <field name="name">卡片設定</field>
         <field name="model">acs.card</field>
         <field name="arch" type="xml">
@@ -102,7 +102,7 @@
       </field>
     </record>
 
-        <record model="ir.ui.view" id="view_form_acs_deviceaccesscode">
+        <record model="ir.ui.view" id="acs_deviceaccesscode_form">
         <field name="name">每日更新通關密碼</field>
         <field name="model">acs.deviceaccesscode</field>
         <field name="arch" type="xml">
