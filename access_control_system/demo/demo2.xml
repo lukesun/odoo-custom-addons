@@ -1,0 +1,26 @@
+          <record id="object2" model="acs.device">
+            <field name="device_name">松山一期內門</field>
+            <field name="device_id">NK01</field>
+            <field name="device_ip">192.168.0.211</field>
+            <field name="device_type">SCR035</field>
+            <field name="device_owner">1</field>
+            <field name="device_location">4F</field>
+          </record>
+
+          <record id="object3" model="acs.device">
+            <field name="device_name">松山一期外門</field>
+            <field name="device_id">NK02</field>
+            <field name="device_ip">192.168.0.212</field>
+            <field name="device_type">SCR035</field>
+            <field name="device_owner">1</field>
+            <field name="device_location">4F</field>
+          </record>
+
+          <record id="object4" model="acs.device">
+            <field name="device_name">松山一期測試門</field>
+            <field name="device_id">NK03</field>
+            <field name="device_ip">192.168.0.213</field>
+            <field name="device_type">SCR035</field>
+            <field name="device_owner">1</field>
+            <field name="device_location">4F</field>
+          </record>

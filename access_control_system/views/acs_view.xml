@@ -70,7 +70,7 @@
                     <field name="name"/>
                     <field name="device_ip"/>
                     <field name="device_type"/>
-                    <field name="device_owner"/>
+                    <field name="device_owner" ref="hr.department"/>
                     <field name="device_location"/>
                     <field name="active" readonly="1"/>
                 </group>
@@ -102,7 +102,13 @@
                 <group>
                   <field name="devicegroup_id"/>
                   <field name="devicegroup_name"/>
+                  
                 </group>
+                             <notebook>
+                            <page string="卡機列表">
+
+                            </page>
+                        </notebook>
                 </sheet>
             </form>
         </field>
