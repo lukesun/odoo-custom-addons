@@ -106,7 +106,9 @@
                 </group>
                              <notebook>
                             <page string="卡機列表">
-
+                                <field name="device_ids"/>
+                            </page>
+                            <page string="合約列表">
                             </page>
                         </notebook>
                 </sheet>
@@ -187,7 +189,7 @@
       <field name="name">進出紀錄</field>
       <field name="model">acs.cardlog</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree create="false" edit="false" delete="false" duplicate="false">
           <field name="device_owner"/>
           <field name="device_name"/>
           <field name="user_role"/>
@@ -205,7 +207,7 @@
       <field name="name">打卡紀錄</field>
       <field name="model">acs.employeecardlog</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree create="false" edit="false" delete="false" duplicate="false">
           <field name="device_owner"/>
           <field name="device_name"/>
           <field name="card_id"/>
@@ -221,7 +223,7 @@
       <field name="name">卡片異動紀錄</field>
       <field name="model">acs.cardsettinglog</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree create="false" edit="false" delete="false" duplicate="false">
           <field name="cardsetting_type"/>
           <field name="user_role"/>
           <field name="user_id"/>
@@ -238,7 +240,7 @@
       <field name="name">個人通關密碼設定紀錄</field>
       <field name="model">acs.accesscodelog</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree create="false" edit="false" delete="false" duplicate="false">
           <field name="user_role"/>
           <field name="user_id"/>
           <field name="user_name"/>

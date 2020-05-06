@@ -14,7 +14,7 @@ class AcsLocker(models.Model):
     locker_vesion =  fields.Char(string="期數")
     devicegroup_name =  fields.Char(string="門禁群組", required=True)
  
- class AcsDevice(models.Model):
+class AcsDevice(models.Model):
     _name = 'acs.device'
     _description = '卡機設定'
 
