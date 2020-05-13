@@ -3,14 +3,14 @@
 {
     'name': 'Access Control',
     'description': 'Manage access control devices.',
-    'author': 'Anonymous',
+    'author': 'ABC',
     'depends': ['base'],
     'application': True,
     'data': [
         'security/ir.model.access.csv',
         'views/acs_menu.xml',
         'views/acs_view.xml',
-         'views/templates.xml',
+        'views/templates.xml',
     ],
 
     'demo': [
