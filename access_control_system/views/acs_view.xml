@@ -10,7 +10,7 @@
           <field name="locker_type"/>
           <field name="locker_style"/>
           <field name="locker_spec"/>
-          <field name="locker_owner"/>
+          <field name="locker_owner" />
           <field name="locker_floor"/>
           <field name="locker_vesion"/>
           <field name="devicegroup_name"/>
@@ -31,7 +31,7 @@
                   <field name="locker_type"/>
                   <field name="locker_style"/>
                   <field name="locker_spec"/>
-                  <field name="locker_owner"/>
+                  <field name="locker_owner" ref="hr.department"/>
                   <field name="locker_floor"/>
                   <field name="locker_vesion"/>
                   <field name="devicegroup_name"/>
@@ -99,18 +99,16 @@
                       <!-- Buttons go here-->
                   </header>
                 <sheet>
-                <group>
-                  <field name="devicegroup_id"/>
-                  <field name="devicegroup_name"/>
-                  
-                </group>
-                             <notebook>
-                            <page string="卡機列表">
-                                <field name="device_ids"/>
-                            </page>
-                            <page string="合約列表">
-                            </page>
-                        </notebook>
+                  <group>
+                    <field name="devicegroup_id"/>
+                    <field name="devicegroup_name"/>
+                    
+                  </group>
+                  <notebook>
+                      <page string="卡機列表">
+                          <field name="device_ids"/>
+                      </page>
+                  </notebook>
                 </sheet>
             </form>
         </field>
@@ -146,6 +144,14 @@
                     <field name="user_phone"/>
                      <field name="card_id"/>
                 </group>
+                <notebook>
+                    <page string="合約列表">
+                        <field name="contract_ids"/>
+                    </page>
+                    <page string="卡機列表">
+                        <field name="device_ids"/>
+                    </page>
+                </notebook>
                 </sheet>
             </form>
         </field>

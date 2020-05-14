@@ -12,7 +12,7 @@ def http_log_response(logid , msg):
     }
     return http.Response(json.dumps(res),status=200,mimetype='application/json')
 
-class AscAPI(http.Controller):
+class AcsAPI(http.Controller):
     @http.route('/api/devices-async-result/',  auth='public', methods=["POST"], csrf=False)
     def devices(self, **kw):
         return http_log_response('devices-async-result', 'OK')
