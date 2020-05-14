@@ -52,12 +52,13 @@ class AcsCard(models.Model):
     _name = 'acs.card'
     _description = '卡片設定'
 
-    user_role = fields.Char(string='身份', required=True)
+    user_role = fields.Many2one( 'res.partner.category' , string="身份")
     user_id = fields.Char(string='I D', required=True)
     user_name = fields.Char(string='名稱', required=True)
     user_phone = fields.Char(string='電話', required=True)
     card_id = fields.Char(string='卡片號碼', required=True)
     devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
+    
     contract_ids = fields.One2many( 'acs.contract', 'id', string="所屬合約")
     device_ids = fields.One2many( 'acs.device', 'id', string="所屬卡機")
 
