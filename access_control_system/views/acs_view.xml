@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <odoo>
-
+    <record model="ir.ui.view" id="acs_contract_list">
+      <field name="name">合約列表</field>
+      <field name="model">acs.contract</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="contract_id"/>
+          <field name="contract_status"/>
+          <field name="devicegroup_name"/>
+          <field name="accesscode"/>
+        </tree>
+      </field>
+    </record>
 
     <record model="ir.ui.view" id="acs_locker_list">
       <field name="name">櫃位資料列表</field>
@@ -142,6 +153,7 @@
                 <sheet>
                 <group>
                     <field name="user_role" widget="selection" />
+                    <field name="card_owner" widget="selection" />
                     <field name="user_id" />
                     <field name="user_name" />
                     <field name="user_phone"/>

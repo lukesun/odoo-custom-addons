@@ -53,14 +53,27 @@ class AcsCard(models.Model):
     _description = '卡片設定'
 
     user_role = fields.Many2one( 'res.partner.category' , string="身份")
-    user_id = fields.Char(string='I D', required=True)
-    user_name = fields.Char(string='名稱', required=True)
-    user_phone = fields.Char(string='電話', required=True)
+    card_owner = fields.Many2one( 'res.partner' , string="聯絡人")
+    user_id = fields.Char(string='I D',compute='_get_partner_code')
+    user_name = fields.Char(string='名稱',compute='_get_partner_name')
+    user_phone = fields.Char(string='電話',compute='_get_partner_phone')
     card_id = fields.Char(string='卡片號碼', required=True)
     devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
     
     contract_ids = fields.One2many( 'acs.contract', 'id', string="所屬合約")
     device_ids = fields.One2many( 'acs.device', 'id', string="所屬卡機")
+
+    def _get_partner_code(self):
+        for record in self:
+            record.user_id = record.card_owner.vat
+
+    def _get_partner_name(self):
+        for record in self:
+            record.user_name = record.card_owner.name
+
+    def _get_partner_phone(self):
+        for record in self:
+            record.user_phone = record.card_owner.phone
 
 class AcsDeviceAccesscode(models.Model):
     _name = 'acs.deviceaccesscode'
