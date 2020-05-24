@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
 
+
     <record model="ir.ui.view" id="acs_locker_list">
       <field name="name">櫃位資料列表</field>
       <field name="model">acs.locker</field>
@@ -31,10 +32,10 @@
                   <field name="locker_type"/>
                   <field name="locker_style"/>
                   <field name="locker_spec"/>
-                  <field name="locker_owner" widget="selection"/>
+                  <field name="locker_owner" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" />
                   <field name="locker_floor"/>
                   <field name="locker_vesion"/>
-                  <field name="devicegroup_name" widget="selection"/>
+                  <field name="devicegroup_name" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" />
                 </group>
                 </sheet>
             </form>
@@ -69,8 +70,10 @@
                     <field name="device_id"/>
                     <field name="name"/>
                     <field name="device_ip"/>
-                    <field name="device_type"/>
-                    <field name="device_owner" widget="selection" />
+                    <field name="device_type" />
+                    <field name="device_port"/>
+                    <field name="node_id"/>
+                    <field name="device_owner" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" />
                     <field name="device_location"/>
                     <field name="active" readonly="1"/>
                 </group>
@@ -105,8 +108,8 @@
                     
                   </group>
                   <notebook>
-                      <page string="卡機列表">
-                          <field name="device_ids"/>
+                      <page string="卡機列表" create="false">
+                          <field name="device_ids" />
                       </page>
                   </notebook>
                 </sheet>

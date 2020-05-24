@@ -5,6 +5,8 @@ import requests
 
 from odoo import http
 
+_logger = logging.getLogger(__name__)
+
 def http_log_response(logid , msg):
     res = {
         "logid": logid,
@@ -19,8 +21,8 @@ class AcsAPI(http.Controller):
 
     @http.route('/api/device-test-result/', auth='public', methods=["POST"], csrf=False)
     def test(self, **kw):
-        return http_log_response('devices-test-result', 'OK')
+        return http_log_response('device-test-result', 'OK')
 
     @http.route('/api/device-record/', auth='public', methods=["POST"], csrf=False)
     def object(self, **kw):
-        return http_log_response('devices-record', 'OK')
+        return http_log_response('device-record', 'OK')
