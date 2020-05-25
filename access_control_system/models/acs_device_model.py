@@ -62,24 +62,15 @@ class AcsCard(models.Model):
     
     contract_ids = fields.One2many('acs.contract', 'id', string="所屬合約")
     
-    device_ids = fields.Reference(string='所屬卡機',selection='_select_contract_device')
+    device_ids = fields.One2many('acs.device', 'id', string='所屬卡機')
     
-    def _select_contract_device(self):
-        
-        sql = "select * from acs_device order by name desc;"
-        self.env.cr.execute(sql)
-        res_all = self.env.cr.fetchall()
-        #fetchall() will return an array of dictionaries
-        return res_all
-        #return self.env['acs.device'].read()
-        #devices = []
-        #for contract in self.contract_ids:
-        #    devices.extend(
-        #        self.env['acs.device'].search([('devicegroup', '=', contract.devicegroup)])
-        #    )
-        #return devices
-        #device_ids = fields.Many2many( 'acs.device',  string="所屬卡機" ,
-        #relation='contract',column1='devicegroup',column2='devicegroup' )
+    devicegroup_ids = fields.Many2many(
+        string='門禁群組',
+        comodel_name='acs.contract',
+        relation='acs_contract_ids_card_ids_rel',
+        column1='devicegroup',
+        column2='contract_ids',
+    )
 
     def _get_partner_code(self):
         for record in self:

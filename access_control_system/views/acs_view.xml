@@ -7,7 +7,7 @@
         <tree>
           <field name="contract_id"/>
           <field name="contract_status"/>
-          <field name="devicegroup_name"/>
+          <field name="devicegroup"/>
           <field name="accesscode"/>
         </tree>
       </field>
@@ -25,7 +25,7 @@
           <field name="locker_owner" />
           <field name="locker_floor"/>
           <field name="locker_vesion"/>
-          <field name="devicegroup_name"/>
+          <field name="devicegroup"/>
         </tree>
       </field>
     </record>
@@ -46,7 +46,7 @@
                   <field name="locker_owner" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" />
                   <field name="locker_floor"/>
                   <field name="locker_vesion"/>
-                  <field name="devicegroup_name" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" />
+                  <field name="devicegroup" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" />
                 </group>
                 </sheet>
             </form>
@@ -163,8 +163,10 @@
                     <page string="合約列表">
                         <field name="contract_ids"/>
                     </page>
+                    <page string="門禁群組列表">
+                        <field name="devicegroup_ids"/>
+                    </page>
                     <page string="卡機列表">
-                        <field name="device_ids"/>
                     </page>
                 </notebook>
                 </sheet>
