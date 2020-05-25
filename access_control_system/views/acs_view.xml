@@ -141,6 +141,9 @@
                       <page string="卡機列表" create="false">
                           <field name="device_ids" />
                       </page>
+                      <page string="卡片列表" create="false">
+                          <field name="card_ids" />
+                      </page>
                   </notebook>
                 </sheet>
             </form>
@@ -183,6 +186,7 @@
                         <field name="contract_ids"/>
                     </page>
                     <page string="門禁群組列表">
+                      <field name="devicegroup_ids"/>
                     </page>
                     <page string="卡機列表">
                         <field name="device_ids"/>

@@ -48,6 +48,13 @@ class AcsDeviceGroup(models.Model):
     devicegroup_id = fields.Char(string="群組編號", required=True)
     devicegroup_name = fields.Char(string="群組名稱", required=True)
     device_ids = fields.One2many( 'acs.device','devicegroup',string="所屬卡機")
+    card_ids = fields.Many2many(
+        string='所屬卡片',
+        comodel_name='acs.card',
+        relation='acs_contract',
+        column1='devicegroup',
+        column2='card',
+    )
 
 class AcsCard(models.Model):
     _name = 'acs.card'
@@ -62,6 +69,14 @@ class AcsCard(models.Model):
     devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
     
     contract_ids = fields.One2many('acs.contract', 'card', string="所屬合約")
+    #fields.One2many('acs.contract', 'devicegroup', string='所屬門禁群組')
+    devicegroup_ids = fields.Many2many(
+        string='所屬門禁群組',
+        comodel_name='acs.devicegroup',
+        relation='acs_contract',
+        column1='card',
+        column2='devicegroup',
+    )
     
     device_ids = fields.One2many('acs.device', 'id', string='所屬卡機')
 
