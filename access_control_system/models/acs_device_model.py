@@ -6,8 +6,9 @@ class AcsContract(models.Model):
     _description = '合約設定'
 
     contract_id = fields.Char(string="合約編號", required=True)
-    contract_status = fields.Char(string='狀態') 
-    devicegroup = fields.Many2one('acs.devicegroup','門禁群組')
+    contract_status = fields.Char(string='狀態')
+    card = fields.Many2one('acs.card',string='卡片',ondelete='set null')
+    devicegroup = fields.Many2one('acs.devicegroup','門禁群組',ondelete='set null')
     accesscode =  fields.Char(string="通關密碼")
 
 class AcsLocker(models.Model):
@@ -60,17 +61,10 @@ class AcsCard(models.Model):
     card_id = fields.Char(string='卡片號碼', required=True)
     devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
     
-    contract_ids = fields.One2many('acs.contract', 'id', string="所屬合約")
+    contract_ids = fields.One2many('acs.contract', 'card', string="所屬合約")
     
     device_ids = fields.One2many('acs.device', 'id', string='所屬卡機')
-    
-    devicegroup_ids = fields.Many2many(
-        string='門禁群組',
-        comodel_name='acs.contract',
-        relation='acs_contract_ids_card_ids_rel',
-        column1='devicegroup',
-        column2='contract_ids',
-    )
+
 
     def _get_partner_code(self):
         for record in self:

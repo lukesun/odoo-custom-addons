@@ -12,6 +12,25 @@
         </tree>
       </field>
     </record>
+    <record model="ir.ui.view" id="acs_contract_form">
+        <field name="name">合約設定</field>
+        <field name="model">acs.contract</field>
+        <field name="arch" type="xml">
+            <form string="合約設定">
+            <header>
+                      <!-- Buttons go here-->
+                  </header>
+                <sheet>
+                <group>
+                  <field name="contract_id"/>
+                  <field name="contract_status"/>
+                  <field name="accesscode"/>
+                  <field name="devicegroup" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" />
+                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <record model="ir.ui.view" id="acs_locker_list">
       <field name="name">櫃位資料列表</field>
@@ -164,9 +183,9 @@
                         <field name="contract_ids"/>
                     </page>
                     <page string="門禁群組列表">
-                        <field name="devicegroup_ids"/>
                     </page>
                     <page string="卡機列表">
+                        <field name="device_ids"/>
                     </page>
                 </notebook>
                 </sheet>
