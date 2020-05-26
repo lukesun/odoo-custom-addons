@@ -59,7 +59,17 @@ class AcsDevice(models.Model):
         }
         r = requests.post('http://odooerp.morespace.com.tw:9090/api/device-test',data=json.dumps(payload))
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
-        raise Warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        
+        message = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+            'title': r.status_code,
+            'message': r._content,
+            'sticky': True,
+            }
+        }
+        return message
 
     def unlink(self):
         self.write({'devicegroup': False})
@@ -110,7 +120,17 @@ class AcsDeviceGroup(models.Model):
         r = requests.post('http://odooerp.morespace.com.tw:9090/api/devices-async',data=json.dumps(payload))
         _logger.warning('%s, %s' % (logid, json.dumps(payload) ) )
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
-        raise Warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        message = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+            'title': r.status_code,
+            'message': r._content,
+            'sticky': True,
+            }
+        }
+        return message
+
 
     def action_update(self):
         t = datetime.datetime.now()
@@ -143,7 +163,16 @@ class AcsDeviceGroup(models.Model):
         r = requests.post('http://odooerp.morespace.com.tw:9090/api/devices-async',data=json.dumps(payload))
         _logger.warning('%s, %s' % (logid, json.dumps(payload) ) )
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
-        raise Warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        message = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+            'title': r.status_code,
+            'message': r._content,
+            'sticky': True,
+            }
+        }
+        return message
 
     def action_clear(self):
         t = datetime.datetime.now()
@@ -172,7 +201,17 @@ class AcsDeviceGroup(models.Model):
         r = requests.post('http://odooerp.morespace.com.tw:9090/api/devices-async',data=json.dumps(payload))
         _logger.warning('%s, %s' % (logid, json.dumps(payload) ) )
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
-        raise Warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        message = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+            'title': r.status_code,
+            'message': r._content,
+            'sticky': True,
+            }
+        }
+        return message
+
 
 class AcsCard(models.Model):
     _name = 'acs.card'
