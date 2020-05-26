@@ -44,8 +44,6 @@ class AcsDevice(models.Model):
 
     devicegroup = fields.Many2one('acs.devicegroup',string='門禁群組',ondelete='set null')
 
-    #"20200423-2356-5503-19",
-
     def action_test(self):
         t = datetime.datetime.now()
         logid = t.strftime('%Y%m%d-%H%M-%S-%f')
@@ -80,6 +78,101 @@ class AcsDeviceGroup(models.Model):
     contract_ids = fields.One2many('acs.contract', 'devicegroup', string="合約清單")
 
     locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單")
+
+    def action_push(self):
+        t = datetime.datetime.now()
+        logid = t.strftime('%Y%m%d-%H%M-%S-%f')
+
+        payload={ "logid": logid, "device": [] }
+
+        for d in self.device_ids: 
+            device={
+                "device_id": d.device_id,
+                "ip": d.device_ip,
+                "port": d.device_port,
+                "node": d.node_id,
+                "card": []
+            }
+
+            for c in self.contract_ids:
+                card= {
+                    "event": "add",
+                    "uid": c.card.card_id,
+                    "display": c.card.card_owner.name,
+                    "pin": c.accesscode,
+                    "expire_start": "2020-05-01",
+                    "expire_end": "2020-05-31"
+                }
+                device["card"].append(card)
+
+            payload["device"].append(device)
+
+        r = requests.post('http://odooerp.morespace.com.tw:9090/api/devices-async',data=json.dumps(payload))
+        _logger.warning('%s, %s' % (logid, json.dumps(payload) ) )
+        _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        raise Warning('%s, %s, %s' % (logid,r.status_code, r._content))
+
+    def action_update(self):
+        t = datetime.datetime.now()
+        logid = t.strftime('%Y%m%d-%H%M-%S-%f')
+
+        payload={ "logid": logid, "device": [] }
+
+        for d in self.device_ids: 
+            device={
+                "device_id": d.device_id,
+                "ip": d.device_ip,
+                "port": d.device_port,
+                "node": d.node_id,
+                "card": []
+            }
+
+            for c in self.contract_ids:
+                card= {
+                    "event": "update",
+                    "uid": c.card.card_id,
+                    "display": c.card.card_owner.name,
+                    "pin": c.accesscode,
+                    "expire_start": "2020-05-01",
+                    "expire_end": "2020-05-31"
+                }
+                device["card"].append(card)
+
+            payload["device"].append(device)
+
+        r = requests.post('http://odooerp.morespace.com.tw:9090/api/devices-async',data=json.dumps(payload))
+        _logger.warning('%s, %s' % (logid, json.dumps(payload) ) )
+        _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        raise Warning('%s, %s, %s' % (logid,r.status_code, r._content))
+
+    def action_clear(self):
+        t = datetime.datetime.now()
+        logid = t.strftime('%Y%m%d-%H%M-%S-%f')
+
+        payload={ "logid": logid, "device": []}
+
+        for d in self.device_ids: 
+            device={
+                "device_id": d.device_id,
+                "ip": d.device_ip,
+                "port": d.device_port,
+                "node": d.node_id,
+                "card": []
+            }
+
+            for c in self.contract_ids:
+                card= {
+                    "event": "delete",
+                    "uid": c.card.card_id,
+                }
+                device["card"].append(card)
+
+            payload["device"].append(device)
+
+        r = requests.post('http://odooerp.morespace.com.tw:9090/api/devices-async',data=json.dumps(payload))
+        _logger.warning('%s, %s' % (logid, json.dumps(payload) ) )
+        _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        raise Warning('%s, %s, %s' % (logid,r.status_code, r._content))
 
 class AcsCard(models.Model):
     _name = 'acs.card'

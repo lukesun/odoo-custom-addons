@@ -17,12 +17,18 @@ def http_log_response(logid , msg):
 class AcsAPI(http.Controller):
     @http.route('/api/devices-async-result/',  auth='public', methods=["POST"], csrf=False)
     def devices(self, **kw):
-        return http_log_response('devices-async-result', 'OK')
+        _logger.warning( kw )
+        logid= kw.get('logid', False)
+        return http_log_response(logid, 'OK')
 
     @http.route('/api/device-test-result/', auth='public', methods=["POST"], csrf=False)
     def test(self, **kw):
-        return http_log_response('device-test-result', 'OK')
+        _logger.warning( kw )
+        logid= kw.get('logid', False)
+        return http_log_response(logid, 'OK')
 
     @http.route('/api/device-record/', auth='public', methods=["POST"], csrf=False)
     def object(self, **kw):
-        return http_log_response('device-record', 'OK')
+        _logger.warning( kw )
+        logid= kw.get('logid', False)
+        return http_log_response(logid, 'OK')
