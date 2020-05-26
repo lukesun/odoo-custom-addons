@@ -78,10 +78,13 @@
       <field name="arch" type="xml">
         <tree>
           <field name="device_owner"/>
+          <field name="devicegroup"/>
           <field name="device_id"/>
           <field name="name"/>
           <field name="device_ip"/>
           <field name="device_type"/>
+          <field name="device_port"/>
+          <field name="node_id"/>
           <field name="device_location"/>
           <field name="active"/>
         </tree>
@@ -94,6 +97,7 @@
             <form string="卡機設定">
             <header>
                       <!-- Buttons go here-->
+                      <button name="action_test" string="測試連線" type="object" default_focus="1" class="oe_highlight"/> 
                   </header>
                 <sheet>
                 <group>
@@ -105,6 +109,7 @@
                     <field name="node_id"/>
                     <field name="device_owner" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" />
                     <field name="device_location"/>
+                    <field name="devicegroup" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" />
                     <field name="active" readonly="1"/>
                 </group>
                 </sheet>
@@ -130,12 +135,13 @@
             <form string="門禁群組設定">
                   <header>
                       <!-- Buttons go here-->
+                      <button name="action_add" string="傳送設定" type="object" default_focus="1" class="oe_highlight"/> 
+                      <button name="action_update" string="更新設定" type="object" default_focus="1" class="oe_highlight"/> 
                   </header>
                 <sheet>
                   <group>
                     <field name="devicegroup_id"/>
                     <field name="devicegroup_name"/>
-                    
                   </group>
                   <notebook>
                       <page string="卡機列表">

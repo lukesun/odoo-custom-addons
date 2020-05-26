@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
+import datetime
+import requests
+import json
 from odoo import fields, models,api
+from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationError, Warning
 
+import logging
+_logger = logging.getLogger(__name__)
 class AcsLocker(models.Model):
     _name = 'acs.locker'
     _description = '櫃位設定'
@@ -12,9 +18,13 @@ class AcsLocker(models.Model):
     locker_floor = fields.Char(string="樓層")
     locker_vesion = fields.Char(string="期數")
 
-    locker_owner = fields.Many2one('hr.department','所屬部門')
+    locker_owner = fields.Many2one('hr.department','所屬部門',ondelete='set null')
 
     devicegroup = fields.Many2one('acs.devicegroup','門禁群組',ondelete='set null')
+
+    def unlink(self):
+        self.write({'devicegroup': False})
+        return True
  
 class AcsDevice(models.Model):
     _name = 'acs.device'
@@ -24,8 +34,8 @@ class AcsDevice(models.Model):
     name = fields.Char(string="卡機名稱", required=True)
     device_ip =  fields.Char(string='IP 位址', size=15)
     device_type = fields.Char(string='型號', size=15)
-    device_port = fields.Integer( string='卡機Port' )
-    node_id = fields.Integer( string='卡機站號' )
+    device_port = fields.Char( string='卡機Port',size=4)
+    node_id = fields.Char( string='卡機站號',size=3)
     device_location = fields.Char(string='樓層', size=8)
     active = fields.Boolean('連線否', default=True)
     devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
@@ -33,6 +43,29 @@ class AcsDevice(models.Model):
     device_owner = fields.Many2one('hr.department',string='所屬門市(部門)',ondelete='set null')
 
     devicegroup = fields.Many2one('acs.devicegroup',string='門禁群組',ondelete='set null')
+
+    #"20200423-2356-5503-19",
+
+    def action_test(self):
+        t = datetime.datetime.now()
+        logid = t.strftime('%Y%m%d-%H%M-%S-%f')
+        payload={
+            "logid": logid, 
+            "device": [
+                {
+                "ip": self.device_ip,
+                "port": self.device_port,
+                "node": self.node_id
+                }
+            ]
+        }
+        r = requests.post('http://odooerp.morespace.com.tw:9090/api/device-test',data=json.dumps(payload))
+        _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        raise Warning('%s, %s, %s' % (logid,r.status_code, r._content))
+
+    def unlink(self):
+        self.write({'devicegroup': False})
+        return True
 
 class AcsDeviceGroup(models.Model):
     _name = 'acs.devicegroup'
@@ -85,6 +118,25 @@ class AcsContract(models.Model):
     card = fields.Many2one('acs.card',string='所屬卡片',ondelete='set null')
 
     devicegroup = fields.Many2one('acs.devicegroup','所屬門禁群組',ondelete='set null')
+
+    #def create(self, vals):
+        #stage_obj = self.env['project.task.type']
+        #result = super(Project, self).create(vals)
+        #for resource in result.stage_ids:
+        #    stage_id = stage_obj.search([('id', '=',resource.name.id)])
+        #    if stage_id:
+        #        stage_id.write({'project_ids': [( 4, result.id)]})
+        #return result
+    #def write(self,values):
+        #campus_write = super(Campus,self).write(values)
+        #return campus_write
+    #def unlink(self,values):
+    #    campus_unlink = super(Campus,self).unlink()
+    #    return campus_unlink
+    
+    def unlink(self):
+        self.write({'devicegroup': False})
+        return True
     
 
 class AcsDeviceAccesscode(models.Model):
