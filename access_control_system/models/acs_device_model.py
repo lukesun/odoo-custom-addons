@@ -1,16 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models,api
 
-class AcsContract(models.Model):
-    _name = 'acs.contract'
-    _description = '合約設定'
-
-    contract_id = fields.Char(string="合約編號", required=True)
-    contract_status = fields.Char(string='狀態')
-    card = fields.Many2one('acs.card',string='卡片',ondelete='set null')
-    devicegroup = fields.Many2one('acs.devicegroup','門禁群組',ondelete='set null')
-    accesscode =  fields.Char(string="通關密碼")
-
 class AcsLocker(models.Model):
     _name = 'acs.locker'
     _description = '櫃位設定'
@@ -19,10 +9,12 @@ class AcsLocker(models.Model):
     locker_type = fields.Char(string="產品種類")
     locker_style = fields.Char(string="類型")
     locker_spec =  fields.Char(string="規格")
-    locker_owner = fields.Many2one('hr.department','部門')
     locker_floor = fields.Char(string="樓層")
     locker_vesion = fields.Char(string="期數")
-    devicegroup = fields.Many2one('acs.devicegroup','門禁群組')
+
+    locker_owner = fields.Many2one('hr.department','所屬部門')
+
+    devicegroup = fields.Many2one('acs.devicegroup','門禁群組',ondelete='set null')
  
 class AcsDevice(models.Model):
     _name = 'acs.device'
@@ -37,7 +29,9 @@ class AcsDevice(models.Model):
     device_location = fields.Char(string='樓層', size=8)
     active = fields.Boolean('連線否', default=True)
     devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
-    device_owner = fields.Many2one('hr.department',string='門市',ondelete='set null')
+
+    device_owner = fields.Many2one('hr.department',string='所屬門市(部門)',ondelete='set null')
+
     devicegroup = fields.Many2one('acs.devicegroup',string='門禁群組',ondelete='set null')
 
 class AcsDeviceGroup(models.Model):
@@ -47,14 +41,12 @@ class AcsDeviceGroup(models.Model):
 
     devicegroup_id = fields.Char(string="群組編號", required=True)
     devicegroup_name = fields.Char(string="群組名稱", required=True)
-    device_ids = fields.One2many( 'acs.device','devicegroup',string="所屬卡機")
-    card_ids = fields.Many2many(
-        string='所屬卡片',
-        comodel_name='acs.card',
-        relation='acs_contract',
-        column1='devicegroup',
-        column2='card',
-    )
+
+    device_ids = fields.One2many( 'acs.device','devicegroup',string="卡機清單")
+
+    contract_ids = fields.One2many('acs.contract', 'devicegroup', string="合約清單")
+
+    locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單")
 
 class AcsCard(models.Model):
     _name = 'acs.card'
@@ -67,19 +59,8 @@ class AcsCard(models.Model):
     user_phone = fields.Char(string='電話',compute='_get_partner_phone')
     card_id = fields.Char(string='卡片號碼', required=True)
     devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
-    
-    contract_ids = fields.One2many('acs.contract', 'card', string="所屬合約")
-    #fields.One2many('acs.contract', 'devicegroup', string='所屬門禁群組')
-    devicegroup_ids = fields.Many2many(
-        string='所屬門禁群組',
-        comodel_name='acs.devicegroup',
-        relation='acs_contract',
-        column1='card',
-        column2='devicegroup',
-    )
-    
-    device_ids = fields.One2many('acs.device', 'id', string='所屬卡機')
 
+    contract_ids = fields.One2many('acs.contract', 'card', string="合約清單")
 
     def _get_partner_code(self):
         for record in self:
@@ -92,6 +73,19 @@ class AcsCard(models.Model):
     def _get_partner_phone(self):
         for record in self:
             record.user_phone = record.card_owner.phone
+
+class AcsContract(models.Model):
+    _name = 'acs.contract'
+    _description = '合約設定'
+
+    contract_id = fields.Char(string="合約編號", required=True)
+    contract_status = fields.Char(string='狀態')
+    accesscode =  fields.Char(string="通關密碼")
+
+    card = fields.Many2one('acs.card',string='所屬卡片',ondelete='set null')
+
+    devicegroup = fields.Many2one('acs.devicegroup','所屬門禁群組',ondelete='set null')
+    
 
 class AcsDeviceAccesscode(models.Model):
     _name = 'acs.deviceaccesscode'

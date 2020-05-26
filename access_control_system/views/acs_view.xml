@@ -88,7 +88,7 @@
       </field>
     </record>
     <record model="ir.ui.view" id="acs_device_form">
-        <field name="name">門禁設定</field>
+        <field name="name">門市卡機設定</field>
         <field name="model">acs.device</field>
         <field name="arch" type="xml">
             <form string="卡機設定">
@@ -138,11 +138,14 @@
                     
                   </group>
                   <notebook>
-                      <page string="卡機列表" create="false">
+                      <page string="卡機列表">
                           <field name="device_ids" />
                       </page>
-                      <page string="卡片列表" create="false">
-                          <field name="card_ids" />
+                      <page string="合約列表">
+                          <field name="contract_ids" />
+                      </page>
+                      <page string="櫃位列表">
+                          <field name="locker_ids" />
                       </page>
                   </notebook>
                 </sheet>
@@ -185,11 +188,8 @@
                     <page string="合約列表">
                         <field name="contract_ids"/>
                     </page>
-                    <page string="門禁群組列表">
-                      <field name="devicegroup_ids"/>
-                    </page>
                     <page string="卡機列表">
-                        <field name="device_ids"/>
+                        
                     </page>
                 </notebook>
                 </sheet>
