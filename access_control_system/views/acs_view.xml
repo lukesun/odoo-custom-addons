@@ -2,7 +2,7 @@
 <odoo>
     <record model="ir.ui.view" id="acs_contract_list">
       <field name="name">合約列表</field>
-      <field name="model">acs.contract</field>
+      <field name="model">acs.contract</field>ßßß
       <field name="arch" type="xml">
         <tree>
           <field name="contract_id"/>
@@ -199,40 +199,6 @@
                         
                     </page>
                 </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-
-<record model="ir.ui.view" id="acs_deviceaccesscode_list">
-      <field name="name">通關密碼</field>
-      <field name="model">acs.deviceaccesscode</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="devicegroup_name"/>
-          <field name="accesscode"/>
-          <field name="start_time"/>
-          <field name="end_time"/>
-        </tree>
-      </field>
-    </record>
-
-        <record model="ir.ui.view" id="acs_deviceaccesscode_form">
-        <field name="name">每日更新通關密碼</field>
-        <field name="model">acs.deviceaccesscode</field>
-        <field name="arch" type="xml">
-            <form string="每日更新通關密碼">
-            <header>
-                      <!-- Buttons go here-->
-                  </header>
-                <sheet>
-                <group>
-                    <field name="devicegroup_name"/>
-                    <field name="accesscode"/>
-                    <field name="start_time"/>
-                    <field name="end_time"/>
-                </group>
                 </sheet>
             </form>
         </field>

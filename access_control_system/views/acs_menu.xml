@@ -25,12 +25,6 @@
       <field name="view_mode">tree,form</field>
     </record>
 
-<record model="ir.actions.act_window" id="action_acs_deviceaccesscode">
-      <field name="name">每日更新通關密碼</field>
-      <field name="res_model">acs.deviceaccesscode</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-
 <record model="ir.actions.act_window" id="action_acs_cardlog">
       <field name="name">進出紀錄</field>
       <field name="res_model">acs.cardlog</field>
@@ -56,13 +50,11 @@
     </record>
 
 <!-- Top menu item -->
-
    <menuitem id="menu_acs" name="門禁"/> <!--頂層選單決定模組顯示名稱-->
    <menuitem id="menu_acs_locker"  name="櫃位資料設定"  parent="menu_acs"  action="action_acs_locker" />
    <menuitem id="menu_acs_device"  name="卡機資料設定"  parent="menu_acs"  action="action_acs_device" />
    <menuitem id="menu_acs_devicegroup" name="門禁群組設定" parent="menu_acs"  action="action_acs_devicegroup"/>
    <menuitem id="menu_acs_card" name="卡片資料維護" parent="menu_acs"   action="action_acs_card"/>
-   <menuitem id="menu_acs_deviceaccesscode" name="群組通關密碼" parent="menu_acs"   action="action_acs_deviceaccesscode"/>
    <menuitem id="menu_acs_devicelog" name="刷卡紀錄查詢" parent="menu_acs"   /> <!--空的子選單-->
    <menuitem id="menu_acs_cardlog" name="進出紀錄" parent="menu_acs_devicelog"   action="action_acs_cardlog"/>
    <menuitem id="menu_acs_employeecardlog" name="打卡紀錄" parent="menu_acs_devicelog"   action="action_acs_employeecardlog"/>
