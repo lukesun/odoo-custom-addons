@@ -8,7 +8,6 @@
           <field name="contract_id"/>
           <field name="contract_status"/>
           <field name="devicegroup"/>
-          <field name="accesscode"/>
         </tree>
       </field>
     </record>
@@ -22,10 +21,9 @@
                   </header>
                 <sheet>
                 <group>
-                  <field name="contract_id"/>
-                  <field name="contract_status"/>
-                  <field name="accesscode"/>
                   <field name="devicegroup" options="{'no_create_edit': True, 'no_create': True}" />
+                  <field name="contract_id" options="{'no_edit': True}"/>
+                  <field name="contract_status"/>
                 </group>
                 </sheet>
             </form>
@@ -86,7 +84,6 @@
           <field name="device_port"/>
           <field name="node_id"/>
           <field name="device_location"/>
-          <field name="active"/>
         </tree>
       </field>
     </record>
@@ -110,7 +107,6 @@
                     <field name="device_owner" options="{'no_create_edit': True, 'no_create': True}" />
                     <field name="device_location"/>
                     <field name="devicegroup" options="{'no_create_edit': True, 'no_create': True}" />
-                    <field name="active" readonly="1"/>
                 </group>
                 </sheet>
             </form>
@@ -184,12 +180,12 @@
                   </header>
                 <sheet>
                 <group>
-                  <field name="user_role" widget="selection" />
-                  <field name="card_owner" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_vat': True}" options="{'no_create': True, 'no_create_edit': True}"/>
+                  <field name="card_owner" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_vat': True , 'search_by_vat': True}" options="{'no_create': True, 'no_create_edit': True}"/>
                   <field name="user_id" />
                   <field name="user_name" />
                   <field name="user_phone"/>
                   <field name="card_id"/>
+                  <field name="card_pin"/>
                 </group>
                 <notebook>
                     <page string="合約列表">

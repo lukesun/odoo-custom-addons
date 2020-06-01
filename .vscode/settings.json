@@ -1,3 +1,16 @@
 {
-    "python.pythonPath": "/usr/bin/python3"
+    "python.pythonPath": "/usr/bin/python3",
+    "editor.fontFamily": "'Fira Code', 'Source Code Pro', Consolas, 'Microsoft JhengHei', 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "editor.formatOnSave": false,
+    "editor.renderWhitespace": "boundary" ,
+    "editor.renderIndentGuides": true,
+    "editor.wordWrap": "on",
+    "files.autoGuessEncoding": true,
+    "files.autoSave": "onWindowChange",
+    "files.insertFinalNewline": true,
+    "git.autofetch": true,
+    "typescript.referencesCodeLens.enabled": true,
+    "prettier.singleQuote": true,
+    "files.exclude": { "**/*.spec.*": true },
 }
