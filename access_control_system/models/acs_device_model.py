@@ -14,11 +14,13 @@ class AcsDevice(models.Model):
 
     device_id = fields.Char(string="卡機編號", required=True)
     name = fields.Char(string="卡機名稱", required=True)
-    device_ip =  fields.Char(string='IP 位址', size=15)
-    device_type = fields.Char(string='型號', size=15)
-    device_port = fields.Char( string='卡機Port',size=4)
-    node_id = fields.Char( string='卡機站號',size=3)
+    device_ip =  fields.Char(string='IP 位址', size=15, required=True)
+    device_type = fields.Char(string='型號', size=15, required=True)
+    device_port = fields.Char( string='卡機Port',size=4, required=True)
+    node_id = fields.Char( string='卡機站號',size=3, required=True)
     device_location = fields.Char(string='樓層', size=8)
+    device_pin = fields.Char(string='通關密碼', size=4)
+    device_pin_update = fields.Char(string='密碼更新時間')
 
     device_owner = fields.Many2one('hr.department',string='所屬門市(部門)',ondelete='set null')
 
@@ -217,15 +219,7 @@ class AcsCard(models.Model):
 
     def _get_owner_role(self):
         for record in self:
-            record_role = ''
-            
-            if (not record.card_owner.customer_rank and not record.card_owner.supplier_rank):
-                record_role = '未定'
-            elif (not record.card_owner.customer_rank):
-                record_role = '廠商'
-            elif (not record.card_owner.supplier_rank):
-                record_role = '客戶'
-
+            record_role = '未定'
             record.user_role = record_role
 
     def _get_owner_id(self):
@@ -243,10 +237,11 @@ class AcsCard(models.Model):
 class AcsContract(models.Model):
     _name = 'acs.contract'
     _description = '合約設定'
-    #_sql_constraints = [
-    #    ('unique_contract_id', 'unique(contract_id)', '合約編號不能重複！')
-    #    ]
-    contract_id = fields.Char(string="合約編號", required=True) 
+    _sql_constraints = [
+        ('unique_contract_id', 'unique(contract_id)', '合約編號不能重複！')
+        ]
+
+    contract_id = fields.Char(string="合約編號", required=True, readonly=True ) 
     
     contract_status = fields.Char(string='狀態')
 
@@ -254,7 +249,17 @@ class AcsContract(models.Model):
 
     devicegroup = fields.Many2one('acs.devicegroup','所屬門禁群組',ondelete='set null')
 
-    #def create(self, vals):
+    @api.onchange('devicegroup')
+    def _onchange_devicegroup(self):
+        t = datetime.datetime.now()
+        c_id = self.devicegroup.devicegroup_id + t.strftime('%Y%m%d')
+        _logger.warning('contract_id:%s' % (c_id ) )
+        self.contract_id=c_id
+
+    def create(self, vals):
+        t = datetime.datetime.now()
+        c_id = self.devicegroup.devicegroup_id + t.strftime('%Y%m%d')
+        _logger.warning('contract_id:%s' % (c_id ) )
         #stage_obj = self.env['project.task.type']
         #result = super(Project, self).create(vals)
         #for resource in result.stage_ids:

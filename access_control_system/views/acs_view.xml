@@ -5,7 +5,7 @@
       <field name="model">acs.contract</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="contract_id"/>
+          <field name="contract_id" />
           <field name="contract_status"/>
           <field name="devicegroup"/>
         </tree>
@@ -22,7 +22,7 @@
                 <sheet>
                 <group>
                   <field name="devicegroup" options="{'no_create_edit': True, 'no_create': True}" />
-                  <field name="contract_id" options="{'no_edit': True}"/>
+                  <field name="contract_id" readonly="1"/>
                   <field name="contract_status"/>
                 </group>
                 </sheet>
@@ -84,6 +84,8 @@
           <field name="device_port"/>
           <field name="node_id"/>
           <field name="device_location"/>
+          <field name="device_pin"/>
+          <field name="device_pin_update"/>
         </tree>
       </field>
     </record>

@@ -48,11 +48,7 @@
       <field name="res_model">acs.accesscodelog</field>
       <field name="view_mode">tree</field>
     </record>
-<record model="ir.actions.act_window" id="action_acs_settings">
-      <field name="name">設定</field>
-      <field name="res_model">acs.config.settings</field>
-      <field name="view_mode">form</field>
-    </record>
+
 <!-- Top menu item -->
    <menuitem id="menu_acs" name="門禁"/> <!--頂層選單決定模組顯示名稱-->
    <menuitem id="menu_acs_locker"  name="櫃位資料設定"  parent="menu_acs"  action="action_acs_locker" />
