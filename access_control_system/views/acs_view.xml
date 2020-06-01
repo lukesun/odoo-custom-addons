@@ -1,5 +1,23 @@
 <?xml version="1.0"?>
 <odoo>
+    <record model="ir.ui.view" id="acs_settings">
+      <field name="name">門禁設定</field>
+      <field name="model">acs.config.settings</field>
+      <field name="arch" type="xml">
+          <form string="設定">
+                <header>
+                      <!-- Buttons go here-->
+                  </header>
+                <sheet>
+                <group>
+                  <field name="deviceserver"/>
+                </group>
+                </sheet>
+            
+          </form>
+      </field>
+    </record>
+
     <record model="ir.ui.view" id="acs_contract_list">
       <field name="name">合約列表</field>
       <field name="model">acs.contract</field>

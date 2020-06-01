@@ -3,7 +3,6 @@ access_devicegroup_list_group_user,acs.devicegroup.user,model_acs_devicegroup,ba
 access_contract_list_group_user,acs.contract.user,model_acs_contract,base.group_user,1,1,1,1
 access_card_list_group_user,acs.card.user,model_acs_card,base.group_user,1,1,1,1
 access_device_list_group_user,acs.device.user,model_acs_device,base.group_user,1,1,1,1
-access_deviceaccesscode_list_group_user,acs.deviceaccesscode.user,model_acs_deviceaccesscode,base.group_user,1,1,1,1
 access_locker_list_group_user,acs.locker.user,model_acs_locker,base.group_user,1,1,1,1
 access_cardlog_list_group_user,acs.cardlog.user,model_acs_cardlog,base.group_user,1,1,1,1
 access_employeecardlog_list_group_user,acs.employeecardlog.user,model_acs_employeecardlog,base.group_user,1,1,1,1
