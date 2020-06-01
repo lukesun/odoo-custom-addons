@@ -38,6 +38,8 @@ class AcsDevice(models.Model):
             ]
         }
         deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
+        _logger.warning('deviceserver: %s' % (deviceserver) )
+
         r = requests.post(deviceserver+'/api/device-test',data=json.dumps(payload))
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
         
@@ -98,6 +100,8 @@ class AcsDeviceGroup(models.Model):
 
             payload["device"].append(device)
         deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
+        _logger.warning('deviceserver: %s' % (deviceserver) )
+
         r = requests.post(deviceserver+'/api/devices-async',data=json.dumps(payload))
         _logger.warning('%s, %s' % (logid, json.dumps(payload) ) )
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
@@ -141,6 +145,8 @@ class AcsDeviceGroup(models.Model):
 
             payload["device"].append(device)
         deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
+        _logger.warning('deviceserver: %s' % (deviceserver) )
+
         r = requests.post(deviceserver+'/api/devices-async',data=json.dumps(payload))
         _logger.warning('%s, %s' % (logid, json.dumps(payload) ) )
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
@@ -179,6 +185,8 @@ class AcsDeviceGroup(models.Model):
 
             payload["device"].append(device)
         deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
+        _logger.warning('deviceserver: %s' % (deviceserver) )
+
         r = requests.post( deviceserver + '/api/devices-async' ,data=json.dumps(payload))
         _logger.warning('%s, %s' % (logid, json.dumps(payload) ) )
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))

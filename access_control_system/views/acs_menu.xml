@@ -64,6 +64,5 @@
    <menuitem id="menu_acs_employeecardlog" name="打卡紀錄" parent="menu_acs_devicelog"   action="action_acs_employeecardlog"/>
     <menuitem id="menu_acs_cardsettinglog" name="卡片異動紀錄查詢" parent="menu_acs"  action="action_acs_cardsettinglog" />
     <menuitem id="menu_acs_accesscodelog" name="個人通關密碼設定紀錄" parent="menu_acs"  action="action_acs_accesscodelog" />
-    <menuitem id="menu_acs_settings" name="系統設定" parent="menu_acs"  action="action_acs_settings" />
 
 </odoo>

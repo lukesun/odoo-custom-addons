@@ -1,0 +1,19 @@
+   <menuitem id="menu_acs_settings" name="系統設定" parent="menu_acs"  action="action_acs_settings" />
+    
+    <record model="ir.ui.view" id="acs_settings">
+      <field name="name">系統設定</field>
+      <field name="model">acs.config.settings</field>
+      <field name="arch" type="xml">
+          <form string="設定">
+                <header>
+                      <!-- Buttons go here-->
+                  </header>
+                <sheet>
+                <group>
+                  <field name="deviceserver"/>
+                </group>
+                </sheet>
+            
+          </form>
+      </field>
+    </record>
