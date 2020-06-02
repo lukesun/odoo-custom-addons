@@ -69,7 +69,9 @@ class AcsDeviceGroup(models.Model):
     devicegroup_name = fields.Char(string="群組名稱", required=True)
 
     device_ids = fields.One2many( 'acs.device','devicegroup',string="卡機清單")
-
+    
+    #card_ids = fields.One2many('acs.card', 'devicegroup', string="卡片清單")
+    #TODO change to self.card_ids
     contract_ids = fields.One2many('acs.contract', 'devicegroup', string="合約清單")
 
     locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單")
@@ -88,6 +90,7 @@ class AcsDeviceGroup(models.Model):
                 "node": d.node_id,
                 "card": []
             }
+            #TODO change to self.card_ids
 
             for c in self.contract_ids:
                 card= {
@@ -133,7 +136,7 @@ class AcsDeviceGroup(models.Model):
                 "node": d.node_id,
                 "card": []
             }
-
+            #TODO change to self.card_ids
             for c in self.contract_ids:
                 card= {
                     "event": "update",
@@ -177,7 +180,7 @@ class AcsDeviceGroup(models.Model):
                 "node": d.node_id,
                 "card": []
             }
-
+            #TODO change to self.card_ids
             for c in self.contract_ids:
                 card= {
                     "event": "delete",
@@ -216,7 +219,27 @@ class AcsCard(models.Model):
     card_id = fields.Char(string='卡片號碼', required=True)
     card_pin = fields.Char(string='卡片密碼')
     contract_ids = fields.One2many('acs.contract', 'card', string="合約清單")
+    #預備新增
+    #devicegroup_ids = fields.One2many('acs.devicegroup', 'card', string="所屬群組")
 
+    def create(self, vals):
+        _logger.warning('acs.card create:%s' % ( vals ) )
+        #TODO: call api to add card setting
+        result = self.create(vals)
+        return result
+
+    def write(self,vals):
+        _logger.warning('acs.card write:%s' % ( vals ) )
+        #TODO: call api to update card setting
+        result = self.write(vals)
+        return result
+        
+    def unlink(self):
+        _logger.warning('acs.card unlink:%s' % ( self.card_id ) )
+        #TODO: call api to delete card setting
+        self.write({'card_owner': False})
+        return True
+    
     def _get_owner_role(self):
         for record in self:
             record_role = '未定'
@@ -234,9 +257,10 @@ class AcsCard(models.Model):
         for record in self:
             record.user_phone = record.card_owner.phone
 
+#改為卡片vs合約的紀錄表 (one2many)
 class AcsContract(models.Model):
     _name = 'acs.contract'
-    _description = '合約設定'
+    _description = '櫃位出租紀錄'
     _sql_constraints = [
         ('unique_contract_id', 'unique(contract_id)', '合約編號不能重複！')
         ]
@@ -246,31 +270,19 @@ class AcsContract(models.Model):
     contract_status = fields.Char(string='狀態')
 
     card = fields.Many2one('acs.card',string='所屬卡片',ondelete='set null')
-
+    #預備新增
+    #locker fields.Many2one('acs.locker',string='所屬櫃位',ondelete='set null')
+    
+    #預備搬到card物件
     devicegroup = fields.Many2one('acs.devicegroup','所屬門禁群組',ondelete='set null')
 
-    @api.onchange('devicegroup')
-    def _onchange_devicegroup(self):
-        t = datetime.datetime.now()
-        c_id = self.devicegroup.devicegroup_id + t.strftime('%Y%m%d')
-        _logger.warning('contract_id:%s' % (c_id ) )
-        self.contract_id=c_id
-
-    #def create(self, vals):
-        #t = datetime.datetime.now()
-        #c_id = self.devicegroup.devicegroup_id + t.strftime('%Y%m%d')
-        #_logger.warning('contract_id:%s' % (c_id ) )
-
-        #stage_obj = self.env['project.task.type']
-        #result = super(Project, self).create(vals)
-        #for resource in result.stage_ids:
-        #    stage_id = stage_obj.search([('id', '=',resource.name.id)])
-        #    if stage_id:
-        #        stage_id.write({'project_ids': [( 4, result.id)]})
-        #return result
-    #def write(self,values):
-        #campus_write = super(Campus,self).write(values)
-        #return campus_write
+#依選擇的櫃位產生合約編號
+    #@api.onchange('locker')
+    #def _onchange_devicegroup(self):
+    #    t = datetime.datetime.now()
+    #    c_id = self.devicegroup.devicegroup_id + t.strftime('%Y%m%d')
+    #    _logger.warning('contract_id:%s' % (c_id ) )
+    #    self.contract_id=c_id
     
     def unlink(self):
         self.write({'devicegroup': False})

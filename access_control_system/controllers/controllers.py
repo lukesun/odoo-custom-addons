@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
-import datetime
-import math
 
+import datetime
+from datetime import timedelta, date
 from odoo import http, _, exceptions
 from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
 def http_log_response(msg):
+    #now = ( datetime.datetime.now() + timedelta(hours=8) ).strftime("%c")
     t = datetime.datetime.now()
     logid = t.strftime('%Y%m%d-%H%M-%S-%f')
     res = {
@@ -19,18 +20,23 @@ def http_log_response(msg):
     return http.Response(json.dumps(res),status=200,mimetype='application/json')
 
 class AcsAPI(http.Controller):
+
+#多部卡機設定的非同步更新結果
     @http.route('/api/devices-async-result/',  auth='public', methods=["POST"], csrf=False,type='http')
     def async_result(self, **kw):
-        _logger.warning( kw )
+
         return http_log_response('OK')
 
+#多筆卡機的非同步連線測試結果
     @http.route('/api/device-test-result/', auth='public', methods=["POST"], csrf=False,type='http')
     def test_result(self, **kw):
-        _logger.warning( kw )
+
         return http_log_response('OK')
 
+#每次使用者刷卡或輸入密碼後卡關送過來的資料
     @http.route('/api/device-record/', auth='public', methods=["POST"], csrf=False,type='http')
     def device_reocrd(self, **kw):
+        _logger.warning( ( datetime.datetime.now() + timedelta(hours=8) ).strftime("%c") )
         _logger.warning('/api/device-record: %s' % ( request.httprequest.data ) )
         dl = json.loads(request.httprequest.data)
         #0-上班, 1-下班, 2-加班上, 3-加班下, 4-午休出, 5-午休回, 6-外出, 7-返回
@@ -73,40 +79,46 @@ class AcsAPI(http.Controller):
                 ldata['device_name'] = d.name
                 if d.device_owner:
                     ldata['device_owner'] = d.device_owner.name
-                    if d.device_owner.suppleir_rank:
-                        ldata['user_role'] = '廠商'
-                    if d.device_owner.customer_rank:
-                        ldata['user_role'] = '客戶'
 
         cards = http.request.env['acs.card'].sudo().search([['card_id','=',dl['card_uid'] ] ])
         if cards :
             for c in cards:
                 ldata['user_id'] = c.card_owner.vat
                 ldata['user_name'] = c.card_owner.name
+                _logger.warning('/api/device-record: card_owner.name-->%s' % ( ldata['user_name'] ) )
+                if hasattr(c.card_owner,'suppleir_rank') and c.card_owner.suppleir_rank>0:
+                    ldata['user_role'] = '廠商'
+                    _logger.warning('/api/device-record: suppleir_rank-->%s' % ( c.card_owner.suppleir_rank ) )
+                if hasattr(c.card_owner,'customer_rank') and c.card_owner.customer_rank>0:
+                    ldata['user_role'] = '客戶'
+                    _logger.warning('/api/device-record: customer_rank-->%s' % ( c.card_owner.customer_rank ) )
 
         http.request.env['acs.cardlog'].sudo().create([ldata])
         _logger.warning('/api/device-record: log-->%s' % ( json.dumps(ldata) ) )
         return http_log_response('OK')
-    
+
+#取所有有效卡機(基本資料)
     @http.route('/api/devices-query', auth='public', methods=["POST"], csrf=False,type='http')
     def devices_query(self, **kw):
-        _logger.warning( kw )
+
         devices = request.env['acs.device'].sudo().search([])
 
         payload=[]
 
-        for d in devices: 
-            device={
-                "device_id": d.device_id,
-                "ip": d.device_ip,
-                "port": d.device_port,
-                "node": d.node_id,
-            }
-            payload.append(device)
+        for d in devices:
+            if d.devicegroup: #有被歸到門禁群組才算有效
+                device={
+                    "device_id": d.device_id,
+                    "ip": d.device_ip,
+                    "port": d.device_port,
+                    "node": d.node_id,
+                }
+                payload.append(device)
         
         _logger.warning('/api/devices-query: %s' % (json.dumps(payload) ) )
         return http.Response(json.dumps(payload),status=200,mimetype='application/json')
 
+#卡機通關密碼更新通知 (群組密碼)
     @http.route('/api/device-update', auth='public', methods=["POST"], csrf=False,type='http')
     def device_update(self, **kw):
 
@@ -117,6 +129,7 @@ class AcsAPI(http.Controller):
 
             dr = http.request.env['acs.device'].sudo().search(
                 [['device_ip','=',d['ip'] ],['device_port','=',d['port'] ]])
+            _logger.warning( 'device ip:%s,port:%s' % (dr.name,d['port']) )
 
             if dr :
                 _logger.warning( 'device name:%s' % (dr.name) )
@@ -124,8 +137,10 @@ class AcsAPI(http.Controller):
                     dr.device_pin = d['pin']
                     t = datetime.datetime.now()
                     dr.device_pin_update = t.strftime('%Y-%m-%d %H:%M:%S')
-                
-                return http_log_response('OK')
+                    _logger.warning( 'update ok' )
+                else:
+                    _logger.warning( 'disconnect!' )
             else:
-                _logger.warning( 'no match!' )
-                return http_log_response('no match!')
+                _logger.warning( 'config not exist!' )
+
+        return http_log_response('OK')

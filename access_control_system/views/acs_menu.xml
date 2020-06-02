@@ -31,12 +31,6 @@
       <field name="view_mode">tree,form</field>
     </record>
 
-<record model="ir.actions.act_window" id="action_acs_employeecardlog">
-      <field name="name">打卡紀錄</field>
-      <field name="res_model">acs.employeecardlog</field>
-      <field name="view_mode">tree</field>
-    </record>
-
 <record model="ir.actions.act_window" id="action_acs_cardsettinglog">
       <field name="name">卡片異動紀錄查詢</field>
       <field name="res_model">acs.cardsettinglog</field>
@@ -55,10 +49,8 @@
    <menuitem id="menu_acs_device"  name="卡機資料設定"  parent="menu_acs"  action="action_acs_device" />
    <menuitem id="menu_acs_devicegroup" name="門禁群組設定" parent="menu_acs"  action="action_acs_devicegroup"/>
    <menuitem id="menu_acs_card" name="卡片資料維護" parent="menu_acs"   action="action_acs_card"/>
-   <menuitem id="menu_acs_devicelog" name="刷卡紀錄查詢" parent="menu_acs"   /> <!--空的子選單-->
-   <menuitem id="menu_acs_cardlog" name="進出紀錄" parent="menu_acs_devicelog"   action="action_acs_cardlog"/>
-   <menuitem id="menu_acs_employeecardlog" name="打卡紀錄" parent="menu_acs_devicelog"   action="action_acs_employeecardlog"/>
-    <menuitem id="menu_acs_cardsettinglog" name="卡片異動紀錄查詢" parent="menu_acs"  action="action_acs_cardsettinglog" />
+   <menuitem id="menu_acs_cardlog" name="進出紀錄" parent="menu_acs_devicelog"   action="menu_acs"/>
+    <menuitem id="menu_acs_cardsettinglog" name="卡片異動紀錄" parent="menu_acs"  action="action_acs_cardsettinglog" />
     <menuitem id="menu_acs_accesscodelog" name="個人通關密碼設定紀錄" parent="menu_acs"  action="action_acs_accesscodelog" />
 
 </odoo>

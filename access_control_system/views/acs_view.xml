@@ -220,22 +220,6 @@
       </field>
     </record>
 
-<record model="ir.ui.view" id="acs_employeecardlog_list">
-      <field name="name">打卡紀錄</field>
-      <field name="model">acs.employeecardlog</field>
-      <field name="arch" type="xml">
-        <tree create="false" edit="false" delete="false" duplicate="false">
-          <field name="device_owner"/>
-          <field name="device_name"/>
-          <field name="card_id"/>
-          <field name="user_id"/>
-          <field name="user_name"/>
-          <field name="employeecardlog_type"/>
-          <field name="employeecardlog_time"/>
-        </tree>
-      </field>
-    </record>
-
     <record model="ir.ui.view" id="acs_cardsettinglog_list">
       <field name="name">卡片異動紀錄</field>
       <field name="model">acs.cardsettinglog</field>
