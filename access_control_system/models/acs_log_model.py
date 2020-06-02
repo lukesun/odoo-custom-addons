@@ -16,17 +16,18 @@ class AcsServicelog(models.Model):
 class AcsCardlog(models.Model):
     _name = 'acs.cardlog'
     _description = '刷卡紀錄'
-
-    cardlog_id = fields.Char(string='紀錄編號')
+    
     device_owner = fields.Char(string='門市')
     device_name = fields.Char(string='卡機名稱')
     user_role = fields.Char(string='身份')
-    card_id = fields.Char(string='卡片號碼')
-    cardlog_type = fields.Char(string='卡別')
     user_id = fields.Char(string='I D')
     user_name = fields.Char(string='名稱')
+    card_id = fields.Char(string='卡片號碼')
     cardlog_time = fields.Datetime(string='刷卡時間')
+    cardlog_type = fields.Char(string='卡別')
     cardlog_result = fields.Char(string='刷卡狀態')
+    cardlog_id = fields.Char(string='紀錄編號')
+    cardlog_data = fields.Char(string='刷卡狀態')
 
 class AcsEmployeeCardlog(models.Model):
     _name = 'acs.employeecardlog'

@@ -256,10 +256,11 @@ class AcsContract(models.Model):
         _logger.warning('contract_id:%s' % (c_id ) )
         self.contract_id=c_id
 
-    def create(self, vals):
-        t = datetime.datetime.now()
-        c_id = self.devicegroup.devicegroup_id + t.strftime('%Y%m%d')
-        _logger.warning('contract_id:%s' % (c_id ) )
+    #def create(self, vals):
+        #t = datetime.datetime.now()
+        #c_id = self.devicegroup.devicegroup_id + t.strftime('%Y%m%d')
+        #_logger.warning('contract_id:%s' % (c_id ) )
+
         #stage_obj = self.env['project.task.type']
         #result = super(Project, self).create(vals)
         #for resource in result.stage_ids:

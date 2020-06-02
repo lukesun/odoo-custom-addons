@@ -28,7 +28,7 @@
 <record model="ir.actions.act_window" id="action_acs_cardlog">
       <field name="name">進出紀錄</field>
       <field name="res_model">acs.cardlog</field>
-      <field name="view_mode">tree</field>
+      <field name="view_mode">tree,form</field>
     </record>
 
 <record model="ir.actions.act_window" id="action_acs_employeecardlog">
