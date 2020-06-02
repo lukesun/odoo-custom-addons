@@ -45,11 +45,11 @@
 
 <!-- Top menu item -->
    <menuitem id="menu_acs" name="門禁"/> <!--頂層選單決定模組顯示名稱-->
-   <menuitem id="menu_acs_locker"  name="櫃位資料設定"  parent="menu_acs"  action="action_acs_locker" />
-   <menuitem id="menu_acs_device"  name="卡機資料設定"  parent="menu_acs"  action="action_acs_device" />
-   <menuitem id="menu_acs_devicegroup" name="門禁群組設定" parent="menu_acs"  action="action_acs_devicegroup"/>
-   <menuitem id="menu_acs_card" name="卡片資料維護" parent="menu_acs"   action="action_acs_card"/>
-   <menuitem id="menu_acs_cardlog" name="進出紀錄" parent="menu_acs_devicelog"   action="menu_acs"/>
+   <menuitem id="menu_acs_locker" name="櫃位資料設定" parent="menu_acs" action="action_acs_locker" />
+   <menuitem id="menu_acs_device" name="卡機資料設定" parent="menu_acs" action="action_acs_device" />
+   <menuitem id="menu_acs_devicegroup" name="門禁群組設定" parent="menu_acs" action="action_acs_devicegroup"/>
+   <menuitem id="menu_acs_card" name="卡片資料維護" parent="menu_acs" action="action_acs_card"/>
+   <menuitem id="menu_acs_cardlog" name="進出紀錄" parent="menu_acs" action="action_acs_cardlog"/>
     <menuitem id="menu_acs_cardsettinglog" name="卡片異動紀錄" parent="menu_acs"  action="action_acs_cardsettinglog" />
     <menuitem id="menu_acs_accesscodelog" name="個人通關密碼設定紀錄" parent="menu_acs"  action="action_acs_accesscodelog" />
 

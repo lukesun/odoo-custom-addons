@@ -225,13 +225,13 @@ class AcsCard(models.Model):
     def create(self, vals):
         _logger.warning('acs.card create:%s' % ( vals ) )
         #TODO: call api to add card setting
-        result = self.create(vals)
+        result = super(AcsCard, self).create(vals)
         return result
 
     def write(self,vals):
         _logger.warning('acs.card write:%s' % ( vals ) )
         #TODO: call api to update card setting
-        result = self.write(vals)
+        result = super(AcsCard, self).write(vals)
         return result
         
     def unlink(self):
