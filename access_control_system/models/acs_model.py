@@ -27,7 +27,7 @@ class AcsLocker(models.Model):
     
     card = fields.Many2one('acs.card','所屬卡片',ondelete='set null')
     
-    contract_id = fields.Char(string="合約編號", readonly=True)
+    contract_id = fields.Char(string="合約編號")
 
     # _sql_constraints = [
     #     ('unique_contract_id', 'unique(contract_id)', '合約編號不能重複！')
@@ -40,14 +40,25 @@ class AcsLocker(models.Model):
             self.write({'devicegroup': False})
             return True
 #變更卡片欄位時產生合約編號
-    # @api.onchange('card')
-    # def _onchange_card(self):
-    #     c_id = ('%s%s',
-    #         self.locker_id ,
-    #         (datetime.datetime.now() + timedelta(hours=8) ).strftime('%Y%m%d')
-    #     )
-    #     _logger.warning('contract_id:%s' % (c_id ) )
-    #     self.contract_id=c_id
+    @api.onchange('card')
+    def _onchange_card(self):
+        if self.card:
+            c_id =  '%s-%s' % ( 
+                self.locker_id ,
+                (datetime.datetime.now() + timedelta(hours=8) ).strftime('%Y%m%d')
+            )
+            # record = self.env['acs.locker'].search(
+            #     [('contract_id', 'ilike', 'c_id' )],
+            #     order='contract_id desc',
+            #     limit=1
+            # ).contract_id            
+            # _logger.warning( record )
+
+        else:
+            c_id = ''
+        #_logger.warning( c_id )
+
+        self.contract_id = c_id
 
 class AcsCard(models.Model):
     _name = 'acs.card'
@@ -69,6 +80,12 @@ class AcsCard(models.Model):
 
     #客戶租用櫃位清單
     locker_ids = fields.One2many('acs.locker', 'card', string="合約清單")
+
+    # def name_get(self, cr, uid, ids, context=None):
+    #     if not len(ids):
+    #         return []
+    #     res = [(r['id'], r['name'] and '%s [%s]' % (r['name'], r['name2']) or r['name'] ) for r in self.read(cr, uid, ids, ['name', 'name2'], context=context) ]
+    #     return res
 
     @api.model
     def create(self, vals):
