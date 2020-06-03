@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import datetime
 from datetime import timedelta, date
 from odoo import fields, models,api
@@ -94,27 +95,27 @@ class AcsCard(models.Model):
 
     @api.model
     def create(self, vals):
-        _logger.warning('acs.card create:%s' % ( vals ) )
+        _log2table(self ,'新增' ,vals)
         #TODO: call api to add card setting
         result = super(AcsCard, self).create(vals)
         return result
-
+    
     def write(self,vals):
-        _logger.warning('acs.card write:%s' % ( vals ) )
+        _log2table(self ,'修改' ,vals)
         #TODO: call api to update card setting
         result = super(AcsCard, self).write(vals)
         return result
 
     def unlink(self):
-        _logger.warning('acs.card unlink:%s' % ( self.card_id ) )
+        _log2table(self ,'刪除' ,{})
+
         #TODO: call api to delete card setting
         result = super(AcsCard, self).unlink()
         return result
     
     def _get_owner_role(self):
-        #TODO 
         for record in self:
-            record_role = '未定'
+            record_role = '客戶'
             record.user_role = record_role
 
     def _get_owner_id(self):
@@ -128,3 +129,48 @@ class AcsCard(models.Model):
     def _get_owner_phone(self):
         for record in self:
             record.user_phone = record.card_owner.phone
+
+def _log2table(self ,cardsetting_type ,vals):
+    _logger.warning( cardsetting_type )
+    _logger.warning( vars(self) )
+    _logger.warning( vals )
+    cardsettinglog_id = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
+    ldata = {
+        'cardsettinglog_id': cardsettinglog_id,
+        'cardsetting_type':cardsetting_type,
+        'user_role': '客戶',
+        'user_id': '',
+        'user_name': '',
+        'card_id' : '',
+        'data_origin': '' ,
+        'data_new': json.dumps(vals),
+        'cardsettinglog_time': datetime.datetime.now(),
+        'cardsettinglog_user': self.env.user.name
+    }
+
+    #use new overwrite old
+    for record in self:
+        vals_old ={
+            'user_role': record.user_role,
+            'user_id': record.user_id, 
+            'user_name': record.user_name,
+            'card_id' : record.card_id,
+            'card_pin' : record.card_pin,
+        }
+        ldata['user_role'] =record.user_role
+        ldata['user_id'] =record.user_id
+        ldata['user_name'] =record.user_name
+        ldata['card_id'] = record.card_id
+
+        ldata['data_origin'] =json.dumps(vals_old)
+
+    if hasattr(vals,'card_id'):
+        ldata['card_id'] = vals.card_id
+
+    self.env['acs.cardsettinglog'].sudo().create([ldata])
+
+    if hasattr(vals,'card_pin'):
+        ldata['cardsetting_type'] = '變更密碼'
+        self.env['acs.cardsettinglog'].sudo().create([ldata])
+
+

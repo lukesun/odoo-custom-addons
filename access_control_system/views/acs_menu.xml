@@ -34,7 +34,7 @@
 <record model="ir.actions.act_window" id="action_acs_cardsettinglog">
       <field name="name">卡片異動紀錄查詢</field>
       <field name="res_model">acs.cardsettinglog</field>
-      <field name="view_mode">tree</field>
+      <field name="view_mode">tree,form</field>
     </record>
 
 <record model="ir.actions.act_window" id="action_acs_accesscodelog">
