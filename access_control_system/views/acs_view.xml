@@ -147,13 +147,13 @@
                   </group>
                   <notebook>
                       <page string="卡機列表">
-                          <field name="device_ids" />
+                          <field name="device_ids" options="{'no_create_edit': True, 'no_create': True}"/>
                       </page>
                       <page string="合約列表">
                           
                       </page>
                       <page string="櫃位列表">
-                          <field name="locker_ids" />
+                          <field name="locker_ids" options="{'no_create_edit': True, 'no_create': True}"/>
                       </page>
                   </notebook>
                 </sheet>
@@ -179,7 +179,7 @@
         <field name="name">卡片設定</field>
         <field name="model">acs.card</field>
         <field name="arch" type="xml">
-            <form string="卡片設定" duplicate="0"></form>
+            <form string="卡片設定" duplicate="0">
             <header>
                       <!-- Buttons go here ('is_company', '=', True) -->
                   </header>
