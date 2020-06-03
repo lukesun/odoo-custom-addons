@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import datetime
-import requests
-import json
 from odoo import fields, models,api
 from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationError, Warning
 

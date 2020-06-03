@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-import datetime
-import requests
 import json
+import requests
+
+import datetime
+from datetime import timedelta, date
+
 from odoo import fields, models,api
 from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationError, Warning
 
@@ -11,6 +14,7 @@ _logger = logging.getLogger(__name__)
 class AcsDevice(models.Model):
     _name = 'acs.device'
     _description = '卡機設定'
+    confirmDelte = fields.Boolean(string='確認刪除', default=False)
 
     device_id = fields.Char(string="卡機編號", required=True)
     name = fields.Char(string="卡機名稱", required=True)
@@ -64,16 +68,15 @@ class AcsDeviceGroup(models.Model):
     _name = 'acs.devicegroup'
     _description = '門禁群組設定'
     _rec_name = 'devicegroup_name'
+    confirmDelte = fields.Boolean(string='確認刪除', default=False)
 
     devicegroup_id = fields.Char(string="群組編號", required=True)
     devicegroup_name = fields.Char(string="群組名稱", required=True)
 
     device_ids = fields.One2many( 'acs.device','devicegroup',string="卡機清單")
     
-    #card_ids = fields.One2many('acs.card', 'devicegroup', string="卡片清單")
-    #TODO change to self.card_ids
-    contract_ids = fields.One2many('acs.contract', 'devicegroup', string="合約清單")
-
+    card_ids = fields.One2many('acs.card', 'devicegroup', string="授權卡片清單")
+    
     locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單")
 
     def action_push(self):
@@ -90,20 +93,20 @@ class AcsDeviceGroup(models.Model):
                 "node": d.node_id,
                 "card": []
             }
-            #TODO change to self.card_ids
 
-            for c in self.contract_ids:
+            for c in self.card_ids:
                 card= {
                     "event": "add",
-                    "uid": c.card.card_id,
-                    "display": c.card.card_owner.name,
-                    "pin": c.card.card_pin,
+                    "uid": c.card_id,
+                    "display": c.card_owner.name,
+                    "pin": c.card_pin,
                     "expire_start": "2020-05-01",
                     "expire_end": "2020-05-31"
                 }
                 device["card"].append(card)
-
+            
             payload["device"].append(device)
+        
         deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
         _logger.warning('deviceserver: %s' % (deviceserver) )
 
@@ -136,13 +139,13 @@ class AcsDeviceGroup(models.Model):
                 "node": d.node_id,
                 "card": []
             }
-            #TODO change to self.card_ids
-            for c in self.contract_ids:
+
+            for c in self.card_ids:
                 card= {
                     "event": "update",
-                    "uid": c.card.card_id,
-                    "display": c.card.card_owner.name,
-                    "pin": c.card.card_pin,
+                    "uid": c.card_id,
+                    "display": c.card_owner.name,
+                    "pin": c.card_pin,
                     "expire_start": "2020-05-01",
                     "expire_end": "2020-05-31"
                 }
@@ -180,8 +183,7 @@ class AcsDeviceGroup(models.Model):
                 "node": d.node_id,
                 "card": []
             }
-            #TODO change to self.card_ids
-            for c in self.contract_ids:
+            for c in self.card_ids:
                 card= {
                     "event": "delete",
                     "uid": c.card.card_id,
@@ -206,21 +208,24 @@ class AcsDeviceGroup(models.Model):
         }
         return message
 
-
 class AcsCard(models.Model):
     _name = 'acs.card'
     _description = '卡片設定'
+    confirmDelte = fields.Boolean(string='確認刪除', default=False)
 
     card_owner = fields.Many2one( 'res.partner' , string="聯絡人")
-    user_role = fields.Char(string='身份',compute='_get_owner_role')
+    card_id = fields.Char(string='卡片號碼', required=True)
+    card_pin = fields.Char(string='卡片密碼')
+
     user_id = fields.Char(string='I D',compute='_get_owner_id')
     user_name = fields.Char(string='名稱',compute='_get_owner_name')
     user_phone = fields.Char(string='電話',compute='_get_owner_phone')
-    card_id = fields.Char(string='卡片號碼', required=True)
-    card_pin = fields.Char(string='卡片密碼')
+    user_role = fields.Char(string='身份',compute='_get_owner_role')
+
+    #員工廠商授權進入的門禁群組
+    devicegroup_ids = fields.One2many('acs.devicegroup', 'card', string="授權門禁群組")
+    #客戶租用櫃位清單
     contract_ids = fields.One2many('acs.contract', 'card', string="合約清單")
-    #預備新增
-    #devicegroup_ids = fields.One2many('acs.devicegroup', 'card', string="所屬群組")
 
     def create(self, vals):
         _logger.warning('acs.card create:%s' % ( vals ) )
@@ -241,6 +246,7 @@ class AcsCard(models.Model):
         return True
     
     def _get_owner_role(self):
+        #TODO 
         for record in self:
             record_role = '未定'
             record.user_role = record_role
@@ -257,33 +263,3 @@ class AcsCard(models.Model):
         for record in self:
             record.user_phone = record.card_owner.phone
 
-#改為卡片vs合約的紀錄表 (one2many)
-class AcsContract(models.Model):
-    _name = 'acs.contract'
-    _description = '櫃位出租紀錄'
-    _sql_constraints = [
-        ('unique_contract_id', 'unique(contract_id)', '合約編號不能重複！')
-        ]
-
-    contract_id = fields.Char(string="合約編號", required=True, readonly=True ) 
-    
-    contract_status = fields.Char(string='狀態')
-
-    card = fields.Many2one('acs.card',string='所屬卡片',ondelete='set null')
-    #預備新增
-    #locker fields.Many2one('acs.locker',string='所屬櫃位',ondelete='set null')
-    
-    #預備搬到card物件
-    devicegroup = fields.Many2one('acs.devicegroup','所屬門禁群組',ondelete='set null')
-
-#依選擇的櫃位產生合約編號
-    #@api.onchange('locker')
-    #def _onchange_devicegroup(self):
-    #    t = datetime.datetime.now()
-    #    c_id = self.devicegroup.devicegroup_id + t.strftime('%Y%m%d')
-    #    _logger.warning('contract_id:%s' % (c_id ) )
-    #    self.contract_id=c_id
-    
-    def unlink(self):
-        self.write({'devicegroup': False})
-        return True

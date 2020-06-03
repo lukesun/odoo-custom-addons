@@ -96,7 +96,8 @@
             <form string="卡機設定">
             <header>
                       <!-- Buttons go here-->
-                      <button name="action_test" string="測試連線" type="object" default_focus="1" class="oe_highlight"/> 
+                      <button name="action_test" string="測試連線" type="object" default_focus="1" class="oe_highlight"/>
+                      <button name="action_reset_pincode" string="更新通關密碼" type="object" default_focus="1" class="oe_highlight"/>
                   </header>
                 <sheet>
                 <group>
@@ -133,9 +134,10 @@
             <form string="門禁群組設定">
                   <header>
                       <!-- Buttons go here-->
+                      <button name="action_clear" string="清除設定" type="object" default_focus="1" class="oe_highlight"/>
                       <button name="action_push" string="傳送設定" type="object" default_focus="1" class="oe_highlight"/> 
-                      <button name="action_update" string="更新設定" type="object" default_focus="1" class="oe_highlight"/> 
-                      <button name="action_clear" string="清除設定" type="object" default_focus="1" class="oe_highlight"/> 
+                      <button name="action_update" string="更新設定" type="object" default_focus="1" class="oe_highlight"/>
+                      <button name="action_reset_pincode" string="更新通關密碼" type="object" default_focus="1" class="oe_highlight"/>
                   </header>
                 <sheet>
                   <group>
