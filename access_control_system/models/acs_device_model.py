@@ -14,6 +14,7 @@ _logger = logging.getLogger(__name__)
 class AcsDevice(models.Model):
     _name = 'acs.device'
     _description = '卡機設定'
+    _rec_name = 'device_id'
     confirmDelte = fields.Boolean(string='確認刪除', default=False)
 
     device_id = fields.Char(string="卡機編號", required=True)
@@ -75,7 +76,7 @@ class AcsDeviceGroup(models.Model):
 
     device_ids = fields.One2many( 'acs.device','devicegroup',string="卡機清單")
     
-    card_ids = fields.One2many('acs.card', 'devicegroup', string="授權卡片清單")
+    #card_ids = fields.One2many('acs.card', 'devicegroup', string="授權卡片清單")
     
     locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單")
 
@@ -211,6 +212,7 @@ class AcsDeviceGroup(models.Model):
 class AcsCard(models.Model):
     _name = 'acs.card'
     _description = '卡片設定'
+    _rec_name = 'card_id'
     confirmDelte = fields.Boolean(string='確認刪除', default=False)
 
     card_owner = fields.Many2one( 'res.partner' , string="聯絡人")
@@ -223,10 +225,12 @@ class AcsCard(models.Model):
     user_role = fields.Char(string='身份',compute='_get_owner_role')
 
     #員工廠商授權進入的門禁群組
-    devicegroup_ids = fields.One2many('acs.devicegroup', 'card', string="授權門禁群組")
+    #devicegroup_ids = fields.One2many('acs.devicegroup', 'card', string="授權門禁群組")
+
     #客戶租用櫃位清單
     contract_ids = fields.One2many('acs.contract', 'card', string="合約清單")
 
+    @api.model
     def create(self, vals):
         _logger.warning('acs.card create:%s' % ( vals ) )
         #TODO: call api to add card setting
@@ -238,12 +242,12 @@ class AcsCard(models.Model):
         #TODO: call api to update card setting
         result = super(AcsCard, self).write(vals)
         return result
-        
+
     def unlink(self):
         _logger.warning('acs.card unlink:%s' % ( self.card_id ) )
         #TODO: call api to delete card setting
-        self.write({'card_owner': False})
-        return True
+        result = super(AcsCard, self).unlink()
+        return result
     
     def _get_owner_role(self):
         #TODO 

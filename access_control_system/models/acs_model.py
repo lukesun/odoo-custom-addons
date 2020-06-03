@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 class AcsLocker(models.Model):
     _name = 'acs.locker'
     _description = '櫃位設定'
-
+    _rec_name = 'locker_id'
     locker_id = fields.Char(string="櫃位編號", required=True)
     locker_type = fields.Char(string="產品種類")
     locker_style = fields.Char(string="類型")
@@ -34,6 +34,7 @@ class AcsLocker(models.Model):
 class AcsContract(models.Model):
     _name = 'acs.contract'
     _description = '合約設定'
+    _rec_name = 'contract_id'
     confirmDelte = fields.Boolean(string='確認刪除', default=False)
     card = fields.Many2one('acs.card',string='所屬卡片',ondelete='set null')
 
@@ -50,11 +51,14 @@ class AcsContract(models.Model):
 #依選擇的櫃位產生合約編號
     @api.onchange('locker')
     def _onchange_locker(self):
-        self.devicegroup = self.locker.devicegroup
-        c_id = self.locker.locker_id + ( datetime.datetime.now() + timedelta(hours=8) ).strftime('%Y%m%d')
-        _logger.warning('contract_id:%s' % (c_id ) )
-        self.contract_id=c_id
-    
+        if self.devicegroup:
+            self.devicegroup = self.locker.devicegroup
+            c_id = self.locker.locker_id + ( datetime.datetime.now() + timedelta(hours=8) ).strftime('%Y%m%d')
+            _logger.warning('contract_id:%s' % (c_id ) )
+            self.contract_id=c_id
+        else:
+            self.contract_id=''
+
     def unlink(self):
         self.write({'locker': False,'card': False ,'devicegroup':False})
         return True

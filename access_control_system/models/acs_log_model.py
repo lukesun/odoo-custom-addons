@@ -13,7 +13,7 @@ class AcsServicelog(models.Model):
 class AcsCardlog(models.Model):
     _name = 'acs.cardlog'
     _description = '刷卡紀錄'
-
+    
     device_owner = fields.Char(string='門市')
     device_name = fields.Char(string='卡機名稱')
     user_role = fields.Char(string='身份')
