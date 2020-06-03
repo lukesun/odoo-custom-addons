@@ -74,11 +74,11 @@ class AcsDeviceGroup(models.Model):
     devicegroup_id = fields.Char(string="群組編號", required=True)
     devicegroup_name = fields.Char(string="群組名稱", required=True)
 
-    device_ids = fields.One2many( 'acs.device','devicegroup',string="卡機清單")
+    device_ids = fields.One2many( 'acs.device','devicegroup',string="卡機清單" ,readonly=True)
     
     #card_ids = fields.One2many('acs.card', 'devicegroup', string="授權卡片清單")
     
-    locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單")
+    locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單" ,readonly=True)
 
     def action_push(self):
         t = datetime.datetime.now()
