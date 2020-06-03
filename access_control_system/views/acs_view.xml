@@ -150,35 +150,38 @@
       </field>
     </record>
 
-        <record model="ir.ui.view" id="acs_card_form">
-        <field name="name">卡片設定</field>
-        <field name="model">acs.card</field>
-        <field name="arch" type="xml">
-            <form string="卡片設定" duplicate="0">
-            <header>
-                      <!-- Buttons go here ('is_company', '=', True) -->
-                  </header>
-                <sheet>
-                <group>
-                  <field name="card_owner" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_vat': True , 'search_by_vat': True}" options="{'no_create': True, 'no_create_edit': True}"/>
-                  <field name="user_id" />
-                  <field name="user_name" />
-                  <field name="user_phone"/>
-                  <field name="card_id"/>
-                  <field name="card_pin"/>
-                </group>
-                <notebook>
-                    <page string="合約列表(客戶)">
-                        <field name="locker_ids" options="{'no_create': True, 'no_create_edit': True}"/>
-                    </page>
-                    <page string="授權群組列表(員工/廠商)">
-                        <field name="devicegroup_ids" options="{'no_create': True, 'no_create_edit': True}"/>
-                    </page>
-                </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
+  <record model="ir.ui.view" id="acs_card_form">
+    <field name="name">卡片設定</field>
+    <field name="model">acs.card</field>
+    <field name="arch" type="xml">
+      <form string="卡片設定" duplicate="0">
+        <header>
+          <!-- Buttons go here-->
+        </header>
+        <sheet>
+          <group>
+            <field name="card_owner" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_vat': True , 'search_by_vat': True}" options="{'no_create': True, 'no_create_edit': True}"/>
+            <field name="user_id" />
+            <field name="user_name" />
+            <field name="user_phone"/>
+            <field name="card_id"/>
+            <field name="card_pin"/>
+          </group>
+          <notebook>
+          <!-- 新增合約請至[櫃位資料設定]，再設定櫃位[所屬卡片] -->
+            <page string="合約列表(客戶)">
+              <field name="locker_ids">
+              </field>
+            </page>
+            <page string="授權群組列表(員工/廠商)">
+              <field name="devicegroup_ids">
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
 
 <record model="ir.ui.view" id="acs_cardlog_list">
       <field name="name">進出紀錄</field>

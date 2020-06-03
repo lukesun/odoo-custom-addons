@@ -76,7 +76,6 @@ class AcsCard(models.Model):
     user_role = fields.Char(string='身份',compute='_get_owner_role')
 
     #員工廠商授權進入的門禁群組 改Many2many
-    #devicegroup_ids = fields.One2many('acs.devicegroup', 'card', string="授權門禁群組")
     devicegroup_ids = fields.Many2many(
         string='授權門禁群組',
         comodel_name='acs.devicegroup',
@@ -86,14 +85,25 @@ class AcsCard(models.Model):
     )
     
     #客戶租用櫃位清單
-    locker_ids = fields.One2many('acs.locker', 'card', string="合約清單")
+    locker_ids = fields.One2many('acs.locker', 'card', string="合約清單",readonly=True)
 
+    #修改卡片顯示名稱(TODO)
     # def name_get(self, cr, uid, ids, context=None):
     #     if not len(ids):
     #         return []
     #     res = [(r['id'], r['name'] and '%s [%s]' % (r['name'], r['name2']) or r['name'] ) for r in self.read(cr, uid, ids, ['name', 'name2'], context=context) ]
     #     return res
 
+    def search_filtered_locker(self):
+        self.ensure_one()
+        return {           
+            'view_type': 'form',
+            'view_mode': 'tree',
+            'res_model': 'asc.locker',
+            'type': 'ir.actions.act_window',
+            'domain':[('contract_id', '=', '' )],
+        }
+    
     @api.model
     def create(self, vals):
         _log2table(self ,'新增' ,vals)
@@ -116,7 +126,7 @@ class AcsCard(models.Model):
     
     def _get_owner_role(self):
         for record in self:
-            record_role = '客戶'
+            record_role = ''
             record.user_role = record_role
 
     def _get_owner_id(self):
@@ -139,7 +149,7 @@ def _log2table(self ,cardsetting_type ,vals):
     ldata = {
         'cardsettinglog_id': cardsettinglog_id,
         'cardsetting_type':cardsetting_type,
-        'user_role': '客戶',
+        'user_role': '',
         'user_id': '',
         'user_name': '',
         'card_id' : '',
@@ -149,7 +159,7 @@ def _log2table(self ,cardsetting_type ,vals):
         'cardsettinglog_user': self.env.user.name
     }
 
-    #use new overwrite old
+    #keep old vals in data_origin
     for record in self:
         vals_old ={
             'user_role': record.user_role,
@@ -158,6 +168,7 @@ def _log2table(self ,cardsetting_type ,vals):
             'card_id' : record.card_id,
             'card_pin' : record.card_pin,
         }
+        #use old vals for display
         ldata['user_role'] =record.user_role
         ldata['user_id'] =record.user_id
         ldata['user_name'] =record.user_name
@@ -165,13 +176,18 @@ def _log2table(self ,cardsetting_type ,vals):
 
         ldata['data_origin'] =json.dumps(vals_old)
 
-    if hasattr(vals,'card_id'):
+    #use new overwrite display cols
+    if 'card_id' in vals:
         ldata['card_id'] = vals.card_id
 
     self.env['acs.cardsettinglog'].sudo().create([ldata])
 
-    if hasattr(vals,'card_pin'):
+    if 'card_pin' in vals:
+        _logger.warning( 'card_pin change!' )
         ldata['cardsetting_type'] = '變更密碼'
         self.env['acs.cardsettinglog'].sudo().create([ldata])
+        #TODO call api
+    else:
+        _logger.warning( 'card_pin no change!' )
 
 

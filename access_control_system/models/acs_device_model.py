@@ -31,9 +31,33 @@ class AcsDevice(models.Model):
 
     devicegroup = fields.Many2one('acs.devicegroup',string='門禁群組',ondelete='set null')
 
+    def action_reset_pincode(self):
+        logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
+        payload={
+            "logid": logid, 
+            "device": [
+                {
+                "ip": self.device_ip,
+                "port": self.device_port,
+                "node": self.node_id
+                }
+            ]
+        }
+        deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
+        _logger.warning('deviceserver: %s' % (deviceserver) )
+        r = requests.post(deviceserver+'/api/device-test',data=json.dumps(payload))
+        message = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+            'title': r.status_code,
+            'message': r._content,
+            'sticky': True,
+            }
+        }
+        return message
     def action_test(self):
-        t = datetime.datetime.now()
-        logid = t.strftime('%Y%m%d-%H%M-%S-%f')
+        logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         payload={
             "logid": logid, 
             "device": [
@@ -80,7 +104,6 @@ class AcsDeviceGroup(models.Model):
     locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單" ,readonly=True)
 
     #授權卡片清單
-    #card_ids = fields.One2many( 'acs.card','devicegroup',string="授權卡片清單" ,readonly=True)
     card_ids = fields.Many2many(
         string='授權卡片清單',
         comodel_name='acs.card',
