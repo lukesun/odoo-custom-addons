@@ -127,6 +127,9 @@
                       <page string="櫃位列表">
                           <field name="locker_ids" options="{'no_create_edit': True, 'no_create': True}"/>
                       </page>
+                      <page string="授權卡片列表">
+                          <field name="card_ids" options="{'no_create_edit': True, 'no_create': True}"/>
+                      </page>
                   </notebook>
                 </sheet>
             </form>
@@ -169,7 +172,7 @@
                         <field name="locker_ids" options="{'no_create': True, 'no_create_edit': True}"/>
                     </page>
                     <page string="授權群組列表(員工/廠商)">
-                        <!-- <field name="devicegroup_ids" options="{'no_create': True, 'no_create_edit': True}"/> -->
+                        <field name="devicegroup_ids" options="{'no_create': True, 'no_create_edit': True}"/>
                     </page>
                 </notebook>
                 </sheet>

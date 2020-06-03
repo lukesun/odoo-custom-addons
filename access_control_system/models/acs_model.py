@@ -75,9 +75,16 @@ class AcsCard(models.Model):
     user_phone = fields.Char(string='電話',compute='_get_owner_phone')
     user_role = fields.Char(string='身份',compute='_get_owner_role')
 
-    #員工廠商授權進入的門禁群組
+    #員工廠商授權進入的門禁群組 改Many2many
     #devicegroup_ids = fields.One2many('acs.devicegroup', 'card', string="授權門禁群組")
-
+    devicegroup_ids = fields.Many2many(
+        string='授權門禁群組',
+        comodel_name='acs.devicegroup',
+        relation='acs_devicegroup_acs_card_rel',
+        column1='devicegroup_id',
+        column2='card_id',
+    )
+    
     #客戶租用櫃位清單
     locker_ids = fields.One2many('acs.locker', 'card', string="合約清單")
 

@@ -79,6 +79,16 @@ class AcsDeviceGroup(models.Model):
     #櫃位清單
     locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單" ,readonly=True)
 
+    #授權卡片清單
+    #card_ids = fields.One2many( 'acs.card','devicegroup',string="授權卡片清單" ,readonly=True)
+    card_ids = fields.Many2many(
+        string='授權卡片清單',
+        comodel_name='acs.card',
+        relation='acs_devicegroup_acs_card_rel',
+        column1='card_id',
+        column2='devicegroup_id',
+    )
+
     def action_push(self):
         t = datetime.datetime.now()
         logid = t.strftime('%Y%m%d-%H%M-%S-%f')
