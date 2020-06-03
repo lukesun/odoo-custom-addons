@@ -25,7 +25,13 @@ class AcsLocker(models.Model):
 
     devicegroup = fields.Many2one('acs.devicegroup','門禁群組',ondelete='set null')
     
-    contract = fields.Many2one('acs.contract','所屬合約',ondelete='set null')
+    card = fields.Many2one('acs.card','所屬卡片',ondelete='set null')
+    
+    contract_id = fields.Char(string="合約編號", readonly=True)
+
+    # _sql_constraints = [
+    #     ('unique_contract_id', 'unique(contract_id)', '合約編號不能重複！')
+    #     ]
 
     def unlink(self):
         if self.confirmUnlink:
@@ -33,44 +39,15 @@ class AcsLocker(models.Model):
         else:
             self.write({'devicegroup': False})
             return True
-
-class AcsContract(models.Model):
-    _name = 'acs.contract'
-    _description = '合約設定'
-    _rec_name = 'contract_id'
-    confirmDelte = fields.Boolean(string='確認刪除', default=False)
-    #改為卡片vs合約的紀錄表 (one2many)
-    card = fields.Many2one('acs.card',string='所屬卡片',ondelete='set null')
-
-    _sql_constraints = [
-        ('unique_contract_id', 'unique(contract_id)', '合約編號不能重複！')
-        ]
-
-    contract_id = fields.Char(string="合約編號", required=True, readonly=True )
-
-    devicegroup = fields.Many2one('acs.devicegroup','所屬門禁群組',ondelete='set null' , readonly=True)
-
-    locker = fields.Many2one('acs.locker',string='所屬櫃位',ondelete='set null')
-
-    contract_status = fields.Boolean(string='狀態', default=True)
-
-#依選擇的櫃位產生合約編號
-    @api.onchange('locker')
-    def _onchange_locker(self):
-        if self.devicegroup:
-            self.devicegroup = self.locker.devicegroup
-            c_id = self.locker.locker_id + ( datetime.datetime.now() + timedelta(hours=8) ).strftime('%Y%m%d')
-            _logger.warning('contract_id:%s' % (c_id ) )
-            self.contract_id=c_id
-        else:
-            self.contract_id=''
-
-    def unlink(self):
-        if self.confirmUnlink:
-            return super(AcsContract, self).unlink()
-        else:
-            self.write({'locker': False,'card': False ,'devicegroup':False})
-            return True
+#變更卡片欄位時產生合約編號
+    # @api.onchange('card')
+    # def _onchange_card(self):
+    #     c_id = ('%s%s',
+    #         self.locker_id ,
+    #         (datetime.datetime.now() + timedelta(hours=8) ).strftime('%Y%m%d')
+    #     )
+    #     _logger.warning('contract_id:%s' % (c_id ) )
+    #     self.contract_id=c_id
 
 class AcsCard(models.Model):
     _name = 'acs.card'
@@ -91,7 +68,7 @@ class AcsCard(models.Model):
     #devicegroup_ids = fields.One2many('acs.devicegroup', 'card', string="授權門禁群組")
 
     #客戶租用櫃位清單
-    contract_ids = fields.One2many('acs.contract', 'card', string="合約清單")
+    locker_ids = fields.One2many('acs.locker', 'card', string="合約清單")
 
     @api.model
     def create(self, vals):

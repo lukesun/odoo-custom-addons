@@ -76,8 +76,7 @@ class AcsDeviceGroup(models.Model):
 
     device_ids = fields.One2many( 'acs.device','devicegroup',string="卡機清單" ,readonly=True)
     
-    #card_ids = fields.One2many('acs.card', 'devicegroup', string="授權卡片清單")
-    
+    #櫃位清單
     locker_ids = fields.One2many( 'acs.locker','devicegroup',string="櫃位清單" ,readonly=True)
 
     def action_push(self):

@@ -1,36 +1,5 @@
 <?xml version="1.0"?>
 <odoo>
-    <record model="ir.ui.view" id="acs_contract_list">
-      <field name="name">合約列表</field>
-      <field name="model">acs.contract</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="contract_id" />
-          <field name="contract_status"/>
-          <field name="devicegroup"/>
-        </tree>
-      </field>
-    </record>
-    <record model="ir.ui.view" id="acs_contract_form">
-        <field name="name">合約設定</field>
-        <field name="model">acs.contract</field>
-        <field name="arch" type="xml">
-            <form string="合約設定">
-            <header>
-                      <!-- Buttons go here-->
-                  </header>
-                <sheet>
-                <group>
-                  <field name="locker" options="{'no_create_edit': True, 'no_create': True}" />
-                  <field name="devicegroup" options="{'no_create_edit': True, 'no_create': True}" />
-                  <field name="contract_id" readonly="1"/>
-                  <field name="contract_status"/>
-                </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
     <record model="ir.ui.view" id="acs_locker_list">
       <field name="name">櫃位資料列表</field>
       <field name="model">acs.locker</field>
@@ -40,10 +9,14 @@
           <field name="locker_type"/>
           <field name="locker_style"/>
           <field name="locker_spec"/>
-          <field name="locker_owner" />
           <field name="locker_floor"/>
           <field name="locker_vesion"/>
+
+          
           <field name="devicegroup"/>
+          <field name="card"/>
+          <field name="contract_id"/>
+
         </tree>
       </field>
     </record>
@@ -61,10 +34,12 @@
                   <field name="locker_type"/>
                   <field name="locker_style"/>
                   <field name="locker_spec"/>
-                  <field name="locker_owner" options="{'no_create_edit': True, 'no_create': True}" />
+                  
                   <field name="locker_floor"/>
                   <field name="locker_vesion"/>
                   <field name="devicegroup" options="{'no_create_edit': True, 'no_create': True}" />
+                  <field name="card"/>
+                  <field name="contract_id"/>
                 </group>
                 </sheet>
             </form>
@@ -149,9 +124,6 @@
                       <page string="卡機列表">
                           <field name="device_ids" options="{'no_create_edit': True, 'no_create': True}"/>
                       </page>
-                      <page string="合約列表">
-                          
-                      </page>
                       <page string="櫃位列表">
                           <field name="locker_ids" options="{'no_create_edit': True, 'no_create': True}"/>
                       </page>
@@ -193,11 +165,11 @@
                   <field name="card_pin"/>
                 </group>
                 <notebook>
-                    <page string="合約列表">
-                        <field name="contract_ids"/>
+                    <page string="合約列表(客戶)">
+                        <field name="locker_ids" options="{'no_create': True, 'no_create_edit': True}"/>
                     </page>
-                    <page string="卡機列表">
-                        
+                    <page string="授權群組列表(員工/廠商)">
+                        <!-- <field name="devicegroup_ids" options="{'no_create': True, 'no_create_edit': True}"/> -->
                     </page>
                 </notebook>
                 </sheet>
