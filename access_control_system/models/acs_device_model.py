@@ -45,7 +45,7 @@ class AcsDevice(models.Model):
         }
         deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
         _logger.warning('deviceserver: %s' % (deviceserver) )
-        r = requests.post(deviceserver+'/api/device-test',data=json.dumps(payload))
+        r = requests.post(deviceserver+'/api/device-update-pincode',data=json.dumps(payload))
         message = {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
@@ -113,8 +113,7 @@ class AcsDeviceGroup(models.Model):
     )
 
     def action_push(self):
-        t = datetime.datetime.now()
-        logid = t.strftime('%Y%m%d-%H%M-%S-%f')
+        logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
 
         payload={ "logid": logid, "device": [] }
 
@@ -159,8 +158,7 @@ class AcsDeviceGroup(models.Model):
 
 
     def action_update(self):
-        t = datetime.datetime.now()
-        logid = t.strftime('%Y%m%d-%H%M-%S-%f')
+        logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
 
         payload={ "logid": logid, "device": [] }
 
@@ -203,8 +201,7 @@ class AcsDeviceGroup(models.Model):
         return message
 
     def action_clear(self):
-        t = datetime.datetime.now()
-        logid = t.strftime('%Y%m%d-%H%M-%S-%f')
+        logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
 
         payload={ "logid": logid, "device": []}
 

@@ -108,13 +108,19 @@ def _log2table(self ,cardsetting_type ,vals):
         ldata['card_id'] = record.card_id
         ldata['data_origin'] =json.dumps(vals_old)
 
-        #TODO: build 1 request for api/devices-async
-        # A: get ORM 1 card object--> 1 relate locker group + authorized groups --> relate devices
-        # B: set params from card object CRUD operations following up
+        #TODO: build 1 request for 1 card api/devices-async
+        # A: set params from card object CRUD operations following up
+        # B: get ORM 1 card object--> 1 relate locker group + authorized groups --> relate devices
         # C: send request after log into logtable
         
+        # B1 search locker group
+        # B2 search authorized groups
+        # B3 union group list
+
         if vals == {}:
             _logger.warning( 'THIS IS DELETE!!!!!' )
+            #TODO B1 build delete api params
+
         else:
             _logger.warning( 'THIS IS UPDATE!!!!!' )
             if 'card_id' in vals:
@@ -122,13 +128,13 @@ def _log2table(self ,cardsetting_type ,vals):
                 _logger.warning( 'card_id change!' )
                 ldata['card_id'] = vals['card_id']
                 ldata['cardsetting_type'] = '變更卡號'
-                #TODO 1 build delete + addnew api request
+                #TODO B2 build delete + addnew api params
             else:
                 _logger.warning( 'card_id no change!' )
-                #TODO 2 build addnew api request
+                #TODO B3 build addnew api params
             
             if 'card_pin' in vals:
-                #TODO 3 build update api request
+                #TODO B4 build update api params
                 _logger.warning( 'card_pin change!' )
                 ldata['cardsetting_type'] = '變更密碼'
             else:
@@ -137,6 +143,8 @@ def _log2table(self ,cardsetting_type ,vals):
         ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         self.env['acs.cardsettinglog'].sudo().create([ldata])
         _logger.warning( ldata )
+        #TODO send request to /api/devices-async
+        _logger.warning( 'begin send reuest:' )
 
     #for addnew--> not update or delete
     if recordcount == 0:
@@ -150,8 +158,9 @@ def _log2table(self ,cardsetting_type ,vals):
                 ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
                 self.env['acs.cardsettinglog'].sudo().create([ldata])
                 _logger.warning( ldata )
+                #TODO send request to /api/devices-async
+                _logger.warning( 'begin send reuest:' )
             else:                
                 _logger.warning( 'WARNIG!!! MISSING card_id!' + str(recordcount))
 
-    #TODO send request to /api/devices-async
-    _logger.warning( 'begin send reuest:' )
+
