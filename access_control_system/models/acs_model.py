@@ -163,6 +163,7 @@ def _log2table(self ,cardsetting_type ,vals):
     #for update/delete
     for record in self:
         recordcount+=1
+        _logger.warning( 'update/delete:' + str(recordcount) )
         #keep old vals in data_origin
         vals_old ={
             'user_role': record.user_role,
@@ -204,15 +205,21 @@ def _log2table(self ,cardsetting_type ,vals):
 
         ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         self.env['acs.cardsettinglog'].sudo().create([ldata])
+        _logger.warning( ldata )
 
     #for addnew--> not update or delete
     if recordcount == 0:
-        if 'card_id' in vals:
-            _logger.warning( 'new card_id!' )
-            ldata['card_id'] = vals['card_id']
-            #TODO build add api request
-
-        ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
-        self.env['acs.cardsettinglog'].sudo().create([ldata])
+        for val in vals:
+            recordcount+=1
+            if 'card_id' in val:
+                _logger.warning( 'new card_id!' + str(recordcount) )
+                ldata['card_id'] = val['card_id']
+                #TODO build add api request
+                ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
+                self.env['acs.cardsettinglog'].sudo().create([ldata])
+                _logger.warning( ldata )
+            else:
+                _logger.warning( 'cannot add without card_id!' + str(recordcount))
 
     #TODO send request to /api/devices-async
+    _logger.warning( 'begin send reuest:' )
