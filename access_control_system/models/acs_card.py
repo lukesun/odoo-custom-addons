@@ -105,32 +105,34 @@ def _log2table(self ,cardsetting_type ,vals):
         ldata['user_role'] =record.user_role
         ldata['user_id'] =record.user_id
         ldata['user_name'] =record.user_name
-
         ldata['card_id'] = record.card_id
         ldata['data_origin'] =json.dumps(vals_old)
 
         #TODO: build 1 request for api/devices-async
-        # 1: get ORM 1 card object--> 1 relate locker group + authorized groups --> relate devices
-        # 2: set params from card object CRUD operations following up
-        # 3: send request after log into logtable
-
-        #use new overwrite display cols when changing card_id
-        if 'card_id' in vals:
-            _logger.warning( 'card_id change!' )
-            ldata['card_id'] = vals['card_id']
-            ldata['cardsetting_type'] = '變更卡號'
-            #TODO 1 build delete + addnew api request
-            _logger.warning( 'card_id changed!' )
-        else:
-            _logger.warning( 'card_id no change!' )
-            #TODO 2 build addnew api request
+        # A: get ORM 1 card object--> 1 relate locker group + authorized groups --> relate devices
+        # B: set params from card object CRUD operations following up
+        # C: send request after log into logtable
         
-        if 'card_pin' in vals:
-            #TODO 3 build update api request
-            _logger.warning( 'card_pin change!' )
-            ldata['cardsetting_type'] = '變更密碼'
+        if vals == {}:
+            _logger.warning( 'THIS IS DELETE!!!!!' )
         else:
-            _logger.warning( 'card_pin no change!' )
+            _logger.warning( 'THIS IS UPDATE!!!!!' )
+            if 'card_id' in vals:
+                #use new overwrite display cols when changing card_id
+                _logger.warning( 'card_id change!' )
+                ldata['card_id'] = vals['card_id']
+                ldata['cardsetting_type'] = '變更卡號'
+                #TODO 1 build delete + addnew api request
+            else:
+                _logger.warning( 'card_id no change!' )
+                #TODO 2 build addnew api request
+            
+            if 'card_pin' in vals:
+                #TODO 3 build update api request
+                _logger.warning( 'card_pin change!' )
+                ldata['cardsetting_type'] = '變更密碼'
+            else:
+                _logger.warning( 'card_pin no change!' )
 
         ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         self.env['acs.cardsettinglog'].sudo().create([ldata])
@@ -138,17 +140,18 @@ def _log2table(self ,cardsetting_type ,vals):
 
     #for addnew--> not update or delete
     if recordcount == 0:
+        _logger.warning( 'THIS IS CREATE!!!!!' )
         for val in vals:
             recordcount+=1
             if 'card_id' in val:
                 _logger.warning( 'new card_id!' + str(recordcount) )
                 ldata['card_id'] = val['card_id']
-                #TODO build add api request
+                #TODO 4 build add api request
                 ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
                 self.env['acs.cardsettinglog'].sudo().create([ldata])
                 _logger.warning( ldata )
-            else:
-                _logger.warning( 'cannot add without card_id!' + str(recordcount))
+            else:                
+                _logger.warning( 'WARNIG!!! MISSING card_id!' + str(recordcount))
 
     #TODO send request to /api/devices-async
     _logger.warning( 'begin send reuest:' )
