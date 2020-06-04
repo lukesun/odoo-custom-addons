@@ -1,3 +1,16 @@
+
+cd /opt/odoo13
+rm -rf odoo-custom-addons.zip
+rm -rf odoo-custom-addons
+wget https://hq.vegaforce.com.tw/download/odoo/odoo-custom-addons.zip
+unzip odoo-custom-addons.zip
+ls -lha
+mv odoo-custom-addons-mockup/ odoo-custom-addons
+chmod 777 -R odoo-custom-addons/
+systemctl restart odoo13
+systemctl status odoo13
+
+
 class AcsConfigSettings(models.TransientModel):
     _name = 'acs.config.settings'
     _inherit = 'res.config.settings'

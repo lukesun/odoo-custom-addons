@@ -296,6 +296,7 @@ class AcsDeviceGroup(models.Model):
         }
         for d in self.device_ids:
             payload['device'].append({
+                "device_id": d.device_id,
                 "ip": d.device_ip,
                 "port": d.device_port,
                 "node": d.node_id

@@ -37,6 +37,7 @@ class AcsDevice(models.Model):
             "logid": logid, 
             "device": [
                 {
+                "device_id": self.device_id,
                 "ip": self.device_ip,
                 "port": self.device_port,
                 "node": self.node_id
@@ -64,6 +65,7 @@ class AcsDevice(models.Model):
             "logid": logid, 
             "device": [
                 {
+                "device_id": self.device_id,
                 "ip": self.device_ip,
                 "port": self.device_port,
                 "node": self.node_id
