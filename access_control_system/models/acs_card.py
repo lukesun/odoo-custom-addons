@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import json
+import requests
+import logging
 import datetime
 from datetime import timedelta, date
 from odoo import fields, models,api
 from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationError, Warning
 
-import logging
 _logger = logging.getLogger(__name__)
 
 class AcsCard(models.Model):
@@ -76,6 +77,10 @@ def _log2table(self ,cardsetting_type ,vals):
     _logger.warning( self )
     _logger.warning( 'vals:' + json.dumps(vals) )
 
+    cards2delete =[]
+    cards2add=[]
+    cards2update = []
+    
     ldata = {
         'cardsettinglog_id': '',
         'cardsetting_type':cardsetting_type,
@@ -104,23 +109,26 @@ def _log2table(self ,cardsetting_type ,vals):
         #use old vals for display
         ldata['user_role'] =record.user_role
         ldata['user_id'] =record.user_id
-        ldata['user_name'] =record.user_name
+        ldata['user_name'] = record.user_name
         ldata['card_id'] = record.card_id
         ldata['data_origin'] =json.dumps(vals_old)
 
-        #TODO: build 1 request for 1 card api/devices-async
-        # A: set params from card object CRUD operations following up
-        # B: get ORM 1 card object--> 1 relate locker group + authorized groups --> relate devices
-        # C: send request after log into logtable
+        #TODO: build 1 request for api/devices-async
+        # A: build card lists from CRUD operations following up
+        # C: log into logtable
+        # B: build devices-card-action list from card lists
+        #    card --> locker relate group + authorized groups --> relate devices
+        # D: build request by devices-card-action list in delete,add,update order
+        # E: send request
         
-        # B1 search locker group
-        # B2 search authorized groups
-        # B3 union group list
-
         if vals == {}:
             _logger.warning( 'THIS IS DELETE!!!!!' )
-            #TODO B1 build delete api params
-
+            #A1 build delete list
+            cards2delete.append({
+                    "event": "delete",
+                    'uid' : record.card_id,
+                    'id': record.id,
+                })
         else:
             _logger.warning( 'THIS IS UPDATE!!!!!' )
             if 'card_id' in vals:
@@ -128,24 +136,43 @@ def _log2table(self ,cardsetting_type ,vals):
                 _logger.warning( 'card_id change!' )
                 ldata['card_id'] = vals['card_id']
                 ldata['cardsetting_type'] = '變更卡號'
-                #TODO B2 build delete + addnew api params
+                #A2 build delete & addnew list
+                cards2delete.append({
+                    "event": "delete",
+                    'uid' : record.card_id,
+                    'id': record.id,
+                })
+                cards2add.append({ 
+                    "event": "add",
+                    "expire_start": "2030-05-01",
+                    "expire_end": "2030-05-31",
+                    'uid' : vals['card_id'],
+                    'display' :  record.user_name,
+                    'pin': record.card_pin,
+                    'id': record.id,
+                })
             else:
                 _logger.warning( 'card_id no change!' )
-                #TODO B3 build addnew api params
             
             if 'card_pin' in vals:
-                #TODO B4 build update api params
+                #TODO A3 build update list
                 _logger.warning( 'card_pin change!' )
                 ldata['cardsetting_type'] = '變更密碼'
+                cards2update.append({ 
+                    "event": "update",
+                    "expire_start": "2030-05-01",
+                    "expire_end": "2030-05-31",
+                    'uid' : record.card_id,
+                    'display' :  record.user_name,
+                    'pin': vals['card_pin'],
+                    'id': record.id,
+                })
             else:
                 _logger.warning( 'card_pin no change!' )
-
+        #C1: log into logtable
         ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         self.env['acs.cardsettinglog'].sudo().create([ldata])
         _logger.warning( ldata )
-        #TODO send request to /api/devices-async
-        _logger.warning( 'begin send reuest:' )
-
     #for addnew--> not update or delete
     if recordcount == 0:
         _logger.warning( 'THIS IS CREATE!!!!!' )
@@ -154,13 +181,65 @@ def _log2table(self ,cardsetting_type ,vals):
             if 'card_id' in val:
                 _logger.warning( 'new card_id!' + str(recordcount) )
                 ldata['card_id'] = val['card_id']
-                #TODO 4 build add api request
+                #C2: log into logtable
                 ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
                 self.env['acs.cardsettinglog'].sudo().create([ldata])
                 _logger.warning( ldata )
-                #TODO send request to /api/devices-async
-                _logger.warning( 'begin send reuest:' )
             else:                
                 _logger.warning( 'WARNIG!!! MISSING card_id!' + str(recordcount))
+        #no need to send request here
+        return
+    # D: build request by devices-card-action list in delete,add,update order
+    call_devices_async(self,cards2delete)
+    call_devices_async(self,cards2add)
+    call_devices_async(self,cards2update)
 
+def call_devices_async(self,cards):
+    logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
+    payload={ "logid": logid, "device": [] }
+
+    for card in cards:
+        
+        searchresult = self.env['acs.card'].sudo().search([['id','=',card['id'] ] ])
+        if searchresult :
+            for c in searchresult:
+        # B1 search authorized groups
+                for dg in c.devicegroup_ids:
+                    for d in dg.device_ids:
+                        payload["device"].append({
+                            "device_id": d.device_id,
+                            "ip": d.device_ip,
+                            "port": d.device_port,
+                            "node": d.node_id,
+                            "card": [ card ]
+                        })
+                for lk in c.locker_ids:
+        # B2 search locker related group
+                    if lk.devicegroup:
+                        for d in lk.devicegroup.device_ids:
+                            payload["device"].append({
+                                "device_id": d.device_id,
+                                "ip": d.device_ip,
+                                "port": d.device_port,
+                                "node": d.node_id,
+                                "card": [ card ]
+                            })
+    if len(payload["device"]) > 0:
+        
+        _logger.warning('sending request: %s' % (json.dumps(payload) ) )
+        deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
+        _logger.warning('deviceserver: %s' % (deviceserver) )
+        # E: begin send request to /api/devices-async
+        r = requests.post(deviceserver+'/api/devices-async',data=json.dumps(payload))
+        _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        message = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+            'title': r.status_code,
+            'message': r._content,
+            'sticky': True,
+            }
+        }
+        return message
 

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
-
 import datetime
 from datetime import timedelta, date
 from odoo import http, _, exceptions
