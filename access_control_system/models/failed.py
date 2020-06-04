@@ -32,3 +32,21 @@ class AcsConfigSettings(models.TransientModel):
 #                args.extend(['|', ['name', 'ilike', name], ['vat', 'ilike', name]])
 #                name = ''
 #        return super(AcsCardOwner, self).name_search(name=name, args=args, operator=operator, limit=limit)
+
+
+    #修改卡片顯示名稱
+    # def name_get(self, cr, uid, ids, context=None):
+    #     if not len(ids):
+    #         return []
+    #     res = [(r['id'], r['name'] and '%s [%s]' % (r['name'], r['name2']) or r['name'] ) for r in self.read(cr, uid, ids, ['name', 'name2'], context=context) ]
+    #     return res
+
+    # def search_filtered_locker(self):
+    #     self.ensure_one()
+    #     return {           
+    #         'view_type': 'form',
+    #         'view_mode': 'tree',
+    #         'res_model': 'asc.locker',
+    #         'type': 'ir.actions.act_window',
+    #         'domain':[('contract_id', '=', '' )],
+    #     }

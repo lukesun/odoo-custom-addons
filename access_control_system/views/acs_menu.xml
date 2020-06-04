@@ -1,56 +1,53 @@
 <?xml version="1.0"?>
 <odoo>
+  <record model="ir.actions.act_window" id="action_acs_locker">
+    <field name="name">櫃位列表</field>
+    <field name="res_model">acs.locker</field>
+    <field name="view_mode">tree,form</field>
+  </record>
 
-    <record model="ir.actions.act_window" id="action_acs_locker">
-      <field name="name">櫃位列表</field>
-      <field name="res_model">acs.locker</field>
-      <field name="view_mode">tree,form</field>
-    </record>
+  <record model="ir.actions.act_window" id="action_acs_device">
+    <field name="name">卡機資料設定</field>
+    <field name="res_model">acs.device</field>
+    <field name="view_mode">tree,form</field>
+  </record>
 
-    <record model="ir.actions.act_window" id="action_acs_device">
-      <field name="name">卡機資料設定</field>
-      <field name="res_model">acs.device</field>
-      <field name="view_mode">tree,form</field>
-    </record>
+  <record model="ir.actions.act_window" id="action_acs_devicegroup">
+    <field name="name">門禁群組列表</field>
+    <field name="res_model">acs.devicegroup</field>
+    <field name="view_mode">tree,form</field>
+  </record>
 
-<record model="ir.actions.act_window" id="action_acs_devicegroup">
-      <field name="name">門禁群組列表</field>
-      <field name="res_model">acs.devicegroup</field>
-      <field name="view_mode">tree,form</field>
-    </record>
+  <record model="ir.actions.act_window" id="action_acs_card">
+    <field name="name">卡片資料維護</field>
+    <field name="res_model">acs.card</field>
+    <field name="view_mode">tree,form</field>
+  </record>
 
-<record model="ir.actions.act_window" id="action_acs_card">
-      <field name="name">卡片資料維護</field>
-      <field name="res_model">acs.card</field>
-      <field name="view_mode">tree,form</field>
-    </record>
+  <record model="ir.actions.act_window" id="action_acs_cardlog">
+    <field name="name">進出紀錄</field>
+    <field name="res_model">acs.cardlog</field>
+    <field name="view_mode">tree,form</field>
+  </record>
 
-<record model="ir.actions.act_window" id="action_acs_cardlog">
-      <field name="name">進出紀錄</field>
-      <field name="res_model">acs.cardlog</field>
-      <field name="view_mode">tree,form</field>
-    </record>
+  <record model="ir.actions.act_window" id="action_acs_cardsettinglog">
+    <field name="name">卡片異動紀錄查詢</field>
+    <field name="res_model">acs.cardsettinglog</field>
+    <field name="view_mode">tree,form</field>
+  </record>
 
-<record model="ir.actions.act_window" id="action_acs_cardsettinglog">
-      <field name="name">卡片異動紀錄查詢</field>
-      <field name="res_model">acs.cardsettinglog</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-
-<record model="ir.actions.act_window" id="action_acs_accesscodelog">
-      <field name="name">個人通關密碼設定紀錄</field>
-      <field name="res_model">acs.accesscodelog</field>
-      <field name="view_mode">tree</field>
-    </record>
+  <record model="ir.actions.act_window" id="action_acs_accesscodelog">
+    <field name="name">個人通關密碼設定紀錄</field>
+    <field name="res_model">acs.accesscodelog</field>
+    <field name="view_mode">tree</field>
+  </record>
 
 <!-- Top menu item -->
-   <menuitem id="menu_acs" name="門禁"/> <!--頂層選單決定模組顯示名稱-->
-   <menuitem id="menu_acs_locker" name="櫃位資料設定" parent="menu_acs" action="action_acs_locker" />
-   <menuitem id="menu_acs_device" name="卡機資料設定" parent="menu_acs" action="action_acs_device" />
-   <menuitem id="menu_acs_devicegroup" name="門禁群組設定" parent="menu_acs" action="action_acs_devicegroup"/>
-   <menuitem id="menu_acs_card" name="卡片資料維護" parent="menu_acs" action="action_acs_card"/>
-   <menuitem id="menu_acs_cardlog" name="進出紀錄" parent="menu_acs" action="action_acs_cardlog"/>
+  <menuitem id="menu_acs" name="門禁"/> <!--頂層選單決定模組顯示名稱-->
+    <menuitem id="menu_acs_locker" name="櫃位資料設定" parent="menu_acs" action="action_acs_locker" />
+    <menuitem id="menu_acs_device" name="卡機資料設定" parent="menu_acs" action="action_acs_device" />
+    <menuitem id="menu_acs_devicegroup" name="門禁群組設定" parent="menu_acs" action="action_acs_devicegroup"/>
+    <menuitem id="menu_acs_card" name="卡片資料維護" parent="menu_acs" action="action_acs_card"/>
+    <menuitem id="menu_acs_cardlog" name="進出紀錄" parent="menu_acs" action="action_acs_cardlog"/>
     <menuitem id="menu_acs_cardsettinglog" name="卡片異動紀錄" parent="menu_acs"  action="action_acs_cardsettinglog" />
-    <menuitem id="menu_acs_accesscodelog" name="個人通關密碼設定紀錄" parent="menu_acs"  action="action_acs_accesscodelog" />
-
 </odoo>

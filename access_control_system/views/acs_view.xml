@@ -218,20 +218,6 @@
     </record>
 
 
-    <record model="ir.ui.view" id="acs_accesscodelog_list">
-      <field name="name">個人通關密碼設定紀錄</field>
-      <field name="model">acs.accesscodelog</field>
-      <field name="arch" type="xml">
-        <tree create="false" edit="false" delete="false" duplicate="false">
-          <field name="user_role"/>
-          <field name="user_id"/>
-          <field name="user_name"/>
-          <field name="devicegroup_name"/>
-          <field name="create_time"/>
-          <field name="expire_time"/>
-          <field name="accesscode"/>
-        </tree>
-      </field>
-    </record>
+
 
 </odoo>
