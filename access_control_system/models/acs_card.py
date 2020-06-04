@@ -241,5 +241,7 @@ def call_devices_async(self,cards):
             'sticky': True,
             }
         }
+        if r.status_code != requests.codes.ok:
+            message['params']['message'] = 'something goes wrong'
         return message
 
