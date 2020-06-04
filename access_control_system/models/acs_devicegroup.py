@@ -11,6 +11,93 @@ from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationE
 import logging
 _logger = logging.getLogger(__name__)
 
+def call_devices_async(self,vals):
+    _logger.warning( 'vals[card_ids]: %s' %(vals['card_ids']) )
+    _logger.warning( 'vals[card_ids][0][2]: %s' %(vals['card_ids'][0][2]) )
+    _logger.warning( 'self.card_ids: %s' %(self.card_ids) )
+    cards = []
+    for c2d in self.card_ids:
+        if c2d.id not in vals['card_ids'][0][2]:
+            _logger.warning( 'card to delete: %s' %(c2d.card_id) )
+            cards.append({
+                "event": "delete",
+                'uid' : c2d.card_id,
+            })
+            log_del = {
+                'cardsettinglog_id': (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f'),
+                'cardsetting_type':'門禁群組變更',
+                'user_role': '客戶',
+                'user_id': c2d.user_id,
+                'user_name': c2d.user_name,
+                'card_id' : c2d.card_id,
+                'data_origin': '退出群組:%s' %(self.devicegroup_name) ,
+                'data_new': '',
+                'cardsettinglog_time': datetime.datetime.now(),
+                'cardsettinglog_user': self.env.user.name
+            }
+            self.env['acs.cardsettinglog'].sudo().create([log_del])
+    addCheck = True
+    for cid2add in vals['card_ids'][0][2]:
+        addCheck = True
+        for oldcard in  self.card_ids:
+            if oldcard.id == cid2add:
+                addCheck = False
+        if addCheck == True:
+            _logger.warning( 'card to add by id: %s' %(cid2add) )
+            card2add = self.env['acs.card'].sudo().search([['id','=',cid2add ] ])
+            cards.append({
+                "event": "add",
+                "expire_start": "2030-05-01",
+                "expire_end": "2030-05-31",
+                'uid' : card2add.card_id,
+                'display' :  card2add.user_name,
+                'pin': card2add.card_pin,
+            })
+            log_add = {
+                'cardsettinglog_id': (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f'),
+                'cardsetting_type':'門禁群組變更',
+                'user_role': '客戶',
+                'user_id': card2add.user_id,
+                'user_name': card2add.user_name,
+                'card_id' : card2add.card_id,
+                'data_origin': '' ,
+                'data_new': '加入群組:%s' %(self.devicegroup_name) ,
+                'cardsettinglog_time': datetime.datetime.now(),
+                'cardsettinglog_user': self.env.user.name
+            }
+            self.env['acs.cardsettinglog'].sudo().create([log_add])
+
+    logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
+    payload={ "logid": logid, "device": [] }
+
+    for d in self.device_ids:
+        payload["device"].append({
+            "device_id": d.device_id,
+            "ip": d.device_ip,
+            "port": d.device_port,
+            "node": d.node_id,
+            "card": cards
+        })
+
+    # call api to update locker's devicegroup's devices
+    _logger.warning('sending request: %s' % (json.dumps(payload) ) )
+    deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
+    _logger.warning('deviceserver: %s' % (deviceserver) )
+    r = requests.post(deviceserver+'/api/devices-async',data=json.dumps(payload))
+    _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
+    message = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+        'title': r.status_code,
+        'message': r._content,
+        'sticky': True,
+        }
+    }
+    if r.status_code != requests.codes.ok:
+        message['params']['message'] = 'something goes wrong'
+    return message
+
 class AcsDeviceGroup(models.Model):
     _name = 'acs.devicegroup'
     _description = '門禁群組設定'
@@ -33,6 +120,17 @@ class AcsDeviceGroup(models.Model):
         column1='card_id',
         column2='devicegroup_id',
     )
+
+    def write(self,vals):
+        #_logger.warning( 'vals: %s' %(vals) )
+        if 'card_ids' in vals:
+            _logger.warning( 'card member change!!' )            
+            call_devices_async(self,vals)
+        else:
+            _logger.warning( 'card no change!!' )
+
+        result = super(AcsDeviceGroup, self).write(vals)
+        return result
 
     def action_push(self):
         logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
@@ -219,3 +317,6 @@ class AcsDeviceGroup(models.Model):
         if r.status_code != requests.codes.ok:
             message['params']['message'] = 'something goes wrong'
         return message
+
+
+
