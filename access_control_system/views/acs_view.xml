@@ -37,8 +37,8 @@
                   
                   <field name="locker_floor"/>
                   <field name="locker_vesion"/>
-                  <field name="devicegroup" options="{'no_create_edit': True, 'no_create': True}" />
-                  <field name="card"/>
+                  <field name="devicegroup" widget="many2one" options="{'no_create_edit': True, 'no_create': True}" />
+                  <field name="card" widget="many2one" options="{'no_create_edit': True, 'no_create': True}"/>
                   <field name="contract_id"/>
                 </group>
                 </sheet>
