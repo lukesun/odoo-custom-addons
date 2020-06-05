@@ -55,6 +55,7 @@ class AcsCard(models.Model):
             record.user_phone = record.card_owner.phone
 
 #card ORM methods
+    #TODO add 1 new card will error
     def create(self, vals):
         _log2table(self ,'新增' ,vals)
         result = super(AcsCard, self).create(vals)
@@ -232,16 +233,6 @@ def call_devices_async(self,cards):
         # E: begin send request to /api/devices-async
         r = requests.post(deviceserver+'/api/devices-async',data=json.dumps(payload))
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
-        message = {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-            'title': r.status_code,
-            'message': r._content,
-            'sticky': True,
-            }
-        }
-        if r.status_code != requests.codes.ok:
-            message['params']['message'] = 'something goes wrong'
-        return message
+        #if r.status_code != requests.codes.ok:
+        #    'something goes wrong'
 

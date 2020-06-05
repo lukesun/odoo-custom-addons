@@ -132,7 +132,7 @@ class AcsAPI(http.Controller):
 
             if dr :
                 _logger.warning( 'device name:%s' % (dr.name) )
-                if d['status'] == '1':
+                if d['status'] == 1:
                     dr.device_pin = d['pin']
                     t = datetime.datetime.now()
                     dr.device_pin_update = t.strftime('%Y-%m-%d %H:%M:%S')
