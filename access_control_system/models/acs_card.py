@@ -57,24 +57,23 @@ class AcsCard(models.Model):
 #card ORM methods
     @api.model
     def create(self, vals):
-        _log2table(self ,'新增' ,vals)
+        _log2table(self ,vals)
         result = super(AcsCard, self).create(vals)
         return result
     
     def write(self,vals):
-        _log2table(self ,'修改' ,vals)
+        _log2table(self ,vals)
         result = super(AcsCard, self).write(vals)
         return result
 
     def unlink(self):
-        _log2table(self ,'刪除' ,{})
+        _log2table(self ,{})
         result = super(AcsCard, self).unlink()
         return result
 
 
-def _log2table(self ,cardsetting_type ,vals):
+def _log2table(self ,vals):
 
-    _logger.warning( cardsetting_type )
     _logger.warning( self )
     _logger.warning( 'vals:' + json.dumps(vals) )
 
@@ -84,7 +83,7 @@ def _log2table(self ,cardsetting_type ,vals):
     
     ldata = {
         'cardsettinglog_id': '',
-        'cardsetting_type':cardsetting_type,
+        'cardsetting_type':'',
         'user_role': '',
         'user_id': '',
         'user_name': '',
@@ -124,6 +123,7 @@ def _log2table(self ,cardsetting_type ,vals):
         
         if vals == {}:
             _logger.warning( 'THIS IS DELETE!!!!!' )
+            ldata['cardsetting_type'] = '刪除'
             #A1 build delete list
             cards2delete.append({
                     "event": "delete",
@@ -132,6 +132,7 @@ def _log2table(self ,cardsetting_type ,vals):
                 })
         else:
             _logger.warning( 'THIS IS UPDATE!!!!!' )
+            ldata['cardsetting_type'] = '修改'
             if 'card_id' in vals:
                 #use new overwrite display cols when changing card_id
                 _logger.warning( 'card_id change!' )
@@ -177,6 +178,7 @@ def _log2table(self ,cardsetting_type ,vals):
     #for addnew--> not update or delete
     if recordcount == 0:
         _logger.warning( 'THIS IS CREATE!!!!!' )
+        ldata['cardsetting_type'] = '新增'
         if 'card_id' in vals:
         #use new card_id as logdata
             _logger.warning( 'create with card_id:' + vals['card_id'])
