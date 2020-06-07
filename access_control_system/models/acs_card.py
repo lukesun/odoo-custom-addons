@@ -55,7 +55,7 @@ class AcsCard(models.Model):
             record.user_phone = record.card_owner.phone
 
 #card ORM methods
-    #TODO add 1 new card will error
+    @api.model
     def create(self, vals):
         _log2table(self ,'新增' ,vals)
         result = super(AcsCard, self).create(vals)
@@ -177,20 +177,17 @@ def _log2table(self ,cardsetting_type ,vals):
     #for addnew--> not update or delete
     if recordcount == 0:
         _logger.warning( 'THIS IS CREATE!!!!!' )
-        for val in vals:
-            recordcount+=1
-            if 'card_id' in val:
-                _logger.warning( 'new card_id!' + str(recordcount) )
-                ldata['card_id'] = val['card_id']
-                #C2: log into logtable
-                ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
-                self.env['acs.cardsettinglog'].sudo().create([ldata])
-                _logger.warning( ldata )
-            else:                
-                _logger.warning( 'WARNIG!!! MISSING card_id!' + str(recordcount))
+        if 'card_id' in vals:
+        #use new card_id as logdata
+            _logger.warning( 'create with card_id:' + vals['card_id'])
+            ldata['card_id'] = vals['card_id']
+        #C2: log into logtable
+        ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
+        self.env['acs.cardsettinglog'].sudo().create([ldata])
+        _logger.warning( ldata )
         #no need to send request here
         return
-    # D: build request by devices-card-action list in delete,add,update order
+    #D: build request by devices-card-action list in delete,add,update order
     call_devices_async(self,cards2delete)
     call_devices_async(self,cards2add)
     call_devices_async(self,cards2update)
