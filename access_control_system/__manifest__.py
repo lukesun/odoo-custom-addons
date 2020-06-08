@@ -2,7 +2,7 @@
 
 {
     'name': 'Access Control',
-    'description': 'Manage access control devices.',
+    'description': 'Manage access control of devices.',
     'author': 'TDL',
     'depends': ['base'],
     'application': True,
