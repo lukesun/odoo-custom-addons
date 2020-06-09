@@ -190,11 +190,14 @@ def _log2table(self ,vals):
         #no need to send request here
         return
     #D: build request by devices-card-action list in delete,add,update order
+    _logger.warning('call_devices_async, delete: %s' % (json.dumps(cards2delete) ) )
     call_devices_async(self,cards2delete)
+    _logger.warning('call_devices_async, add: %s' % (json.dumps(cards2add) ) )
     call_devices_async(self,cards2add)
+    _logger.warning('call_devices_async, update: %s' % (json.dumps(cards2update) ) )
     call_devices_async(self,cards2update)
 
-def call_devices_async(self,cards):
+def call_devices_async(self,cards):    
     logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
     payload={ "logid": logid, "device": [] }
 

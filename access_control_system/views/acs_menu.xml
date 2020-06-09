@@ -53,8 +53,8 @@
     <menuitem id="menu_acs_devicegroup" name="門禁群組設定" parent="menu_acs_data" action="action_acs_devicegroup"/>
     <menuitem id="menu_acs_card" name="卡片設定" parent="menu_acs_data" action="action_acs_card"/>
 
-    <menuitem id="menu_acs_cardlog" name="進出紀錄" parent="menu_acs_log" action="action_acs_cardlog"/>
+    <menuitem id="menu_acs_cardlog" name="門禁刷卡紀錄" parent="menu_acs_log" action="action_acs_cardlog"/>
     <menuitem id="menu_acs_cardsettinglog" name="卡片異動紀錄" parent="menu_acs_log"  action="action_acs_cardsettinglog" />
 
-    <menuitem id="menu_acs_accesscodelog" name="個人通關密碼設定紀錄" parent="menu_acs_pwd"  action="action_acs_accesscodelog" />
+    <menuitem id="menu_acs_accesscodelog" name="個人歷史密碼" parent="menu_acs_pwd"  action="action_acs_accesscodelog" />
 </odoo>
