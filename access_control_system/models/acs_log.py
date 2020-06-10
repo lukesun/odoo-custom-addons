@@ -8,8 +8,9 @@ _logger = logging.getLogger(__name__)
 class AcsServicelog(models.Model):
     _name = 'acs.servicelog'
     _description = '卡機通訊紀錄'
-    #devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
-    
+    devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
+    request_data = fields.Char(string='原始資料')
+
 class AcsCardlog(models.Model):
     _name = 'acs.cardlog'
     _description = '刷卡紀錄'
@@ -45,6 +46,7 @@ class AcsCardSettinglog(models.Model):
 class AcsAccessCodelog(models.Model):
     _name = 'acs.accesscodelog'
     _description = '個人通關密碼設定紀錄'
+    _rec_name = 'accesscodelog_id'
 
     accesscodelog_id = fields.Char(string='紀錄編號')
     user_role = fields.Char(string='身份')

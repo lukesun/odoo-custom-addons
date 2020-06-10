@@ -14,3 +14,5 @@ class AcsContract(models.Model):
     _description = '設定'
     _rec_name = 'contract_id'
     confirmDelte = fields.Boolean(string='確認刪除', default=False)
+
+    contract_id = fields.Char(string="合約編號")

@@ -216,17 +216,17 @@ def call_devices_async(self,cards):
                             "node": d.node_id,
                             "card": [ card ]
                         })
-                for lk in c.locker_ids:
-        # B2 search locker related group
-                    if lk.devicegroup:
-                        for d in lk.devicegroup.device_ids:
-                            payload["device"].append({
-                                "device_id": d.device_id,
-                                "ip": d.device_ip,
-                                "port": d.device_port,
-                                "node": d.node_id,
-                                "card": [ card ]
-                            })
+                # for lk in c.locker_ids:
+        ## B2 search locker related group 櫃位群組
+                    # if lk.devicegroup:
+                    #     for d in lk.devicegroup.device_ids:
+                    #         payload["device"].append({
+                    #             "device_id": d.device_id,
+                    #             "ip": d.device_ip,
+                    #             "port": d.device_port,
+                    #             "node": d.node_id,
+                    #             "card": [ card ]
+                    #         })
     if len(payload["device"]) > 0:
         
         _logger.warning('sending request: %s' % (json.dumps(payload) ) )
