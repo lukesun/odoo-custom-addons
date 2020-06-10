@@ -1,6 +1,5 @@
 <odoo>
     <data>
-<!--
 
         <template id="listing">
           <ul>
@@ -21,7 +20,5 @@
             </t>
           </dl>
         </template>
--->
-
     </data>
 </odoo>

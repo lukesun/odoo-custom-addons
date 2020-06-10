@@ -15,19 +15,18 @@ class AcsLocker(models.Model):
     _rec_name = 'locker_id'
     confirmDelte = fields.Boolean(string='確認刪除', default=False)
 
-    locker_id = fields.Char(string="櫃位編號", required=True)
-    locker_type = fields.Char(string="產品種類")
-    locker_style = fields.Char(string="類型")
-    locker_spec =  fields.Char(string="規格")
-    locker_floor = fields.Char(string="樓層")
-    locker_vesion = fields.Char(string="期數")
+    locker_status = fields.Selection([ ('閒置', '閒置'),('租用中', '租用中'),('自用', '自用'),('停用', '停用'),],'櫃位狀態', default='閒置', required=True)
+    locker_id = fields.Char(string="櫃號", required=True)
+    locker_type = fields.Selection([ ('倉庫', '倉庫'),('工作空間', '工作空間'),('經典車庫', '經典車庫'),('公司登記', '公司登記'),],string="租賃類別", default='倉庫', required=True)
+    locker_style = fields.Char(string="類型", required=True)
+    locker_spec =  fields.Char(string="規格", required=True)
+    locker_floor = fields.Char(string="樓層", required=True)
+    locker_vesion = fields.Char(string="期數", required=True)
+    devicegroup = fields.Many2one('acs.devicegroup','門禁群組',ondelete='set null')
     
     locker_owner = fields.Many2one('hr.department','所屬部門',ondelete='set null')
 
-    devicegroup = fields.Many2one('acs.devicegroup','門禁群組',ondelete='set null')
-    
     card = fields.Many2one('acs.card','所屬卡片',ondelete='set null')
-    
     contract_id = fields.Char(string="合約編號")
 
     # _sql_constraints = [

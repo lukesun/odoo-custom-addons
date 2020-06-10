@@ -11,6 +11,10 @@ from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationE
 import logging
 _logger = logging.getLogger(__name__)
 
+class Department(models.Model):
+    _inherit = 'hr.department'
+    short_name = fields.Char(string="部門代號")
+    
 class AcsDevice(models.Model):
     _name = 'acs.device'
     _description = '卡機設定'
@@ -19,17 +23,29 @@ class AcsDevice(models.Model):
 
     device_id = fields.Char(string="卡機編號", required=True)
     name = fields.Char(string="卡機名稱", required=True)
-    device_ip =  fields.Char(string='IP 位址', size=15, required=True)
+    device_ip =  fields.Char(string='IP位址', size=15, required=True)
     device_type = fields.Char(string='型號', size=15, required=True)
     device_port = fields.Char( string='卡機Port',size=4, required=True)
     node_id = fields.Char( string='卡機站號',size=3, required=True)
     device_location = fields.Char(string='樓層', size=8)
     device_pin = fields.Char(string='通關密碼', size=4)
     device_pin_update = fields.Char(string='密碼更新時間')
-
-    device_owner = fields.Many2one('hr.department',string='所屬門市(部門)',ondelete='set null')
+    device_status = fields.Char(string='連線否',default='')
+    device_owner_id = fields.Char(string='部門代號',compute='_get_owner_id')
+    device_owner = fields.Many2one('hr.department',string='部門名稱',ondelete='set null')
 
     devicegroup = fields.Many2one('acs.devicegroup',string='門禁群組',ondelete='set null')
+
+#變更部門欄位時顯示部門代碼
+    @api.onchange('device_owner')
+    def _onchange_owner(self):
+        _logger.warning('onchange device_owner: %s' % (self) )
+        if self.device_owner:
+            self.device_owner_id= self.device_owner.short_name
+
+    def _get_owner_id(self):
+        for record in self:
+            record.device_owner_id = record.device_owner.short_name
 
     def action_reset_pincode(self):
         logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
@@ -94,6 +110,3 @@ class AcsDevice(models.Model):
     def unlink(self):
         self.write({'devicegroup': False})
         return True
-
-
-
