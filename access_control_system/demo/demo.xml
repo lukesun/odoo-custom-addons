@@ -1,38 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-          <record id="object0" model="acs.devicegroup">
-            <field name="devicegroup_name">松山一期</field>
-            <field name="devicegroup_id">NK01</field>
+    <data noupdate="1">
+          <!--DEVICEGROUP DEMO DATA -->
+          <record id="group0" model="acs.devicegroup">
+            <field name="devicegroup_name">測試一期</field>
+            <field name="devicegroup_id">TG01</field>
           </record>
-          <record id="object1" model="acs.devicegroup">
-            <field name="devicegroup_name">松山二期</field>
-            <field name="devicegroup_id">NK02</field>
+          <record id="group1" model="acs.devicegroup">
+            <field name="devicegroup_name">測試二期</field>
+            <field name="devicegroup_id">TG02</field>
           </record>
-                  <record id="object2" model="acs.device">
-            <field name="device_name">松山一期內門</field>
-            <field name="device_id">NK01</field>
+          <!--DEVICE DEMO DATA -->
+          <!-- <record id="device0" model="acs.device">
+            <field name="device_name">松山一期1門</field>
+            <field name="device_id">TS01</field>
             <field name="device_ip">192.168.0.211</field>
-            <field name="device_type">SCR035</field>
-            <field name="device_owner">1</field>
+            <field name="device_type">Soyal701</field>
+            <field name="device_owner" ref="dept_test"/>
             <field name="device_location">4F</field>
           </record>
-
-          <record id="object3" model="acs.device">
-            <field name="device_name">松山一期外門</field>
-            <field name="device_id">NK02</field>
+          <record id="device1" model="acs.device">
+            <field name="device_name">松山一期2門</field>
+            <field name="device_id">TS02</field>
             <field name="device_ip">192.168.0.212</field>
-            <field name="device_type">SCR035</field>
-            <field name="device_owner">1</field>
+            <field name="device_type">Soyal701</field>
+            <field name="device_owner" ref="dept_test"/>
             <field name="device_location">4F</field>
-          </record>
-
-          <record id="object4" model="acs.device">
-            <field name="device_name">松山一期測試門</field>
-            <field name="device_id">NK03</field>
+          </record>1
+          <record id="device2" model="acs.device">
+            <field name="device_name">松山一期3門</field>
+            <field name="device_id">TS03</field>
             <field name="device_ip">192.168.0.213</field>
-            <field name="device_type">SCR035</field>
-            <field name="device_owner">1</field>
+            <field name="device_type">Soyal701</field>
+            <field name="device_owner" ref="dept_test"/>
             <field name="device_location">4F</field>
+          </record> -->
+          <!--DEPARTMENT DEMO DATA -->
+          <record id="dept_test" model="hr.department">
+              <field name="name">測試部門</field>
+              <field name="short_name">DEMO</field>
+          </record>
+         <!--EMPLOYEE  DEMO DATA ? -->
+          <record id="employee_demo" model="hr.employee">
+              <field name="name">測試員</field>
+              <field name="department_id" ref="dept_test"/>
+              <field name="work_location">Building 1, Second Floor</field>
+              <field name="work_phone">(376)-310-7863</field>
+              <field name="work_email">demo@example.com</field>
+              <!-- <field name="image_1920" type="base64" file="hr/static/img/employee_al-image.jpg"/> -->
           </record>
     </data>
 </odoo>
