@@ -6,13 +6,15 @@
         <field name="model">acs.cardlog</field>
         <field name="arch" type="xml">
         <tree create="false" edit="false" delete="false" duplicate="false">
-            <field name="device_owner"/>
+            <field name="department_code"/>
+            <field name="department_name"/>
+            <field name="device_code"/>
             <field name="device_name"/>
             <field name="user_role"/>
             <field name="card_id"/>
-            <field name="cardlog_type"/>
             <field name="user_id"/>
             <field name="user_name"/>
+            <field name="cardlog_type"/>
             <field name="cardlog_time"/>
             <field name="cardlog_result"/>
         </tree>

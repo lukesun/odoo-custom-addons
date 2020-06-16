@@ -6,11 +6,12 @@
       <field name="model">acs.card</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="user_role"/>
-          <field name="user_code"/>
-          <field name="user_name"/>
-          <field name="user_phone"/>
-          <field name="uid"/>
+            <field name="user_role"/>
+            <field name="user_code"/>
+            <field name="user_name"/>
+            <field name="user_phone"/>
+            <field name="uid"/>
+            <field name="pin"/>
         </tree>
       </field>
     </record>
@@ -25,7 +26,7 @@
             </header>
             <sheet>
                 <group>
-                <field name="partner_id" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_vat': True , 'search_by_vat': True}" options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="person_ref"/>
                 <field name="user_code" />
                 <field name="user_name" />
                 <field name="user_phone"/>

@@ -9,7 +9,7 @@ from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationE
 
 _logger = logging.getLogger(__name__)
 
-def _log2table(self ,vals):
+def write_card_log(self ,vals):
 
     _logger.warning( self )
     _logger.warning( 'vals:' + json.dumps(vals) )
@@ -38,16 +38,16 @@ def _log2table(self ,vals):
         #keep old vals in data_origin
         vals_old ={
             'user_role': record.user_role,
-            'user_id': record.user_id, 
+            'user_id': record.user_code, 
             'user_name': record.user_name,
-            'card_id' : record.card_id,
-            'card_pin' : record.card_pin,
+            'card_id' : record.uid,
+            'card_pin' : record.pin,
         }
         #use old vals for display
         ldata['user_role'] =record.user_role
-        ldata['user_id'] =record.user_id
+        ldata['user_id'] =record.user_code
         ldata['user_name'] = record.user_name
-        ldata['card_id'] = record.card_id
+        ldata['card_id'] = record.uid
         ldata['data_origin'] =json.dumps(vals_old)
 
         #TODO: build 1 request for api/devices-async
@@ -64,7 +64,7 @@ def _log2table(self ,vals):
             #A1 build delete list
             cards2delete.append({
                     "event": "delete",
-                    'uid' : record.card_id,
+                    'uid' : record.uid,
                     'id': record.id,
                 })
         else:
@@ -78,16 +78,16 @@ def _log2table(self ,vals):
                 #A2 build delete & addnew list
                 cards2delete.append({
                     "event": "delete",
-                    'uid' : record.card_id,
+                    'uid' : record.uid,
                     'id': record.id,
                 })
                 cards2add.append({ 
                     "event": "add",
                     "expire_start": "2020-05-01",
                     "expire_end": "2030-05-31",
-                    'uid' : vals['card_id'],
+                    'uid' : vals['uid'],
                     'display' :  record.user_name,
-                    'pin': record.card_pin,
+                    'pin': record.pin,
                     'id': record.id,
                 })
             else:
@@ -101,9 +101,9 @@ def _log2table(self ,vals):
                     "event": "update",
                     "expire_start": "2020-05-01",
                     "expire_end": "2030-05-31",
-                    'uid' : record.card_id,
+                    'uid' : record.uid,
                     'display' :  record.user_name,
-                    'pin': vals['card_pin'],
+                    'pin': vals['pin'],
                     'id': record.id,
                 })
             else:
@@ -128,13 +128,13 @@ def _log2table(self ,vals):
         return
     #D: build request by devices-card-action list in delete,add,update order
     _logger.warning('call_devices_async, delete: %s' % (json.dumps(cards2delete) ) )
-    call_devices_async(self,cards2delete)
+    #call_devices_async(self,cards2delete)
     _logger.warning('call_devices_async, add: %s' % (json.dumps(cards2add) ) )
-    call_devices_async(self,cards2add)
+    #call_devices_async(self,cards2add)
     _logger.warning('call_devices_async, update: %s' % (json.dumps(cards2update) ) )
-    call_devices_async(self,cards2update)
+    #call_devices_async(self,cards2update)
 
-def call_devices_async(self,cards):    
+""" def call_devices_async(self,cards):    
     logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
     payload={ "logid": logid, "device": [] }
 
@@ -163,7 +163,7 @@ def call_devices_async(self,cards):
         _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
         #if r.status_code != requests.codes.ok:
         #    'something goes wrong'
-
+ """
 #更新卡機設定
 def call_devices_async(self,vals):
     _logger.warning( 'vals[card_ids]: %s' %(vals['card_ids']) )

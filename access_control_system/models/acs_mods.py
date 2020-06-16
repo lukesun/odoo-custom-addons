@@ -35,7 +35,7 @@ class AcsLocker(models.Model):
 
 class AcsContract(models.Model):
     _name = 'acs.contract'
-    _description = '????'
+    _description = '合約設定'
     _rec_name = 'code'
     confirmUnlink = fields.Boolean(string='確認刪除', default=False)
 
