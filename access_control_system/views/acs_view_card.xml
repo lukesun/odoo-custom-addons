@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record model="ir.ui.view" id="acs_card_list">
+      <field name="name">卡片設定</field>
+      <field name="model">acs.card</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="user_role"/>
+          <field name="user_code"/>
+          <field name="user_name"/>
+          <field name="user_phone"/>
+          <field name="uid"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="acs_card_form">
+        <field name="name">卡片設定</field>
+        <field name="model">acs.card</field>
+        <field name="arch" type="xml">
+            <form string="卡片設定" duplicate="0">
+            <header>
+                <!-- Buttons go here-->
+            </header>
+            <sheet>
+                <group>
+                <field name="partner_id" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_vat': True , 'search_by_vat': True}" options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="user_code" />
+                <field name="user_name" />
+                <field name="user_phone"/>
+                <field name="uid"/>
+                <field name="pin"/>
+                </group>
+                <notebook>
+                <!--
+                <page string="合約列表">
+                    <field name="contract_ids">
+                    </field>
+                </page>-->
+                <page string="授權群組列表">
+                    <field name="devicegroup_ids">
+                    </field>
+                </page>
+                </notebook>
+            </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

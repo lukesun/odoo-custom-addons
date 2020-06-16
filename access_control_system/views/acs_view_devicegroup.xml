@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="acs_devicegroup_list">
+        <field name="name">門禁群組</field>
+        <field name="model">acs.devicegroup</field>
+        <field name="arch" type="xml">
+            <tree>
+            <field name="code"/>
+            <field name="fullname"/>
+            </tree>
+        </field>
+    </record>
+        
+    <record model="ir.ui.view" id="acs_devicegroup_form">
+            <field name="name">門禁群組設定</field>
+            <field name="model">acs.devicegroup</field>
+            <field name="arch" type="xml">
+                <form string="門禁群組設定">
+                    <header>
+                        <!-- Buttons go here
+                        <button name="action_clear" string="清除設定" type="object" default_focus="1" class="oe_highlight"/>
+                        <button name="action_push" string="傳送設定" type="object" default_focus="1" class="oe_highlight"/> 
+                        <button name="action_update" string="更新設定" type="object" default_focus="1" class="oe_highlight"/>
+                        <button name="action_reset_group_pincode" string="更新通關密碼" type="object" default_focus="1" class="oe_highlight"/>
+                        -->
+                    </header>
+                    <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="fullname"/>
+                    </group>
+                    <notebook>
+                        <page string="卡機列表">
+                            <field name="device_ids" options="{'no_create_edit': True, 'no_create': True}">
+                                <tree string="卡機列表s" editable="bottom">
+                                <field name="code"/>
+                                <field name="fullname"/>
+                            </tree>
+                            </field>
+                        </page>
+                        <!--
+                        <page string="櫃位列表">
+                            <field name="locker_ids" options="{'no_create_edit': True, 'no_create': True}"/>
+                        </page>
+                        <page string="授權卡片列表">
+                            <field name="card_ids" options="{'no_create_edit': True, 'no_create': True}"/>
+                        </page>
+                        -->
+                    </notebook>
+                    </sheet>
+                </form>
+            </field>
+    </record>
+
+</odoo>

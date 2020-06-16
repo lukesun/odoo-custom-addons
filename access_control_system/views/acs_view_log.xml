@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record model="ir.ui.view" id="acs_cardlog_list">
+        <field name="name">進出紀錄</field>
+        <field name="model">acs.cardlog</field>
+        <field name="arch" type="xml">
+        <tree create="false" edit="false" delete="false" duplicate="false">
+            <field name="device_owner"/>
+            <field name="device_name"/>
+            <field name="user_role"/>
+            <field name="card_id"/>
+            <field name="cardlog_type"/>
+            <field name="user_id"/>
+            <field name="user_name"/>
+            <field name="cardlog_time"/>
+            <field name="cardlog_result"/>
+        </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="acs_cardsettinglog_list">
+        <field name="name">卡片異動紀錄</field>
+        <field name="model">acs.cardsettinglog</field>
+        <field name="arch" type="xml">
+        <tree create="false" edit="false" delete="false" duplicate="false">
+            <field name="cardsetting_type"/>
+            <field name="user_role"/>
+            <field name="user_id"/>
+            <field name="user_name"/>
+            <field name="card_id"/>
+            <field name="cardsettinglog_time"/>
+            <field name="cardsettinglog_user"/>
+        </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="acs_accesscodelog_list">
+      <field name="name">個人通關密碼設定紀錄</field>
+      <field name="model">acs.accesscodelog</field>
+      <field name="arch" type="xml">
+        <tree create="false" edit="false" delete="false" duplicate="false">
+          <field name="user_role"/>
+          <field name="user_id"/>
+          <field name="user_name"/>
+          <field name="devicegroup_name"/>
+          <field name="create_time"/>
+          <field name="expire_time"/>
+          <field name="accesscode"/>
+        </tree>
+      </field>
+    </record>
+</odoo>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+          <!--DEPARTMENT DEMO DATA -->
+          <record id="dept_test" model="hr.department">
+              <field name="name">測試部門</field>
+              <field name="code">DEMO</field>
+          </record>
+         <!--EMPLOYEE  DEMO DATA ? -->
+          <record id="employee_demo" model="hr.employee">
+              <field name="name">測試員</field>
+              <field name="department_id" ref="dept_test"/>
+              <field name="work_location">測試站點</field>
+              <field name="work_phone">(TEST)-555-0987</field>
+              <field name="work_email">test@test.com</field>
+              <!-- <field name="image_1920" type="base64" file="hr/static/img/employee_al-image.jpg"/> -->
+          </record>
+          <!--DEVICEGROUP DEMO DATA -->
+          <record id="group0" model="acs.devicegroup">
+            <field name="fullname">測試一期</field>
+            <field name="code">TG01</field>
+          </record>
+          <record id="group1" model="acs.devicegroup">
+            <field name="fullname">測試二期</field>
+            <field name="code">TG02</field>
+          </record>
+          <!--DEVICE DEMO DATA -->
+          <record id="device0" model="acs.device">
+            <field name="fullname">松山一期1門</field>
+            <field name="code">TS01</field>
+            <field name="ip">118.233.72.82</field>
+            <field name="port">1621</field>
+            <field name="node">001</field>
+            <field name="hardware">Soyal701</field>
+            <field name="department_id" ref="dept_test"/>
+            <field name="location">4F</field>
+          </record>
+          <record id="device1" model="acs.device">
+            <field name="fullname">松山一期2門</field>
+            <field name="code">TS02</field>
+            <field name="ip">118.233.72.82</field>
+            <field name="port">1622</field>
+            <field name="node">002</field>
+            <field name="hardware">Soyal701</field>
+            <field name="department_id" ref="dept_test"/>
+            <field name="location">4F</field>
+          </record>
+          <record id="device2" model="acs.device">
+            <field name="fullname">松山一期3門</field>
+            <field name="code">TS03</field>
+            <field name="ip">118.233.72.82</field>
+            <field name="port">1623</field>
+            <field name="node">003</field>
+            <field name="hardware">Soyal701</field>
+            <field name="department_id" ref="dept_test"/>
+            <field name="location">4F</field>
+          </record>
+
+    </data>
+</odoo>

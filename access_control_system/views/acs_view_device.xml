@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="acs_device_list">
+      <field name="name">門市卡機列表</field>
+      <field name="model">acs.device</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="code"/>
+          <field name="fullname"/>
+          <field name="ip"/>
+          <field name="hardware"/>
+          <field name="port"/>
+          <field name="node"/>
+          <field name="department_code"/>
+          <field name="department_id"/>
+          <field name="location"/>
+          <field name="status"/>
+          <field name="pin"/>
+          <field name="pin_update"/>
+        </tree>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="acs_device_form">
+        <field name="name">門市卡機設定</field>
+        <field name="model">acs.device</field>
+        <field name="arch" type="xml">
+            <form string="卡機設定">
+            <header>
+                      <!-- Buttons go here-->
+                      <button name="action_test" string="測試連線" type="object" default_focus="1" class="oe_highlight"/>
+                      <button name="action_reset_pincode" string="更新通關密碼" type="object" default_focus="1" class="oe_highlight"/>
+                  </header>
+                <sheet>
+                <group>
+                    <field name="code"/>
+                    <field name="fullname"/>
+                    <field name="ip"/>
+                    <field name="hardware" />
+                    <field name="port"/>
+                    <field name="node"/>
+                    <field name="department_id" options="{'no_create_edit': True, 'no_create': True}"/>
+                    <field name="department_code"/>
+                    <field name="location"/>
+                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

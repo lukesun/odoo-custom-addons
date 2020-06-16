@@ -1,119 +1,53 @@
 <?xml version="1.0"?>
 <odoo>
-
-    <record model="ir.ui.view" id="acs_device_list">
-      <field name="name">門市卡機列表</field>
-      <field name="model">acs.device</field>
+    <!--all the view for mod classes-->
+    <record id="res_hr_view_department_form_inherited" model="ir.ui.view"> 
+        <field name="name">hr.custom.form.inherited</field>
+        <field name="model">hr.department</field> 
+        <field name="inherit_id" ref="hr.view_department_form"/> 
+        <field name="arch" type="xml"> 
+            <xpath expr="//field[@name='name']" position="after"> 
+                <field name="code" string="部門代碼"/>
+            </xpath> 
+        </field> 
+    </record>
+    <record model="ir.ui.view" id="acs_locker_list">
+      <field name="name">櫃位列表</field>
+      <field name="model">acs.locker</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="device_owner"/>
-          <field name="device_id"/>
-          <field name="name"/>
-          <field name="device_ip"/>
-          <field name="device_type"/>
-          <field name="device_location"/>
-          <field name="active"/>
+          <field name="status"/>
+          <field name="code"/>
+          <field name="category"/>
+          <field name="style"/>
+          <field name="spec"/>
+          <field name="floor"/>
+          <field name="vesion"/>
+          <field name="devicegroup_id"/>
         </tree>
       </field>
     </record>
-    <record model="ir.ui.view" id="view_form_acs_device">
-        <field name="name">門禁設定</field>
-        <field name="model">acs.device</field>
+    <record model="ir.ui.view" id="acs_locker_form">
+        <field name="name">櫃位設定</field>
+        <field name="model">acs.locker</field>
         <field name="arch" type="xml">
-            <form string="卡機設定">
-                <group>
-                    <field name="device_id"/>
-                    <field name="name"/>
-                    <field name="device_ip"/>
-                    <field name="device_type"/>
-                    <field name="device_owner"/>
-                    <field name="device_location"/>
-                    <field name="active" readonly="1"/>
-                </group>
+            <form string="櫃位設定">
+                <header>
+                      <!-- Buttons go here-->
+                </header>
+                <sheet>
+                    <group>
+                    <field name="status"/>
+                    <field name="code"/>
+                    <field name="category"/>
+                    <field name="style"/>
+                    <field name="spec"/>                  
+                    <field name="floor"/>
+                    <field name="vesion"/>
+                    <field name="devicegroup_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True}" />
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
-
-<record model="ir.ui.view" id="acs_devicegroup_list">
-      <field name="name">門禁群組</field>
-      <field name="model">acs.devicegroup</field>
-      <field name="arch" type="xml">
-        <tree>
-        
-          <field name="name"/>
-        </tree>
-      </field>
- </record>
-    
- <record model="ir.ui.view" id="view_form_acs_devicegroup">
-        <field name="name">門禁群組設定</field>
-        <field name="model">acs.devicegroup</field>
-        <field name="arch" type="xml">
-            <form string="門禁群組設定">
-                <group>
-
-                    <field name="name"/>
-                </group>
-            </form>
-        </field>
-</record>
-
-<record model="ir.ui.view" id="acs_card_list">
-      <field name="name">卡片設定</field>
-      <field name="model">acs.card</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="role"/>
-          <field name="userid"/>
-          <field name="name"/>
-          <field name="phone"/>
-          <field name="cardsn"/>
-        </tree>
-      </field>
-    </record>
-
-        <record model="ir.ui.view" id="view_form_acs_card">
-        <field name="name">卡片設定</field>
-        <field name="model">acs.card</field>
-        <field name="arch" type="xml">
-            <form string="卡片設定">
-                <group>
-                    <field name="role"/>
-                    <field name="userid"/>
-                    <field name="name"/>
-                    <field name="phone"/>
-                </group>
-            </form>
-        </field>
-    </record>
-
-
-<record model="ir.ui.view" id="acs_devicepassword_list">
-      <field name="name">通關密碼</field>
-      <field name="model">acs.devicepassword</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="group"/>
-          <field name="accesscode"/>
-          <field name="start_time"/>
-          <field name="end_time"/>
-        </tree>
-      </field>
-    </record>
-
-        <record model="ir.ui.view" id="view_form_acs_devicepassword">
-        <field name="name">每日更新通關密碼</field>
-        <field name="model">acs.devicepassword</field>
-        <field name="arch" type="xml">
-            <form string="每日更新通關密碼">
-                <group>
-                    <field name="group"/>
-                    <field name="accesscode"/>
-                    <field name="start_time"/>
-                    <field name="end_time"/>
-                </group>
-            </form>
-        </field>
-    </record>
-
 </odoo>
