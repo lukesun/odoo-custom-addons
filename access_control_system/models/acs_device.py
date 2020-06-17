@@ -41,14 +41,12 @@ class AcsDevice(models.Model):
     
 #變更部門欄位時顯示部門代碼
     @api.onchange('department_id')
-    def _onchange_owner(self):
-        _logger.warning('onchange department_id: %s' % (self) )
-        # if self.department_id:
-        #     self.department_code= self.department_id.code
-
     def _get_department_code(self):
         for record in self:
-            record.department_code = record.department_id.code
+            self.department_code = ''
+            if record.department_id:
+                self.department_code = record.department_id.code
+                
 
     def action_reset_pincode(self):
         logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')

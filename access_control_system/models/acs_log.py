@@ -24,11 +24,11 @@ class AcsCardlog(models.Model):
     user_role = fields.Char(string='身份')
     card_id = fields.Char(string='卡片號碼')
     user_name = fields.Char(string='名稱')
-    #卡別？
     user_id = fields.Char(string='I D')
     cardlog_time = fields.Datetime(string='刷卡時間')
     cardlog_type = fields.Char(string='刷卡類別')
     cardlog_result = fields.Char(string='刷卡狀態')
+    cardlog_source = fields.Char(string='卡別') #驗證來源：卡片 密碼
 
     cardlog_id = fields.Char(string='紀錄編號')
     cardlog_data = fields.Char(string='卡機資料')

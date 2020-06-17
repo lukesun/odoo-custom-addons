@@ -27,7 +27,36 @@ class AcsLocker(models.Model):
     
     department_id = fields.Many2one('hr.department','所屬部門',ondelete='set null')
     
-    contract_id = fields.Many2one('acs.contract','所屬合約',ondelete='set null')
+    partner_id = fields.Many2one('res.partner','租用客戶', ondelete='set null')
+
+    @api.onchange('status')
+    def onchange_status(self):
+        for record in self:
+            if record.partner_id:
+                # message = {
+                # 'type': 'ir.actions.client',
+                # 'tag': 'display_notification',
+                # 'params': {
+                #     'title': '規則限制',
+                #     'message': '尚有租約進行中，無法改變狀態',
+                #     'sticky': False,
+                #     }
+                # }
+                message = {
+                    'warning': {
+                    'title': '規則限制',
+                    'message': '尚有租約進行中，無法改變狀態'
+                    }
+                }
+                return message
+
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        for record in self:
+            if record.partner_id:
+                record.status = '租用中'
+            else:
+                record.status = '閒置'
 
     def unlink(self):
         if self.confirmUnlink:
@@ -43,7 +72,16 @@ class AcsContract(models.Model):
 
     code = fields.Char(string="合約編號", required=True)
 
-    locker_id = fields.Many2one('acs.locker','櫃位', required=True)
+    status = fields.Selection([ ('正常', '正常'),('停用', '停用'),('作廢', '作廢'),],'狀態', default='正常', required=True)
+
+    locker_id = fields.Many2one('acs.locker','租用櫃位', required=True)
+
+    @api.onchange('status')
+    def onchange_status(self):
+        for record in self:
+            if record.partner_id and record.locker_id and record.status=='作廢':
+                record.locker_id.partner_id = None
+            
 
     def unlink(self):
         if self.confirmUnlink:

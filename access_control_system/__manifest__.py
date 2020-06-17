@@ -4,7 +4,7 @@
     'name': 'Access Control',
     'description': 'Manage access control of devices.',
     'author': 'TDL',
-    'depends': ['base','hr','contacts'],
+    'depends': ['base','hr','contacts','account'],
     'application': True,
     'data': [
         'security/ir.model.access.csv',

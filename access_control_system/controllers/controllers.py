@@ -57,43 +57,49 @@ class AcsAPI(http.Controller):
             '1C':'密碼正確',
             '06':'卡號過期',
         }
+        #驗證結果分類
+        cardlog_source= {
+            '0B':'卡片',
+            '03':'卡片',
+            '01':'密碼',
+            '1C':'密碼',
+            '06':'卡片',
+        }
         ldata = {
             'cardlog_id': str(dl['id']),
-            'device_owner':'',
+            'department_code':'',
+            'department_name':'',
+            'device_code': '',
             'device_name': '',
-            'user_role': '',
             'card_id':dl['card_uid'],
             'cardlog_type':cardlog_type[ dl['type'] ] ,
             'user_id': '',
             'user_name': '',
+            'user_role': '',
             'cardlog_time' : dl['date'] + ' ' + dl['time'],
             'cardlog_result': cardlog_result[ dl['function_code'] ] ,
+            'cardlog_source': cardlog_source[ dl['function_code'] ] ,
             'cardlog_data': dl['source_data'],
             }
-        devices = http.request.env['acs.device'].sudo().search(
-            [['device_ip','=',dl['ip'] ],['node_id','=',dl['node_id'] ]])
-
+        devices = http.request.env['acs.device'].sudo().search([['device_ip','=',dl['ip'] ],['node_id','=',dl['node_id'] ]])
         if devices :
             for d in devices:
+                ldata['device_code'] = d.code
                 ldata['device_name'] = d.name
-                if d.device_owner:
-                    ldata['device_owner'] = d.device_owner.name
+                if d.department_id:
+                    ldata['department_code'] = d.department_id.code
+                    ldata['department_name'] = d.department_id.name
 
         cards = http.request.env['acs.card'].sudo().search([['card_id','=',dl['card_uid'] ] ])
         if cards :
             for c in cards:
-                ldata['user_id'] = c.card_owner.vat
-                ldata['user_name'] = c.card_owner.name
-                _logger.warning('/api/device-record: card_owner.name-->%s' % ( ldata['user_name'] ) )
-                if hasattr(c.card_owner,'suppleir_rank') and c.card_owner.suppleir_rank>0:
-                    ldata['user_role'] = '廠商'
-                    _logger.warning('/api/device-record: suppleir_rank-->%s' % ( c.card_owner.suppleir_rank ) )
-                if hasattr(c.card_owner,'customer_rank') and c.card_owner.customer_rank>0:
-                    ldata['user_role'] = '客戶'
-                    _logger.warning('/api/device-record: customer_rank-->%s' % ( c.card_owner.customer_rank ) )
-
-        http.request.env['acs.cardlog'].sudo().create([ldata])
+                ldata['user_id'] = c.user_code
+                ldata['user_name'] = c.user_name
+                ldata['user_role'] = c.user_role
+        
         _logger.warning('/api/device-record: log-->%s' % ( json.dumps(ldata) ) )
+        http.request.env['acs.cardlog'].sudo().create([ldata])
+        
         return http_log_response('OK')
 
 #取所有有效卡機(基本資料)
@@ -132,11 +138,13 @@ class AcsAPI(http.Controller):
             if dr :
                 _logger.warning( 'device name:%s' % (dr.name) )
                 if d['status'] == 1:
-                    dr.device_pin = d['pin']
-                    t = datetime.datetime.now()
-                    dr.device_pin_update = t.strftime('%Y-%m-%d %H:%M:%S')
+                    dr.pin = d['pin']
+                    #t = datetime.datetime.now()
+                    dr.pin_update = ( datetime.datetime.now() + timedelta(hours=8) ).strftime('%Y-%m-%d %H:%M:%S')
+                    dr.status = '正常'
                     _logger.warning( 'update ok' )
                 else:
+                    dr.status = '錯誤:' + d['status'] 
                     _logger.warning( 'disconnect!' )
             else:
                 _logger.warning( 'config not exist!' )
