@@ -14,9 +14,10 @@
         'views/acs_view_devicegroup.xml',
         'views/acs_view_card.xml',
         'views/acs_view_log.xml',
+        'demo/demo.xml',
     ],
 
     'demo': [
-        'demo/demo.xml',
+        
     ],
 }

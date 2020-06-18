@@ -73,7 +73,7 @@ def write_card_log(self ,vals):
             if 'card_id' in vals:
                 #use new overwrite display cols when changing card_id
                 _logger.warning( 'card_id change!' )
-                ldata['card_id'] = vals['card_id']
+                ldata['card_id'] = vals['uid']
                 ldata['cardsetting_type'] = '變更卡號'
                 #A2 build delete & addnew list
                 cards2delete.append({
@@ -93,9 +93,9 @@ def write_card_log(self ,vals):
             else:
                 _logger.warning( 'card_id no change!' )
             
-            if 'card_pin' in vals:
+            if 'pin' in vals:
                 #TODO A3 build update list
-                _logger.warning( 'card_pin change!' )
+                _logger.warning( 'pin change!' )
                 ldata['cardsetting_type'] = '變更密碼'
                 cards2update.append({ 
                     "event": "update",
@@ -116,15 +116,14 @@ def write_card_log(self ,vals):
     if recordcount == 0:
         _logger.warning( 'THIS IS CREATE!!!!!' )
         ldata['cardsetting_type'] = '新增'
-        if 'card_id' in vals:
+        if 'uid' in vals:
         #use new card_id as logdata
-            _logger.warning( 'create with card_id:' + vals['card_id'])
-            ldata['card_id'] = vals['card_id']
+            _logger.warning( 'create with card_id:' + vals['uid'])
+            ldata['card_id'] = vals['uid']
         #C2: log into logtable
         ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         self.env['acs.cardsettinglog'].sudo().create([ldata])
         _logger.warning( ldata )
-        #no need to send request here
         return
     #D: build request by devices-card-action list in delete,add,update order
     _logger.warning('call_devices_async, delete: %s' % (json.dumps(cards2delete) ) )
@@ -183,7 +182,7 @@ def call_devices_async(self,vals):
                 'user_role': '客戶',
                 'user_id': c2d.user_id,
                 'user_name': c2d.user_name,
-                'card_id' : c2d.card_id,
+                'card_id' : c2d.uid,
                 'data_origin': '退出群組:%s' %(self.devicegroup_name) ,
                 'data_new': '',
                 'cardsettinglog_time': datetime.datetime.now(),
