@@ -126,11 +126,11 @@ def write_card_log(self ,vals):
         _logger.warning( ldata )
         return
     #D: build request by devices-card-action list in delete,add,update order
-    _logger.warning('call_devices_async, delete: %s' % (json.dumps(cards2delete) ) )
+    #_logger.warning('call_devices_async, delete: %s' % (json.dumps(cards2delete) ) )
     #call_devices_async(self,cards2delete)
-    _logger.warning('call_devices_async, add: %s' % (json.dumps(cards2add) ) )
+    #_logger.warning('call_devices_async, add: %s' % (json.dumps(cards2add) ) )
     #call_devices_async(self,cards2add)
-    _logger.warning('call_devices_async, update: %s' % (json.dumps(cards2update) ) )
+    #_logger.warning('call_devices_async, update: %s' % (json.dumps(cards2update) ) )
     #call_devices_async(self,cards2update)
 
 """ def call_devices_async(self,cards):    

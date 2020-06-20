@@ -19,22 +19,68 @@ class AcsCard(models.Model):
 
     uid = fields.Char(string='卡片號碼', required=True)
     pin = fields.Char(string='卡片密碼')
-    status = fields.Selection([ ('啟用', '啟用'),('作廢', '作廢'),],'卡片狀態', default='啟用', required=True)
+    status = fields.Selection([ ('新建', '新建'),('啟用', '啟用'),('作廢', '作廢'),],'卡片狀態', default='新建', required=True)
 
     user_role = fields.Selection([ ('員工', '員工'),('客戶', '客戶'),('廠商', '廠商'),],'身份', default='客戶', required=True)
-    partner_id = fields.Many2one('res.partner','客戶或廠商', default=False)
+    partner_id = fields.Many2one('res.partner','外部用卡人', default=False)
     employee_id = fields.Many2one('hr.employee','員工', default=False)
     
     user_code = fields.Char(string='I D')
     user_name = fields.Char(string='名稱')
     user_phone = fields.Char(string='電話')
 
+    # _show_partner = fields.Boolean(string="All")
+    # _show_empolyee = fields.Boolean(string="All")
+    # _has_owner = fields.Boolean(string="All")
+
+    def action_get_pin(self):
+        raise UserError('Not support yet,generate_pin.')
+        # for record in self:
+        #     record.pin = "".join(choice(digits) for i in range(4))
+
+    def action_uid_change(self):
+        raise UserError('Not support yet,action_uid_change.')
+
+    def action_dispose(self):
+        #text = """The case """+str(self.case_no)+""" will be forward to VC for further Approval. Are you want to proceed."""
+        #query='delete from thesis_approval_message_oric'
+        #self.env.cr.execute(query) 
+        #value=self.env['thesis.approval.message.oric'].sudo().create({'text':text}) 
+        
+        return { 
+            'type':'ir.actions.act_window', 
+            'name':'卡片作廢',
+            'res_model':'acs.card', 
+            'view_type':'form', 
+            'view_mode':'form', 
+            'target':'new',  
+            'context':{
+                #'thesis_obj':self.id,
+                'flag':'WHAT EVER'
+            }, 
+            'res_id':self.id
+        }
+        #raise UserError('Not support yet,action_dispose')
+        
     @api.onchange('user_role')
     def _change_user_role(self):
         for record in self:
-            if record.partner_id or record.employee_id:
-                raise ValidationError('已確認持有人的卡片無法更改持有人，請作廢或新增卡片。')
-
+            if record.status !='新建':
+                raise ValidationError('已啟用的卡片無法更改持有人，請作廢或新增卡片。')
+            else:
+                if record.user_role == '廠商':
+                    record.employee_id = False
+                    return {'domain': {'partner_id': [('supplier_rank', '>', 0)]}}
+                if record.user_role == '客戶':
+                    record.employee_id = False
+                    return {'domain': {'partner_id': [('supplier_rank', '=', 0)]}}
+                if record.user_role == '員工':
+                    record.partner_id = False
+                
+    # @api.onchange('partner_id')
+    # def onchange_partner_id(self):
+    #     for rec in self:
+    #         return {'domain': {'order_id': [('partner_id', '=', rec.partner_id.id)]}}
 
     @api.onchange('partner_id')
     def _update_partner_profile(self):
@@ -73,6 +119,9 @@ class AcsCard(models.Model):
 #card ORM methods
     @api.model
     def create(self, vals):
+        if 'status' in vals:
+            if vals['status'] == '新建':
+                vals['status'] ='啟用'
         write_card_log(self ,vals)
         result = super(AcsCard, self).create(vals)
         return result

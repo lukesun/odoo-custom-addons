@@ -4,34 +4,52 @@
           <!--DEPARTMENT DEMO DATA -->
           <record id="dept_test" model="hr.department">
               <field name="name">測試部門</field>
+              <field name="code">TEST</field>
+          </record>
+          <record id="dept_test2" model="hr.department">
+              <field name="name">DEMO部門</field>
               <field name="code">DEMO</field>
           </record>
          <!--USER DEMO DATA -->
           <record id="employee_demo" model="hr.employee">
-              <field name="name">測試員工</field>
+              <field name="name">測試員工A</field>
               <field name="department_id" ref="dept_test"/>
               <field name="work_location">測試站點</field>
               <field name="work_phone">(TEST)-555-0987</field>
               <field name="work_email">test@test.com</field>
               <!-- <field name="image_1920" type="base64" file="hr/static/img/employee_al-image.jpg"/> -->
           </record>
+          <record id="employee_demo2" model="hr.employee">
+              <field name="name">測試員工B</field>
+              <field name="department_id" ref="dept_test2"/>
+              <field name="work_location">測試站點</field>
+              <field name="work_phone">(TEST)-555-0987</field>
+              <field name="work_email">demo@test.com</field>
+              <!-- <field name="image_1920" type="base64" file="hr/static/img/employee_al-image.jpg"/> -->
+          </record>
           <record id="supplier_demo" model="res.partner">
               <field name="supplier_rank">1</field>
-              <field name="name">測試廠商</field>
+              <field name="name">測試A廠商</field>
               <field name="vat">A987654321</field>
               <field name="phone">0987-654-321</field>
               <field name="email">test@supplier.com</field>
           </record>
-          <record id="customer_demo1" model="res.partner">
-
+          <record id="supplier_demo2" model="res.partner">
+              <field name="supplier_rank">1</field>
+              <field name="name">測試B廠商</field>
+              <field name="vat">B987654321</field>
+              <field name="phone">0987-654-789</field>
+              <field name="email">demo2@supplier.com</field>
+          </record>
+          <record id="customer_demo" model="res.partner">
               <field name="name">測試客戶1</field>
-              <field name="vat">A123456789</field>
+              <field name="vat">C123456789</field>
               <field name="phone">0912-345-678</field>
               <field name="email">demo1@customer.com</field>
           </record>
           <record id="customer_demo2" model="res.partner">
               <field name="name">測試客戶2</field>
-              <field name="vat">A45678901</field>
+              <field name="vat">D45678901</field>
               <field name="phone">0934-567-890</field>
               <field name="email">demo2@customer.com</field>
           </record>
@@ -54,21 +72,39 @@
             <field name="user_role">員工</field>
           </record>
           <record id="card2" model="acs.card">
-            <field name="partner_id" ref="supplier_demo"/>
-            <field name="status">啟用</field>
+            <field name="employee_id" ref="employee_demo2"/>
+            <field name="status">作廢</field>
             <field name="uid">0006293934</field>
-            <field name="user_role">廠商</field>
+            <field name="user_role">員工</field>
           </record>
           <record id="card3" model="acs.card">
-            <field name="partner_id" ref="customer_demo1"/>
+            <field name="partner_id" ref="supplier_demo"/>
             <field name="status">啟用</field>
             <field name="uid">0006293935</field>
-            <field name="user_role">客戶</field>
+            <field name="user_role">廠商</field>
           </record>
           <record id="card4" model="acs.card">
+            <field name="partner_id" ref="supplier_demo2"/>
+            <field name="status">作廢</field>
+            <field name="uid">0006293936</field>
+            <field name="user_role">廠商</field>
+          </record>
+          <record id="card5" model="acs.card">
+            <field name="partner_id" ref="customer_demo"/>
+            <field name="status">啟用</field>
+            <field name="uid">0006293937</field>
+            <field name="user_role">客戶</field>
+          </record>
+          <record id="card6" model="acs.card">
             <field name="partner_id" ref="customer_demo2"/>
             <field name="status">啟用</field>
-            <field name="uid">0006293936</field>
+            <field name="uid">0006293938</field>
+            <field name="user_role">客戶</field>
+          </record>
+          <record id="card7" model="acs.card">
+            <field name="partner_id" ref="customer_demo"/>
+            <field name="status">作廢</field>
+            <field name="uid">0006293939</field>
             <field name="user_role">客戶</field>
           </record>
           <!--DEVICE DEMO DATA -->
