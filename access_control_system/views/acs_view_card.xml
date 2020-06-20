@@ -6,14 +6,14 @@
       <field name="model">acs.card</field>
       <field name="arch" type="xml">
         <tree>
-            <field name="user_role" on_change="0"/>
-            <field name="user_code" on_change="0"/>
-            <field name="user_name" on_change="0"/>
-            <field name="user_phone" on_change="0"/>
+            <field name="user_role"/>
+            <field name="user_code"/>
+            <field name="user_name"/>
+            <field name="user_phone"/>
             <field name="uid"/>
             <field name="pin"/>
-            <button name="action_uid_change" string="更換卡片"/>
-            <button name="action_dispose" string="作廢"/>
+            <button name="action_uid_change" string="更換卡片" type="object" class="oe_highlight" confirm="確認更換卡片？"/>
+            <button name="action_dispose" string="作廢" type="object" class="oe_highlight" confirm="確認將此卡片作廢？"/>
         </tree>
       </field>
     </record>
@@ -27,7 +27,12 @@
             </header>
             <sheet>
                 <group>
-                <field name="owner_ref" options="{'no_create': True, 'no_create_edit': True ,'no_open': True,}"/>
+                <field name="user_role"/>
+                <field name="partner_id" widget="res_partner_many2one" context="{'res_partner_search_mode': 'supplier', 'show_vat': True}" placeholder="名稱、統一編號、電子郵件或參考" on_change="1" can_create="false" can_write="false" modifiers="{'readonly':[ ['status','in',['作廢'] | ['user_role','in',['員工'] ] ] ,invisibility: [ ['user_role','in',['員工'] ] }"/>
+                <field name="employee_id" can_create="false" can_write="false" modifiers="{'readonly':[ ['status','in',['作廢'] | ['user_role','in',['員工'] ] ] ,invisibility: [ ['user_role','in',['廠商','客戶'] ] }"/>
+                <!--
+                <field name="employee_id" widget="hr_employee_many2one" context="{'hr_employee_search_mode': 'supplier', 'show_badge_id': True}" placeholder="名稱、員工編號、電子郵件或參考" on_change="1" can_create="false" can_write="false" modifiers="{'readonly':[ ['status','in',['作廢'] | ['status','in',['客戶','廠商'] ] ],'required':true}"/>
+                -->
                 <field name="user_code" />
                 <field name="user_name" />
                 <field name="user_phone"/>
