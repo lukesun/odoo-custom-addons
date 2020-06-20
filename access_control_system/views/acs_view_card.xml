@@ -31,8 +31,6 @@
                 <sheet>            
                 <group name="group_top">
                     <group name="group_left">
-                        <field name="status" widget="label_selection"/> 
-                        <field name="user_role" attrs="{ 'readonly':[('status','!=','新建')] }"/>
                         <field name="partner_id" widget="res_partner_many2one" 
                         domain="[('supplier_rank', '=', 0)]" 
                         context="{'show_email': True ,'show_vat': True ,'show_phone':True,'show_mobile':True ,'html_format':True}"
@@ -54,17 +52,19 @@
                         <field name="user_phone"/>
                     </group>
                     <group name="group_right">
+                        <field name="user_role" attrs="{ 'readonly':[('status','!=','新建')] }"/>
+                        <field name="status" widget="label_selection"/> 
                         <field name="uid" />
                         <field name="pin" readonly="1" attrs="{'invisible':[('status', '=', '作廢')] }"/>
                         <button name="action_get_pin" string="重置密碼" attrs="{'invisible':[('status', '=', '作廢')] }"/>
                     </group>
                 </group>
                 <notebook>
-                <page string="合約列表" >
+                <page string="合約列表" attrs="{'invisible':[('user_role', '!=', '客戶')]}">
                     <field name="contract_ids" options="{'no_create': True, 'no_create_edit': True}">
                     </field>
                 </page>                
-                <page string="群組列表" >
+                <page string="群組列表" attrs="{'invisible':[('user_role', '=', '客戶')]}">
                     <field name="devicegroup_ids" options="{'no_create': True, 'no_create_edit': True}">
                     </field>
                 </page>
