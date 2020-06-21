@@ -27,14 +27,18 @@
             <form string="卡片設定" duplicate="0">
                 <header>
                     <!-- Buttons go here-->
+                    <button name="action_get_pin" string="重置密碼" type="object"
+                        attrs="{'invisible':[('status', 'in', ['作廢','新建'])] }"/>
+                    <button name="action_create_contact" string="新建合約" type="object"
+                        attrs="{'invisible':[ '|',('status', 'in', ['作廢','新建']) , ('user_role','!=','客戶') ] }"/>
                 </header>
-                <sheet>            
+                <sheet>
                 <group name="group_top">
                     <group name="group_left">
                         <field name="partner_id" widget="res_partner_many2one" 
                         domain="[('supplier_rank', '=', 0)]" 
                         context="{'show_email': True ,'show_vat': True ,'show_phone':True,'show_mobile':True ,'html_format':True}"
-                        placeholder="名稱、統一編號、電子郵件、手機、電話" 
+                        placeholder="名稱、統一編號/身份證、電子郵件、手機、電話" 
                         on_change="1"
                         options="{'no_create': True, 'no_create_edit': True}"
                         attrs="{'invisible':[('user_role', '=', '員工')] ,'readonly':[('status','!=','新建')]}"
@@ -54,17 +58,19 @@
                     <group name="group_right">
                         <field name="user_role" attrs="{ 'readonly':[('status','!=','新建')] }"/>
                         <field name="status" widget="label_selection"/> 
-                        <field name="uid" />
+                        <field name="uid" attrs="{ 'readonly':[('status','!=','新建')] }"/>
                         <field name="pin" readonly="1" attrs="{'invisible':[('status', '=', '作廢')] }"/>
-                        <button name="action_get_pin" string="重置密碼" attrs="{'invisible':[('status', '=', '作廢')] }"/>
+                        
                     </group>
                 </group>
                 <notebook>
-                <page string="合約列表" attrs="{'invisible':[('user_role', '!=', '客戶')]}">
+                <page string="合約列表" 
+                    attrs="{'invisible':['|',('user_role', '!=', '客戶') , ('status','=','新建') ] }">
                     <field name="contract_ids" options="{'no_create': True, 'no_create_edit': True}">
                     </field>
                 </page>                
-                <page string="群組列表" attrs="{'invisible':[('user_role', '=', '客戶')]}">
+                <page string="群組列表" 
+                    attrs="{'invisible':['|',('user_role', '=', '客戶') , ('status','=','新建') ] }">
                     <field name="devicegroup_ids" options="{'no_create': True, 'no_create_edit': True}">
                     </field>
                 </page>
@@ -73,51 +79,4 @@
             </form>
         </field>
     </record>
-<!-- 
-    <record model="ir.ui.view" id="acs_card_list2">
-      <field name="name">客用卡片設定</field>
-      <field name="model">acs.card.customer</field>
-      <field name="arch" type="xml">
-        <tree>
-            <field name="user_role"/>
-            <field name="user_code"/>
-            <field name="user_name"/>
-            <field name="user_phone"/>
-            <field name="uid"/>
-            <field name="pin"/>
-            <button name="action_uid_change" string="更換卡片"/>
-            <button name="action_dispose" string="作廢"/>
-        </tree>
-      </field>
-    </record>
-
-
-    <record model="ir.ui.view" id="acs_card_form2">
-        <field name="name">客用卡片設定</field>
-        <field name="model">acs.card.customer</field>
-        <field name="arch" type="xml">
-            <form string="卡片設定" duplicate="0">
-            <header>
-            </header>
-            <sheet>
-                <group>
-                <field name="owner_id" options="{'no_create': True, 'no_create_edit': True ,'no_open': True,}"/>
-                <field name="user_code" />
-                <field name="user_name" />
-                <field name="user_phone"/>
-                <field name="uid"/>
-                <field name="pin" readonly="1"/>
-                <button name="action_dispose" string="重置密碼"/>
-                </group>
-                <notebook>
-                <page string="合約列表" >
-                    <field name="contract_ids" options="{'no_create': True, 'no_create_edit': True}">
-
-                    </field>
-                </page>
-                </notebook>
-            </sheet>
-            </form>
-        </field>
-    </record> -->
 </odoo>
