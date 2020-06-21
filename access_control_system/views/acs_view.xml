@@ -91,9 +91,12 @@
       <field name="model">acs.contract</field>
       <field name="arch" type="xml">
         <tree>
+            
             <field name="status"/>
-            <field name="locker_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
+            <field name="locker_id" widget="many2one" 
+            options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
             <field name="code"/>
+            <field name="partner_id"/>
         </tree>
       </field>
     </record>
@@ -108,9 +111,11 @@
                 <sheet>
                     <group>
                     <field name="status"/>
-                    <field name="locker_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
+                    <field name="locker_id" widget="many2one" 
+                    options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
                     <field name="code"/>
-                    <field name="partner_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
+                    <field name="partner_id" widget="many2one" 
+                    options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
                     </group>
                 </sheet>
             </form>

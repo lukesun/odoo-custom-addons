@@ -66,12 +66,16 @@
                 <notebook>
                 <page string="關聯合約列表" 
                     attrs="{'invisible':['|',('user_role', '!=', '客戶') , ('status','=','新建') ] }">
-                    <field name="contract_ids" options="{'no_create': True, 'no_create_edit': True}">
+                    <field name="contract_ids"
+                        domain="[('partner_id','=', partner_id) , ( 'status' ,'=', '正常' )]"
+                        options="{'no_create': True, 'no_create_edit': True}">
+
                     </field>
                 </page>                
                 <page string="授權群組列表" 
                     attrs="{'invisible':['|',('user_role', '=', '客戶') , ('status','=','新建') ] }">
-                    <field name="devicegroup_ids" options="{'no_create': True, 'no_create_edit': True}">
+                    <field name="devicegroup_ids"
+                        options="{'no_create': True, 'no_create_edit': True}">
                     </field>
                 </page>
                 </notebook>
