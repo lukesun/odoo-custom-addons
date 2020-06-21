@@ -29,7 +29,7 @@
                     <!-- Buttons go here-->
                     <button name="action_get_pin" string="重置密碼" type="object"
                         attrs="{'invisible':[('status', 'in', ['作廢','新建'])] }"/>
-                    <button name="action_create_contact" string="新建合約" type="object"
+                    <button name="action_create_contract" string="新建合約" type="object"
                         attrs="{'invisible':[ '|',('status', 'in', ['作廢','新建']) , ('user_role','!=','客戶') ] }"/>
                 </header>
                 <sheet>
@@ -64,12 +64,12 @@
                     </group>
                 </group>
                 <notebook>
-                <page string="合約列表" 
+                <page string="關聯合約列表" 
                     attrs="{'invisible':['|',('user_role', '!=', '客戶') , ('status','=','新建') ] }">
                     <field name="contract_ids" options="{'no_create': True, 'no_create_edit': True}">
                     </field>
                 </page>                
-                <page string="群組列表" 
+                <page string="授權群組列表" 
                     attrs="{'invisible':['|',('user_role', '=', '客戶') , ('status','=','新建') ] }">
                     <field name="devicegroup_ids" options="{'no_create': True, 'no_create_edit': True}">
                     </field>

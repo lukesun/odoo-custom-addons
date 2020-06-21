@@ -17,12 +17,31 @@
         <field name="inherit_id" ref="base.view_partner_form"/> 
         <field name="arch" type="xml"> 
             <xpath expr="//page[@name='internal_notes']" position="after"> 
-                <page string="合約列表">
-                    <field name="contract_ids">
+                <page string="合約列表" >
+                <!-- attrs="{'invisible':[ ('supplier_rank', '>', '0') ] }" -->
+                    <field name="contract_ids"
+                    options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}"
+                    attrs="{'readonly': True }" >
+                        <field name="arch" type="xml">
+                            <tree>
+                                <field name="status"/>
+                                <field name="locker_id"/>
+                                <field name="code"/>
+                            </tree>
+                        </field>
                     </field>
                 </page>
                 <page string="卡片列表">
-                    <field name="card_ids">
+                    <field name="card_ids"
+                    options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}"
+                    attrs="{'readonly': True }" >
+                        <field name="arch" type="xml">
+                            <tree>
+                                <field name="status"/>
+                                <field name="uid"/>
+                                <field name="pin"/>
+                            </tree>
+                        </field>
                     </field>
                 </page>
             </xpath> 
