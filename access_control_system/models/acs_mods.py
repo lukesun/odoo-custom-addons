@@ -131,17 +131,17 @@ class AcsLocker(models.Model):
     _rec_name = 'code'
     confirmUnlink = fields.Boolean(string='確認刪除', default=False)
 
-    status = fields.Selection([ ('閒置', '閒置'),('租用中', '租用中'),('自用', '自用'),('停用', '停用'),],'櫃位狀態', default='閒置', required=True)
+    status = fields.Selection([ ('閒置', '閒置'),('租用中', '租用中'),('自用', '自用'),('停用', '停用'),],string='櫃位狀態', default='閒置', required=True)
     code = fields.Char(string="櫃號", required=True)
     category = fields.Selection([ ('倉庫', '倉庫'),('工作空間', '工作空間'),('經典車庫', '經典車庫'),('公司登記', '公司登記'),],string="租賃類別", default='倉庫', required=True)
-    style = fields.Char(string="類型", required=True)
-    spec =  fields.Char(string="規格", required=True)
-    floor = fields.Char(string="樓層", required=True)
-    vesion = fields.Char(string="期數", required=True)
+    style = fields.Selection([ ('下層櫃', '下層櫃'),('半截下層櫃', '半截下層櫃'), ] ,string="類型",default ="下層櫃", required=True)
+    spec =  fields.Char(string="規格", default ="", required=True)
+    floor = fields.Selection([ ('B1','B1'),('B2','B2'),('B3','B3'),('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'),('7','7'),('8','8'),('9','9'),('10','10'),('11','11'),('12','12'),('13','13') ] ,string="樓層",default ="1", required=True)
+    vesion = fields.Selection([ ('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'), ] ,string="期數",default ="1", required=True)
 
     devicegroup_id = fields.Many2one('acs.devicegroup','門禁群組',ondelete='set null')
     
-    department_id = fields.Many2one('hr.department','所屬部門',ondelete='set null')
+    #department_id = fields.Many2one('hr.department','所屬部門',ondelete='set null')
     
     # partner_id = fields.Many2one('res.partner','租用客戶', ondelete='set null')
 

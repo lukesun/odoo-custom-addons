@@ -61,7 +61,7 @@
                     <field name="spec"/>                  
                     <field name="floor"/>
                     <field name="vesion"/>
-                    <field name="devicegroup_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True}" />
+                    <field name="devicegroup_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
                     </group>
                 </sheet>
             </form>
@@ -73,7 +73,7 @@
       <field name="arch" type="xml">
         <tree>
             <field name="status"/>
-            <field name="locker_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True}" />
+            <field name="locker_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
             <field name="code"/>
         </tree>
       </field>

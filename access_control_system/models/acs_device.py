@@ -19,7 +19,7 @@ class AcsDevice(models.Model):
 
     code = fields.Char(string="卡機編號", required=True)
     fullname = fields.Char(string="卡機名稱", required=True)
-    hardware = fields.Char(string='型號', size=15, required=True)
+    hardware = fields.Selection([ ('Soyal', 'Soyal'), ] ,string='型號', required=True)
     ip =  fields.Char(string='IP', size=15, required=True)
     port = fields.Char( string='Port',size=4, required=True)
     node = fields.Char( string='站號',size=3, required=True)
@@ -27,7 +27,8 @@ class AcsDevice(models.Model):
     pin_update = fields.Char(string='密碼更新時間')
     status = fields.Char(string='連線否',default='')
     status_update = fields.Char(string='狀態更新時間')
-    location = fields.Char(string='樓層', size=8)
+    location = fields.Selection([ ('B1','B1'),('B2','B2'),('B3','B3'),('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'),('7','7'),('8','8'),('9','9'),('10','10'),('11','11'),('12','12'),('13','13') ] ,string="樓層",default ="1", required=True)
+    
     department_code = fields.Char(string='部門代號',compute='_get_department_code')
     department_id = fields.Many2one('hr.department',string='部門名稱',ondelete='set null')
 

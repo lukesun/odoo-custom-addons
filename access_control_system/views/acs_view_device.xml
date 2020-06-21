@@ -7,8 +7,8 @@
         <tree>
           <field name="code"/>
           <field name="fullname"/>
-          <field name="ip"/>
           <field name="hardware"/>
+          <field name="ip"/>
           <field name="port"/>
           <field name="node"/>
           <field name="department_code"/>
