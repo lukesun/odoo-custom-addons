@@ -133,10 +133,11 @@ class AcsAPI(http.Controller):
 
             dr = http.request.env['acs.device'].sudo().search(
                 [['ip','=',d['ip'] ],['port','=',d['port'] ]])
-            _logger.warning( 'device ip:%s,port:%s' % (dr.name,d['port']) )
+                
+            _logger.warning( 'device ip:%s,port:%s' % (d['ip'],d['port']) )
 
             if dr :
-                _logger.warning( 'device name:%s' % (dr.name) )
+                _logger.warning( 'device status:%s' % (d['status']) )
                 if d['status'] == 1:
                     dr.pin = d['pin']
                     #t = datetime.datetime.now()
