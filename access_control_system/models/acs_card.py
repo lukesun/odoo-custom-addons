@@ -46,7 +46,19 @@ class AcsCard(models.Model):
     )
 
     def action_create_contract(self):
-        raise UserError('Not support yet,action_create_contract.')
+        #raise UserError('Not support yet,action_create_contract.')
+        for record in self:
+            return {
+                "type": "ir.actions.act_window",
+                "name": "新建合約",
+                "res_model": "acs.contract",
+                'view_type':'form', 
+                'view_mode':'form',
+                "target": "new",
+                "context": {  
+                    'default_partner_id' :  record.partner_id.id,
+                },
+            }
 
     def action_get_pin(self):
         raise UserError('Not support yet,action_get_pin.')
