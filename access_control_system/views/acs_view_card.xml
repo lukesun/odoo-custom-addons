@@ -35,6 +35,13 @@
                 <sheet>
                 <group name="group_top">
                     <group name="group_left">
+                        <field name="user_role" attrs="{ 'readonly':[('status','!=','新建')] }"/>
+                        <field name="status" widget="label_selection"/> 
+                        <field name="uid" attrs="{ 'readonly':[('status','!=','新建')] }"/>
+                        <field name="pin" readonly="1" attrs="{'invisible':[('status', '=', '作廢')] }"/>
+                        
+                    </group>
+                    <group name="group_right">
                         <field name="partner_id" widget="res_partner_many2one" 
                         domain="[('supplier_rank', '=', 0)]" 
                         context="{'show_email': True ,'show_vat': True ,'show_phone':True,'show_mobile':True ,'html_format':True}"
@@ -51,17 +58,11 @@
                         options="{'no_create': True, 'no_create_edit': True}"
                         attrs="{'invisible':[('user_role', '!=', '員工')] ,'readonly':[('status','!=','新建')] }"
                         ></field>
-                        <field name="user_code" />
-                        <field name="user_name" />
-                        <field name="user_phone"/>
+                        <field name="user_code" attrs="{ 'readonly': True}"/>
+                        <field name="user_name" attrs="{ 'readonly': True}" />
+                        <field name="user_phone" attrs="{ 'readonly': True}"/>
                     </group>
-                    <group name="group_right">
-                        <field name="user_role" attrs="{ 'readonly':[('status','!=','新建')] }"/>
-                        <field name="status" widget="label_selection"/> 
-                        <field name="uid" attrs="{ 'readonly':[('status','!=','新建')] }"/>
-                        <field name="pin" readonly="1" attrs="{'invisible':[('status', '=', '作廢')] }"/>
-                        
-                    </group>
+
                 </group>
                 <notebook>
                 <page string="關聯合約列表" 
