@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
-    <!--all the view for mod classes-->
+    <!--all the view for inherited classes-->
+    <!--not necessary for this system this effore result in 3 weeks delay-->
     <record id="res_hr_view_department_form_inherited" model="ir.ui.view"> 
         <field name="name">hr.custom.form.inherited</field>
         <field name="model">hr.department</field> 
@@ -15,11 +16,10 @@
         <field name="name">res.custom.form.inherited</field>
         <field name="model">res.partner</field> 
         <field name="inherit_id" ref="base.view_partner_form"/> 
-        <field name="arch" type="xml"> 
-            <xpath expr="//page[@name='internal_notes']" position="after"> 
-                <page string="合約列表" >
-                <!-- attrs="{'invisible':[ ('supplier_rank', '>', '0') ] }" -->
-                    <field name="contract_ids"
+        <field name="arch" type="xml">
+            <xpath expr="//page[1]" position="before"> 
+                <page string="合約列表">
+                    <field name="contract_ids" autofocus='autofocus'
                     options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}"
                     attrs="{'readonly': True }" >
                         <field name="arch" type="xml">
@@ -44,81 +44,10 @@
                         </field>
                     </field>
                 </page>
-            </xpath> 
+            </xpath>
+            <xpath expr="//page[3]" position="attributes">
+                    <attribute name="autofocus"></attribute>
+            </xpath>
         </field> 
-    </record>
-    <record model="ir.ui.view" id="acs_locker_list">
-      <field name="name">櫃位列表</field>
-      <field name="model">acs.locker</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="status"/>
-          <field name="code"/>
-          <field name="category"/>
-          <field name="style"/>
-          <field name="spec"/>
-          <field name="floor"/>
-          <field name="vesion"/>
-          <field name="devicegroup_id"/>
-        </tree>
-      </field>
-    </record>
-    <record model="ir.ui.view" id="acs_locker_form">
-        <field name="name">櫃位設定</field>
-        <field name="model">acs.locker</field>
-        <field name="arch" type="xml">
-            <form string="櫃位設定">
-                <header>
-                      <!-- Buttons go here-->
-                </header>
-                <sheet>
-                    <group>
-                    <field name="status"/>
-                    <field name="code"/>
-                    <field name="category"/>
-                    <field name="style"/>
-                    <field name="spec"/>                  
-                    <field name="floor"/>
-                    <field name="vesion"/>
-                    <field name="devicegroup_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-    <record model="ir.ui.view" id="acs_contract_list">
-      <field name="name">合約列表</field>
-      <field name="model">acs.contract</field>
-      <field name="arch" type="xml">
-        <tree>
-            
-            <field name="status"/>
-            <field name="locker_id" widget="many2one" 
-            options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
-            <field name="code"/>
-            <field name="partner_id"/>
-        </tree>
-      </field>
-    </record>
-    <record model="ir.ui.view" id="acs_contract_form">
-        <field name="name">合約設定</field>
-        <field name="model">acs.contract</field>
-        <field name="arch" type="xml">
-            <form string="合約設定">
-                <header>
-                      <!-- Buttons go here-->
-                </header>
-                <sheet>
-                    <group>
-                    <field name="status"/>
-                    <field name="locker_id" widget="many2one" 
-                    options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
-                    <field name="code"/>
-                    <field name="partner_id" widget="many2one" 
-                    options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
-                    </group>
-                </sheet>
-            </form>
-        </field>
     </record>
 </odoo>

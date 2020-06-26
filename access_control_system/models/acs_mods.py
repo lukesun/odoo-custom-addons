@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# models not necessary for this system this effore result in 3 weeks delay
 import base64
 import collections
 import datetime
@@ -25,7 +26,7 @@ class Department(models.Model):
 
 class Partner(models.Model):
     _inherit = 'res.partner'
-    
+    #客戶持有的卡片
     card_ids = fields.One2many('acs.card','partner_id')
     #客戶關聯到的合約清單
     contract_ids = fields.One2many('acs.contract','partner_id')

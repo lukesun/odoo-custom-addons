@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="acs_locker_list">
+      <field name="name">櫃位列表</field>
+      <field name="model">acs.locker</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="status"/>
+          <field name="code"/>
+          <field name="category"/>
+          <field name="style"/>
+          <field name="spec"/>
+          <field name="floor"/>
+          <field name="vesion"/>
+          <field name="devicegroup_id"/>
+        </tree>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="acs_locker_form">
+        <field name="name">櫃位設定</field>
+        <field name="model">acs.locker</field>
+        <field name="arch" type="xml">
+            <form string="櫃位設定">
+                <header>
+                      <!-- Buttons go here-->
+                </header>
+                <sheet>
+                    <group>
+                    <field name="status"/>
+                    <field name="code"/>
+                    <field name="category"/>
+                    <field name="style"/>
+                    <field name="spec"/>                  
+                    <field name="floor"/>
+                    <field name="vesion"/>
+                    <field name="devicegroup_id" widget="many2one" options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

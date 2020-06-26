@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+          <!--DEPARTMENT DEMO DATA -->
+          <record id="dept_test" model="hr.department">
+              <field name="name">測試部門</field>
+              <field name="code">TEST</field>
+          </record>
+          <record id="dept_test2" model="hr.department">
+              <field name="name">DEMO部門</field>
+              <field name="code">DEMO</field>
+          </record>
+         <!--USER DEMO DATA -->
+          <record id="employee_demo" model="hr.employee">
+              <field name="name">測試員工A</field>
+              <field name="department_id" ref="dept_test"/>
+              <field name="work_location">測試站點</field>
+              <field name="work_phone">(TEST)-555-0987</field>
+              <field name="work_email">test@test.com</field>
+              <field name="barcode">A0001</field>
+              <!-- <field name="image_1920" type="base64" file="hr/static/img/employee_al-image.jpg"/> -->
+          </record>
+          <record id="employee_demo2" model="hr.employee">
+              <field name="name">測試員工B</field>
+              <field name="department_id" ref="dept_test2"/>
+              <field name="work_location">測試站點</field>
+              <field name="work_phone">(DEMO))-555-0987</field>
+              <field name="work_email">demo@test.com</field>
+              <field name="barcode">B0001</field>
+              <!-- <field name="image_1920" type="base64" file="hr/static/img/employee_al-image.jpg"/> -->
+          </record>
+          <record id="supplier_demo" model="res.partner">
+              <field name="supplier_rank">1</field>
+              <field name="name">測試A廠商</field>
+              <field name="vat">A987654321</field>
+              <field name="phone">0987-654-321</field>
+              <field name="email">test@supplier.com</field>
+          </record>
+          <record id="supplier_demo2" model="res.partner">
+              <field name="supplier_rank">1</field>
+              <field name="name">測試B廠商</field>
+              <field name="vat">B987654321</field>
+              <field name="phone">0987-654-789</field>
+              <field name="email">demo2@supplier.com</field>
+          </record>
+          <record id="customer_demo" model="res.partner">
+              <field name="name">測試客戶1</field>
+              <field name="vat">C123456789</field>
+              <field name="phone">0912-345-678</field>
+              <field name="email">demo1@customer.com</field>
+          </record>
+          <record id="customer_demo2" model="res.partner">
+              <field name="name">測試客戶2</field>
+              <field name="vat">D45678901</field>
+              <field name="phone">0934-567-890</field>
+              <field name="email">demo2@customer.com</field>
+          </record>
+          <!--DEVICEGROUP DEMO DATA -->
+          <record id="group0" model="acs.devicegroup">
+            <field name="fullname">測試一期</field>
+            <field name="code">TG01</field>
+          </record>
+          <record id="group1" model="acs.devicegroup">
+            <field name="fullname">測試二期</field>
+            <field name="code">TG02</field>
+          </record>
+          <!--CARD DEMO DATA 
+          <field name="owner_ref" eval="'hr.employee,%d' % ref('employee_demo')"/>
+          eval="'res.partner,%d' % ref('partner_record_id')"
+          <field name="user_code" eval="'hr.employee,%d' % ref('employee_demo')"/>
+          -->
+          <record id="card1" model="acs.card">
+            <field name="employee_id" ref="employee_demo"/>
+            <field name="status">啟用</field>
+            <field name="uid">0006293933</field>
+            <field name="user_role">員工</field>
+            <field name="user_code">A0001</field>
+            <field name="user_name">測試員工A</field>
+            <field name="user_phone">(TEST)-555-0987</field>
+          </record>
+          <record id="card2" model="acs.card">
+            <field name="employee_id" ref="employee_demo2"/>
+            <field name="status">作廢</field>
+            <field name="uid">0006293934</field>
+            <field name="user_role">員工</field>
+            <field name="user_code">B0001</field>
+            <field name="user_name">測試員工B</field>
+            <field name="user_phone">(DEMO)-555-0987</field>
+          </record>
+          <record id="card3" model="acs.card">
+            <field name="partner_id" ref="supplier_demo"/>
+            <field name="status">啟用</field>
+            <field name="uid">0006293935</field>
+            <field name="user_role">廠商</field>
+            <field name="user_code">A987654321</field>
+            <field name="user_name">測試A廠商</field>
+            <field name="user_phone">0987-654-321</field>
+          </record>
+          <record id="card4" model="acs.card">
+            <field name="partner_id" ref="supplier_demo2"/>
+            <field name="status">作廢</field>
+            <field name="uid">0006293936</field>
+            <field name="user_role">廠商</field>
+            <field name="user_code">B987654321</field>
+            <field name="user_name">測試B廠商</field>
+            <field name="user_phone">0987-654-789</field>
+          </record>
+          <record id="card5" model="acs.card">
+            <field name="partner_id" ref="customer_demo"/>
+            <field name="status">啟用</field>
+            <field name="uid">0006293937</field>
+            <field name="user_role">客戶</field>
+            <field name="user_code">C123456789</field>
+            <field name="user_name">測試客戶1</field>
+            <field name="user_phone">0987-654-321</field>
+          </record>
+          <record id="card6" model="acs.card">
+            <field name="partner_id" ref="customer_demo2"/>
+            <field name="status">啟用</field>
+            <field name="uid">0006293938</field>
+            <field name="user_role">客戶</field>
+            <field name="user_code">D45678901</field>
+            <field name="user_name">測試客戶2</field>
+            <field name="user_phone">0934-567-890</field>
+          </record>
+          <record id="card7" model="acs.card">
+            <field name="partner_id" ref="customer_demo"/>
+            <field name="status">作廢</field>
+            <field name="uid">0006293939</field>
+            <field name="user_role">客戶</field>
+            <field name="user_code">C123456789</field>
+            <field name="user_name">測試客戶1</field>
+            <field name="user_phone">0987-654-321</field>
+          </record>
+          <!--DEVICE DEMO DATA -->
+          <record id="device0" model="acs.device">
+            <field name="fullname">松山一期1門</field>
+            <field name="code">TS01</field>
+            <field name="ip">118.233.72.82</field>
+            <field name="port">1621</field>
+            <field name="node">001</field>
+            <field name="hardware">Soyal</field>
+            <field name="department_id" ref="dept_test"/>
+            <field name="location">4</field>
+          </record>
+          <record id="device1" model="acs.device">
+            <field name="fullname">松山一期2門</field>
+            <field name="code">TS02</field>
+            <field name="ip">118.233.72.82</field>
+            <field name="port">1622</field>
+            <field name="node">002</field>
+            <field name="hardware">Soyal</field>
+            <field name="department_id" ref="dept_test"/>
+            <field name="location">4</field>
+          </record>
+          <record id="device2" model="acs.device">
+            <field name="fullname">松山一期3門</field>
+            <field name="code">TS03</field>
+            <field name="ip">118.233.72.82</field>
+            <field name="port">1623</field>
+            <field name="node">003</field>
+            <field name="hardware">Soyal</field>
+            <field name="department_id" ref="dept_test"/>
+            <field name="location">4</field>
+          </record>
+          <record id="locker1" model="acs.locker">
+            <field name="status">閒置</field>
+            <field name="code">SL001</field>
+            <field name="category">倉庫</field>
+            <field name="style">下層櫃</field>
+            <field name="spec">50cm</field>
+            <field name="floor">1</field>
+            <field name="vesion">1</field>
+            <field name="devicegroup_id" ref="group0"/>
+          </record>
+          <record id="locker2" model="acs.locker">
+            <field name="status">閒置</field>
+            <field name="code">SL002</field>
+            <field name="category">倉庫</field>
+            <field name="style">下層櫃</field>
+            <field name="spec">50cm</field>
+            <field name="floor">1</field>
+            <field name="vesion">1</field>
+            <field name="devicegroup_id" ref="group0"/>
+          </record>
+          <record id="locker3" model="acs.locker">
+            <field name="status">閒置</field>
+            <field name="code">SL003</field>
+            <field name="category">倉庫</field>
+            <field name="style">下層櫃</field>
+            <field name="spec">50cm</field>
+            <field name="floor">1</field>
+            <field name="vesion">1</field>
+            <field name="devicegroup_id" ref="group0"/>
+          </record>
+          <record id="locker4" model="acs.locker">
+            <field name="status">閒置</field>
+            <field name="code">SL004</field>
+            <field name="category">倉庫</field>
+            <field name="style">下層櫃</field>
+            <field name="spec">50cm</field>
+            <field name="floor">1</field>
+            <field name="vesion">1</field>
+            <field name="devicegroup_id" ref="group0"/>
+          </record>
+          <record id="contract1" model="acs.contract">
+            <field name="status">正常</field>
+            <field name="code">SL0012020-001</field>
+            <field name="locker_id" ref="locker1"/>
+            <field name="partner_id" ref="customer_demo"/>
+          </record>
+    </data>
+</odoo>
