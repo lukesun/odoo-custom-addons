@@ -48,12 +48,15 @@ class AcsCard(models.Model):
     def action_create_contract(self):
         #raise UserError('Not support yet,action_create_contract.')
         for record in self:
+            form_id = record.env.ref('access_control_system.acs_contract_form_create').id
+            _logger.warning('form_id: %s' % ( form_id ) )
             return {
                 "type": "ir.actions.act_window",
-                "name": "新建合約",
                 "res_model": "acs.contract",
-                'view_type':'form', 
+                "name": "新建合約",
+                'view_type':'form',
                 'view_mode':'form',
+                "views": [[form_id, "form"]],
                 "target": "new",
                 "context": {  
                     'default_partner_id' :  record.partner_id.id,
@@ -69,26 +72,22 @@ class AcsCard(models.Model):
         raise UserError('Not support yet,action_uid_change.')
 
     def action_dispose(self):
-        raise UserError('Not support yet,action_dispose.')
-        #text = """The case """+str(self.case_no)+""" will be forward to VC for further Approval. Are you want to proceed."""
-        #query='delete from thesis_approval_message_oric'
-        #self.env.cr.execute(query) 
-        #value=self.env['thesis.approval.message.oric'].sudo().create({'text':text}) 
-        
-        return { 
-            'type':'ir.actions.act_window', 
-            'name':'卡片作廢',
-            'res_model':'acs.card', 
-            'view_type':'form', 
-            'view_mode':'form', 
-            'target':'new',  
-            'context':{
-                #'thesis_obj':self.id,
-                'flag':'WHAT EVER'
-            }, 
-            'res_id':self.id
-        }
-        
+        #raise UserError('Not support yet,action_dispose.')
+        for record in self:
+            return { 
+                'type':'ir.actions.act_window', 
+                'name':'卡片作廢',
+                'res_model':'acs.card', 
+                'view_type':'form', 
+                'view_mode':'form', 
+                'target':'new',  
+                'context':{
+                    'thesis_obj': record.id,
+                    'flag':'WHAT EVER'
+                },
+                'res_id': record.id
+            }
+
     @api.onchange('user_role')
     def _change_user_role(self):
         for record in self:

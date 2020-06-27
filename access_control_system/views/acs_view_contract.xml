@@ -1,7 +1,16 @@
 <?xml version="1.0"?>
 <odoo>
     <!--all the view for classes not necessary for this system-->
-    <!--this effore result in 3 weeks delay-->
+    <!--result in 3 weeks delay-->
+
+  <record model="ir.actions.act_window" id="action_acs_contract">
+    <field name="name">合約資料維護</field>
+    <field name="res_model">acs.contract</field>
+    <field name="view_mode">tree</field>
+  </record>
+
+
+
     <record model="ir.ui.view" id="acs_contract_list">
       <field name="name">合約列表</field>
       <field name="model">acs.contract</field>
@@ -15,25 +24,47 @@
         </tree>
       </field>
     </record>
+
+    <record model="ir.ui.view" id="acs_contract_form_create">
+        <field name="name">創建合約</field>
+        <field name="model">acs.contract</field>
+        <field name="arch" type="xml">
+            <form string="合約設定">
+                <header>
+                      <button name="action_test" string="TEST" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="locker_id"  
+                        options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
+                        <field name="code" />
+                        <field name="partner_id" 
+                        options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="acs_contract_form">
         <field name="name">合約設定</field>
         <field name="model">acs.contract</field>
         <field name="arch" type="xml">
             <form string="合約設定">
                 <header>
-                      <!-- Buttons go here-->
                 </header>
                 <sheet>
                     <group>
-                    <field name="status"/>
-                    <field name="locker_id" widget="many2one" 
-                    options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
-                    <field name="code"/>
-                    <field name="partner_id" widget="many2one" 
-                    options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
+                        <field name="status" />
+                        <field name="locker_id" widget="many2one" 
+                        options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
+                        <field name="code"/>
+                        <field name="partner_id" widget="many2one" 
+                        options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
+
 </odoo>

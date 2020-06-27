@@ -24,29 +24,6 @@
     <field name="view_mode">tree,form</field>
   </record>
 
-  <record model="ir.actions.act_window" id="action_acs_contract">
-    <field name="name">合約資料維護</field>
-    <field name="res_model">acs.contract</field>
-    <field name="view_mode">tree,form</field>
-  </record>
-<!--
-  <record model="ir.actions.act_window" id="action_acs_card">
-    <field name="name">員工卡片資料維護</field>
-    <field name="res_model">acs.card</field>
-    <field name="view_mode">tree,form</field>
-  </record>
-  <record model="ir.actions.act_window" id="action_acs_card2">
-    <field name="name">客用卡片資料維護</field>
-    <field name="res_model">acs.card.customer</field>
-    <field name="view_mode">tree,form</field>
-  </record>
-  <record model="ir.actions.act_window" id="action_acs_card3">
-    <field name="name">廠商卡片資料維護</field>
-    <field name="res_model">acs.card.supplier</field>
-    <field name="view_mode">tree,form</field>
-  </record>
--->
-
   <record model="ir.actions.act_window" id="action_acs_cardlog">
     <field name="name">進出紀錄</field>
     <field name="res_model">acs.cardlog</field>

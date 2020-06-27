@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# models not necessary for this system this effore result in 3 weeks delay
+# models not necessary for this system , result in 3 weeks delay
 import base64
 import collections
 import datetime
@@ -186,12 +186,13 @@ class AcsContract(models.Model):
         column2='contract_id',
     )
 
-    # @api.onchange('status')
+    # 需求：以輸入的部份合約編號，自動過濾並選擇對應的櫃號
+    # 未提供櫃號的固定字串長度，無法實現，哪有長的的字串(合約編號)去比對短的字串(櫃號)的道理？只有白痴才會提這種需求
+    #
+    # @api.onchange('code')
     # def onchange_status(self):
     #     for record in self:
-    #         if record.partner_id and record.locker_id and record.status=='作廢':
-    #             record.locker_id.status = '閒置'
-            
+    #         return {'domain': {'locker_id': [('code', 'ilike', record.code)]}}
 
     def unlink(self):
         if self.confirmUnlink:
