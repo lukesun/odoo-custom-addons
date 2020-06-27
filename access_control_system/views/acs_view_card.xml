@@ -6,13 +6,13 @@
       <field name="model">acs.card</field>
       <field name="arch" type="xml">
             <tree>
-                <field name="status" invisible='True'/>
                 <field name="user_role"/>
                 <field name="user_code"/>
                 <field name="user_name"/>
                 <field name="user_phone"/>
                 <field name="uid"/>
                 <field name="pin"/>
+                <field name="status"/>
             </tree>
       </field>
     </record>
@@ -28,17 +28,17 @@
                         attrs="{'invisible':[('status', 'in', ['作廢','新建'])] }"  confirm="確認重置？"/>
                     <button name="action_create_contract" string="新建合約" type="object" class="oe_highlight"
                         attrs="{'invisible':[ '|',('status', 'in', ['作廢','新建']) , ('user_role','!=','客戶') ] }"/>
-                    <button name="action_uid_change" string="更換卡片" type="object" 
-                        attrs="{'invisible':[('status', '=', '作廢')] }" confirm="確認更換？"/>
+                    <!-- <button name="action_uid_change" string="更換卡片" type="object" class="oe_edit_only"
+                        attrs="{'invisible':[('status', '=', '作廢')] }" confirm="確認更換？"/> -->
                     <button name="action_dispose" string="作廢" type="object" 
-                        attrs="{'invisible':[('status', '=', '作廢')] }" confirm="確認作廢？"/>
+                        attrs="{'invisible':[('status', 'in', ['作廢', '新建'])] }" confirm="確認作廢？"/>
                 </header>
                 <sheet>
                 <group name="group_top">
                     <group name="group_left">
                         <field name="user_role" attrs="{ 'readonly':[('status','!=','新建')] }"/>
                         <field name="status" widget="label_selection"/> 
-                        <field name="uid" attrs="{ 'readonly':[('status','!=','新建')] }"/>
+                        <field name="uid" attrs="{ 'readonly':[ ('status','=','作廢' ) ] }"/>
                         <field name="pin" readonly="1" attrs="{'invisible':[('status', '=', '作廢')] }"/>
                     </group>
                     <group name="group_right">

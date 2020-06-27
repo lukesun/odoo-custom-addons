@@ -18,7 +18,6 @@
               <field name="work_phone">(TEST)-555-0987</field>
               <field name="work_email">test@test.com</field>
               <field name="barcode">A0001</field>
-              <!-- <field name="image_1920" type="base64" file="hr/static/img/employee_al-image.jpg"/> -->
           </record>
           <record id="employee_demo2" model="hr.employee">
               <field name="name">測試員工B</field>
@@ -27,7 +26,6 @@
               <field name="work_phone">(DEMO))-555-0987</field>
               <field name="work_email">demo@test.com</field>
               <field name="barcode">B0001</field>
-              <!-- <field name="image_1920" type="base64" file="hr/static/img/employee_al-image.jpg"/> -->
           </record>
           <record id="supplier_demo" model="res.partner">
               <field name="supplier_rank">1</field>
@@ -64,11 +62,7 @@
             <field name="fullname">測試二期</field>
             <field name="code">TG02</field>
           </record>
-          <!--CARD DEMO DATA 
-          <field name="owner_ref" eval="'hr.employee,%d' % ref('employee_demo')"/>
-          eval="'res.partner,%d' % ref('partner_record_id')"
-          <field name="user_code" eval="'hr.employee,%d' % ref('employee_demo')"/>
-          -->
+          <!--CARD DEMO DATA -->
           <record id="card1" model="acs.card">
             <field name="employee_id" ref="employee_demo"/>
             <field name="status">啟用</field>
@@ -164,7 +158,7 @@
             <field name="location">4</field>
           </record>
           <record id="locker1" model="acs.locker">
-            <field name="status">閒置</field>
+            <field name="status">租用中</field>
             <field name="code">SL001</field>
             <field name="category">倉庫</field>
             <field name="style">下層櫃</field>

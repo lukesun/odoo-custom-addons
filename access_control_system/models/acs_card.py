@@ -19,7 +19,7 @@ class AcsCard(models.Model):
 
     uid = fields.Char(string='卡片號碼', required=True)
     pin = fields.Char(string='卡片密碼')
-    status = fields.Selection([ ('新建', '新建'),('啟用', '啟用'),('作廢', '作廢'),],'卡片狀態', default='新建', required=True)
+    status = fields.Selection([ ('新建', '新建'),('啟用', '啟用'),('作廢', '作廢')],'卡片狀態', default='新建', required=True)
 
     user_role = fields.Selection([ ('員工', '員工'),('客戶', '客戶'),('廠商', '廠商'),],'身份', default='客戶', required=True)
     partner_id = fields.Many2one('res.partner','持卡人', default=False)
@@ -72,8 +72,19 @@ class AcsCard(models.Model):
     def action_uid_change(self):
         #raise UserError('Not support yet,action_uid_change.')
         for record in self:
-            _logger.warning('更換卡號: %s' % (record.uid) )
-            record.status ="更換卡號"
+            _logger.warning('換卡: %s' % (record.uid) )
+            #record.status ="換卡"
+            #record.uid.readonly = False
+
+    # @api.constrains('uid')
+    # def check_uid(self):
+    #     for record in self:
+    #         _logger.warning('check_uid: %s' % (record.uid) )
+    #         card2add = self.env['acs.card'].sudo().search([['uid','=',record.uid ] ])
+    #         _logger.warning('check_uid: %s' % (card2add.uid) )
+    #         # if card2add :
+    #         #     raise ValidationError('已存在同樣的卡片號碼')
+
     def action_dispose(self):
         #raise UserError('Not support yet,action_dispose.')
         for record in self:
@@ -114,17 +125,50 @@ class AcsCard(models.Model):
 #card ORM methods
     @api.model
     def create(self, vals):
+        #_logger.warning('create self: %s' % (self) )
+        #_logger.warning('create vals: %s' % (vals) )
+
         if 'status' in vals:
             if vals['status'] == '新建':
                 vals['status'] ='啟用'
+        
+        if ('partner_id' in vals):
+            if vals['partner_id']:
+                record = self.env['res.partner'].sudo().search([ ['id','=',vals['partner_id'] ] ] )
+                vals['user_name'] = record.name
+                vals['user_phone'] = record.phone
+                vals['user_code'] = record.vat #統編 身份證
+        
+        if ('employee_id' in vals):
+            if vals['employee_id']:
+                record = self.env['hr.employee'].sudo().search([ ['id','=',vals['employee_id'] ] ])
+                vals['user_name'] = record.name
+                vals['user_phone'] = record.work_phone
+                vals['user_code'] = record.barcode #徽章 ID, 工號
+
+        if ('partner_id' in vals and vals['partner_id'] == False ) and ( 'employee_id' in vals and vals['employee_id'] == False) :
+            raise ValidationError("必須指定持卡人")
+
         write_card_log(self ,vals)
         result = super(AcsCard, self).create(vals)
         return result
-    
+
+
     def write(self,vals):
-        write_card_log(self ,vals)
-        result = super(AcsCard, self).write(vals)
-        return result
+        for record in self:
+            vals['user_role'] = record.user_role
+            if record.employee_id:
+                vals['user_name'] = record.employee_id.name
+                vals['user_phone'] = record.employee_id.work_phone
+                vals['user_code'] = record.employee_id.barcode #徽章 ID, 工號            
+            if record.partner_id:
+                vals['user_name'] = record.partner_id.name
+                vals['user_phone'] = record.partner_id.phone
+                vals['user_code'] = record.partner_id.vat #統編 身份證            
+            
+            write_card_log(self ,vals)
+            result = super(AcsCard, self).write(vals)
+            return result
 
     def unlink(self):
         if self.confirmUnlink:
