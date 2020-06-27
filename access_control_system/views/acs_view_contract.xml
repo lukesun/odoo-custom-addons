@@ -1,15 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
-    <!--all the view for classes not necessary for this system-->
+    <!--all the view for classes not requested but necessary for this system-->
     <!--result in 3 weeks delay-->
-
-  <record model="ir.actions.act_window" id="action_acs_contract">
-    <field name="name">合約資料維護</field>
-    <field name="res_model">acs.contract</field>
-    <field name="view_mode">tree</field>
-  </record>
-
-
 
     <record model="ir.ui.view" id="acs_contract_list">
       <field name="name">合約列表</field>
@@ -23,27 +15,6 @@
             <field name="partner_id"/>
         </tree>
       </field>
-    </record>
-
-    <record model="ir.ui.view" id="acs_contract_form_create">
-        <field name="name">創建合約</field>
-        <field name="model">acs.contract</field>
-        <field name="arch" type="xml">
-            <form string="合約設定">
-                <header>
-                      <button name="action_test" string="TEST" type="object" class="oe_highlight"/>
-                </header>
-                <sheet>
-                    <group>
-                        <field name="locker_id"  
-                        options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}" />
-                        <field name="code" />
-                        <field name="partner_id" 
-                        options="{'no_create_edit': True, 'no_create': True,'no_open': True,}" />
-                    </group>
-                </sheet>
-            </form>
-        </field>
     </record>
 
     <record model="ir.ui.view" id="acs_contract_form">
@@ -67,4 +38,31 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="acs_contract_form_create">
+        <field name="name">創建合約</field>
+        <field name="model">acs.contract</field>
+        <field name="arch" type="xml">
+            <form string="合約設定">
+                <header>
+                      
+                </header>
+                <sheet>
+                    <group>
+                        <field name="status" 
+                        attrs="{'invisible': True }"
+                        />
+                        <field name="locker_id"  
+                        domain="[('status', '=', '閒置')]"
+                        options="{'no_create_edit': True, 'no_create': True ,'no_open': True,}"
+                        />
+                        <field name="code" />
+                        <field name="partner_id"
+                        attrs="{'invisible': True }"
+                        options="{'no_create_edit': True, 'no_create': True,'no_open': True,}"
+                        />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 </odoo>

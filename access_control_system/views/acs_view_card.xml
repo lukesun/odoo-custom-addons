@@ -2,24 +2,21 @@
 <odoo>
 
     <record model="ir.ui.view" id="acs_card_list">
-      <field name="name">卡片設定</field>
+      <field name="name">卡片清單</field>
       <field name="model">acs.card</field>
       <field name="arch" type="xml">
-        <tree>
-            <field name="status" invisible='True'/>
-            <field name="user_role"/>
-            <field name="user_code"/>
-            <field name="user_name"/>
-            <field name="user_phone"/>
-            <field name="uid"/>
-            <field name="pin"/>
-            <button name="action_uid_change" string="更換卡片" type="object" class="oe_highlight" confirm="確認更換卡片？"
-            attrs="{'invisible':[('status', '=', '作廢')] }"/>
-            <button name="action_dispose" string="作廢" type="object" class="oe_highlight" confirm="確認將此卡片作廢？"
-            attrs="{'invisible':[('status', '=', '作廢')] }"/>
-        </tree>
+            <tree>
+                <field name="status" invisible='True'/>
+                <field name="user_role"/>
+                <field name="user_code"/>
+                <field name="user_name"/>
+                <field name="user_phone"/>
+                <field name="uid"/>
+                <field name="pin"/>
+            </tree>
       </field>
     </record>
+
     <record model="ir.ui.view" id="acs_card_form">
         <field name="name">卡片設定</field>
         <field name="model">acs.card</field>
@@ -27,10 +24,14 @@
             <form string="卡片設定" duplicate="0">
                 <header>
                     <!-- Buttons go here-->
-                    <button name="action_get_pin" string="重置密碼" type="object"
-                        attrs="{'invisible':[('status', 'in', ['作廢','新建'])] }"/>
-                    <button name="action_create_contract" string="新建合約" type="object"
+                    <button name="action_get_pin" string="重置密碼" type="object" class="oe_highlight"
+                        attrs="{'invisible':[('status', 'in', ['作廢','新建'])] }"  confirm="確認重置？"/>
+                    <button name="action_create_contract" string="新建合約" type="object" class="oe_highlight"
                         attrs="{'invisible':[ '|',('status', 'in', ['作廢','新建']) , ('user_role','!=','客戶') ] }"/>
+                    <button name="action_uid_change" string="更換卡片" type="object" 
+                        attrs="{'invisible':[('status', '=', '作廢')] }" confirm="確認更換？"/>
+                    <button name="action_dispose" string="作廢" type="object" 
+                        attrs="{'invisible':[('status', '=', '作廢')] }" confirm="確認作廢？"/>
                 </header>
                 <sheet>
                 <group name="group_top">
@@ -39,30 +40,27 @@
                         <field name="status" widget="label_selection"/> 
                         <field name="uid" attrs="{ 'readonly':[('status','!=','新建')] }"/>
                         <field name="pin" readonly="1" attrs="{'invisible':[('status', '=', '作廢')] }"/>
-                        
                     </group>
                     <group name="group_right">
                         <field name="partner_id" widget="res_partner_many2one" 
-                        domain="[('supplier_rank', '=', 0)]" 
-                        context="{'show_email': True ,'show_vat': True ,'show_phone':True,'show_mobile':True ,'html_format':True}"
-                        placeholder="名稱、統一編號/身份證、電子郵件、手機、電話" 
-                        on_change="1"
-                        options="{'no_create': True, 'no_create_edit': True}"
-                        attrs="{'invisible':[('user_role', '=', '員工')] ,'readonly':[('status','!=','新建')]}"
-                        ></field>
-                        
+                            domain="[('supplier_rank', '=', 0)]" 
+                            context="{'show_email': True ,'show_vat': True ,'show_phone':True,'show_mobile':True ,'html_format':True}"
+                            placeholder="名稱、統一編號/身份證、電子郵件、手機、電話" 
+                            on_change="1"
+                            options="{'no_create': True, 'no_create_edit': True}"
+                            attrs="{'invisible':[('user_role', '=', '員工')] ,'readonly':[('status','!=','新建')]}"
+                        />
                         <field name="employee_id" widget="hr_employee_many2one" 
-                        context="{'show_email': True}" 
-                        placeholder="名稱"
-                        on_change="1"
-                        options="{'no_create': True, 'no_create_edit': True}"
-                        attrs="{'invisible':[('user_role', '!=', '員工')] ,'readonly':[('status','!=','新建')] }"
-                        ></field>
+                            context="{'show_email': True}" 
+                            placeholder="名稱"
+                            on_change="1"
+                            options="{'no_create': True, 'no_create_edit': True}"
+                            attrs="{'invisible':[('user_role', '!=', '員工')] ,'readonly':[('status','!=','新建')] }"
+                        />
                         <field name="user_code" attrs="{ 'readonly': True}"/>
                         <field name="user_name" attrs="{ 'readonly': True}" />
                         <field name="user_phone" attrs="{ 'readonly': True}"/>
                     </group>
-
                 </group>
                 <notebook>
                 <page string="關聯合約列表" 

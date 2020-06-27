@@ -64,29 +64,21 @@ class AcsCard(models.Model):
             }
 
     def action_get_pin(self):
-        raise UserError('Not support yet,action_get_pin.')
-        # for record in self:
+        #raise UserError('Not support yet,action_get_pin.')
+        for record in self:
+            _logger.warning('產生密碼: %s' % (record.uid) )
         #     record.pin = "".join(choice(digits) for i in range(4))
 
     def action_uid_change(self):
-        raise UserError('Not support yet,action_uid_change.')
-
+        #raise UserError('Not support yet,action_uid_change.')
+        for record in self:
+            _logger.warning('更換卡號: %s' % (record.uid) )
+            record.status ="更換卡號"
     def action_dispose(self):
         #raise UserError('Not support yet,action_dispose.')
         for record in self:
-            return { 
-                'type':'ir.actions.act_window', 
-                'name':'卡片作廢',
-                'res_model':'acs.card', 
-                'view_type':'form', 
-                'view_mode':'form', 
-                'target':'new',  
-                'context':{
-                    'thesis_obj': record.id,
-                    'flag':'WHAT EVER'
-                },
-                'res_id': record.id
-            }
+            _logger.warning('作廢: %s' % (record.uid) )
+            record.status ="作廢"
 
     @api.onchange('user_role')
     def _change_user_role(self):
