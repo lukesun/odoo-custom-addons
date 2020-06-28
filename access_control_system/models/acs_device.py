@@ -107,6 +107,8 @@ class AcsDevice(models.Model):
         }
         if r.status_code != requests.codes.ok:
             message['params']['message'] = 'something goes wrong'
+        else:
+            self.status = 'ok'
         return message
 
     def unlink(self):
