@@ -10,14 +10,8 @@ from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationE
 _logger = logging.getLogger(__name__)
 
 def write_card_log(self ,vals):
-
     #_logger.warning( self )
     #_logger.warning( 'vals:' + json.dumps(vals) )
-
-    cards2delete =[]
-    cards2add=[]
-    cards2update = []
-    
     #use new vals for display
     ldata = {
         'cardsettinglog_id': '',
@@ -47,25 +41,12 @@ def write_card_log(self ,vals):
         }
 
         ldata['data_origin'] = '%s' % (vals_old) #json.dumps(vals_old)
-
-        #TODO: build 1 request for api/devices-async
-        # A: build card lists from CRUD operations following up
-        # C: log into logtable
-        # B: build devices-card-action list from card lists
-        #    card --> locker relate group + authorized groups --> relate devices
-        # D: build request by devices-card-action list in delete,add,update order
-        # E: send request
         
         if 'status' in vals:
             if vals['status'] == '作廢':
             #_logger.warning( 'THIS IS DELETE!!!!!' )
                 ldata['cardsetting_type'] = '作廢'
                 ldata['card_id'] = record.uid
-                #A1 build delete list
-                cards2delete.append({
-                        "event": "delete",
-                        'uid' : record.uid,
-                    })
         else:
             #_logger.warning( 'THIS IS UPDATE!!!!!' )
             ldata['cardsetting_type'] = '修改'
@@ -74,36 +55,15 @@ def write_card_log(self ,vals):
                 #_logger.warning( 'uid change!' )
                 ldata['card_id'] = vals['uid']
                 ldata['cardsetting_type'] = '變更卡號'
-                #A2 build delete & addnew list
-                cards2delete.append({
-                    "event": "delete",
-                    'uid' : record.uid,
-                })
-                cards2add.append({ 
-                    "event": "add",
-                    "expire_start": "2020-05-01",
-                    "expire_end": "2030-05-31",
-                    'uid' : vals['uid'],
-                    'display' :  record.user_name,
-                })
             else:
                 ldata['card_id'] = record.uid
-                _logger.warning( 'uid no change!' )
-            
+                # _logger.warning( 'uid no change!' )
             if 'pin' in vals:
                 #TODO A3 build update list
                 #_logger.warning( 'pin change!' )
                 ldata['cardsetting_type'] = '變更密碼'
-                cards2update.append({ 
-                    "event": "update",
-                    "expire_start": "2020-05-01",
-                    "expire_end": "2030-05-31",
-                    'uid' : vals['uid'],
-                    'display' :  record.user_name,
-                    'pin': vals['pin'],
-                })
-            else:
-                _logger.warning( 'card_pin no change!' )
+            # else:
+            #     _logger.warning( 'card_pin no change!' )
 
             if 'devicegroup_ids' in vals:
                 ldata['cardsetting_type'] = '變更群組'
@@ -115,6 +75,7 @@ def write_card_log(self ,vals):
         ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         self.env['acs.cardsettinglog'].sudo().create([ldata])
         #_logger.warning( ldata )
+
     #for addnew--> not update or delete
     if recordcount == 0:
         #_logger.warning( 'THIS IS CREATE!!!!!' )
@@ -123,19 +84,38 @@ def write_card_log(self ,vals):
         #use new card_id as logdata
             #_logger.warning( 'create with card_id:' + vals['uid'])
             ldata['card_id'] = vals['uid']
-            if vals['status'] == '啟用':
-                cards2add.append({ 
-                        "event": "add",
-                        "expire_start": "2020-05-01",
-                        "expire_end": "2030-05-31",
-                        'uid' : vals['uid'],
-                        'display' : vals['user_name'],
-                    })
+
         #C2: log into logtable
         ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         self.env['acs.cardsettinglog'].sudo().create([ldata])
         #_logger.warning( ldata )
-        #return
+
+def save_card2device(self,cards):
+
+    _logger.warning('save_card2device, %s' % ( cards ) )
+""" 
+    cards2delete =[]
+    cards2delete.append({
+            "event": "delete",
+            'uid' : record.uid,
+        })
+    cards2add=[]
+    cards2add.append({ 
+            "event": "add",
+            "expire_start": "2020-05-01",
+            "expire_end": "2030-05-31",
+            'uid' : vals['uid'],
+            'display' : vals['user_name'],
+        })
+    cards2update = []
+    cards2update.append({ 
+        "event": "update",
+        "expire_start": "2020-05-01",
+        "expire_end": "2030-05-31",
+        'uid' : vals['uid'],
+        'display' :  record.user_name,
+        'pin': vals['pin'],
+    })
     #D: build request by devices-card-action list in delete,add,update order
     if len(cards2delete) > 0:
         _logger.warning('card delete: %s' % (json.dumps(cards2delete) ) )
@@ -146,11 +126,16 @@ def write_card_log(self ,vals):
     if len(cards2update) > 0:
         _logger.warning('card update: %s' % (json.dumps(cards2update) ) )
         save_card2device(self,cards2update)
-
-def save_card2device(self,cards):
-    _logger.warning('save_card2device, %s' % ( cards ) )
-
+ """
 def call_devices_async(self,cards):    
+    #TODO: build 1 request for api/devices-async
+    # A: build card lists from CRUD operations following up
+    # C: log into logtable
+    # B: build devices-card-action list from card lists
+    #    card --> locker relate group + authorized groups --> relate devices
+    # D: build request by devices-card-action list in delete,add,update order
+    # E: send request
+
     logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
     payload={ "logid": logid, "device": [] }
 

@@ -178,7 +178,7 @@
             <field name="devicegroup_id" ref="group0"/>
           </record>
           <record id="locker3" model="acs.locker">
-            <field name="status">閒置</field>
+            <field name="status">租用中</field>
             <field name="code">SL003</field>
             <field name="category">倉庫</field>
             <field name="style">下層櫃</field>
@@ -197,11 +197,77 @@
             <field name="vesion">1</field>
             <field name="devicegroup_id" ref="group0"/>
           </record>
+          <record id="locker5" model="acs.locker">
+            <field name="status">租用中</field>
+            <field name="code">SL005</field>
+            <field name="category">倉庫</field>
+            <field name="style">下層櫃</field>
+            <field name="spec">50cm</field>
+            <field name="floor">1</field>
+            <field name="vesion">1</field>
+            <field name="devicegroup_id" ref="group0"/>
+          </record>
+          <record id="locker6" model="acs.locker">
+            <field name="status">閒置</field>
+            <field name="code">TS001</field>
+            <field name="category">倉庫</field>
+            <field name="style">下層櫃</field>
+            <field name="spec">50cm</field>
+            <field name="floor">1</field>
+            <field name="vesion">1</field>
+            <field name="devicegroup_id" ref="group1"/>
+          </record>
+          <record id="locker7" model="acs.locker">
+            <field name="status">閒置</field>
+            <field name="code">TS002</field>
+            <field name="category">倉庫</field>
+            <field name="style">下層櫃</field>
+            <field name="spec">50cm</field>
+            <field name="floor">1</field>
+            <field name="vesion">1</field>
+            <field name="devicegroup_id" ref="group1"/>
+          </record>
+          <record id="locker8" model="acs.locker">
+            <field name="status">閒置</field>
+            <field name="code">TS003</field>
+            <field name="category">倉庫</field>
+            <field name="style">下層櫃</field>
+            <field name="spec">50cm</field>
+            <field name="floor">1</field>
+            <field name="vesion">1</field>
+            <field name="devicegroup_id" ref="group1"/>
+          </record>
+          <record id="locker9" model="acs.locker">
+            <field name="status">閒置</field>
+            <field name="code">TS004</field>
+            <field name="category">倉庫</field>
+            <field name="style">下層櫃</field>
+            <field name="spec">50cm</field>
+            <field name="floor">1</field>
+            <field name="vesion">1</field>
+            <field name="devicegroup_id" ref="group1"/>
+          </record>
+
           <record id="contract1" model="acs.contract">
             <field name="status">正常</field>
             <field name="code">SL0012020-001</field>
             <field name="locker_id" ref="locker1"/>
             <field name="partner_id" ref="customer_demo"/>
           </record>
+
+          <record id="contract2" model="acs.contract">
+            <field name="status">正常</field>
+            <field name="code">SL0032020-002</field>
+            <field name="locker_id" ref="locker3"/>
+            <field name="partner_id" ref="customer_demo"/>
+          </record>
+
+          <record id="contract3" model="acs.contract">
+            <field name="status">停用</field>
+            <field name="code">SL0052020-002</field>
+            <field name="locker_id" ref="locker5"/>
+            <field name="partner_id" ref="customer_demo2"/>
+          </record>
+
     </data>
 </odoo>
