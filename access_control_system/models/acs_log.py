@@ -7,7 +7,6 @@ from datetime import timedelta, date
 from odoo import fields, models,api
 from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationError, Warning
 
-import logging
 _logger = logging.getLogger(__name__)
     
 class AcsCardlog(models.Model):
@@ -35,16 +34,17 @@ class AcsCardSettinglog(models.Model):
     _description = '卡片異動紀錄'
     _rec_name = 'cardsettinglog_id'
     
-    cardsettinglog_id = fields.Char(string='紀錄編號')
+    cardsettinglog_id = fields.Char(string='紀錄編號', required=True)
     cardsetting_type = fields.Char(string='異動別')
     user_role = fields.Char(string='身份')
     user_id = fields.Char(string='I D')
     user_name = fields.Char(string='名稱')
-    card_id = fields.Char(string='卡片號碼')
+    card_id = fields.Char(string='卡片號碼', required=True)
     data_origin = fields.Char(string='原始')
     data_new = fields.Char(string='變更')
-    cardsettinglog_time = fields.Datetime(string='變更時間')
-    cardsettinglog_user = fields.Char(string='變更者')
+    cardsettinglog_time = fields.Datetime(string='變更時間', required=True)
+    cardsettinglog_user = fields.Char(string='變更者', required=True)
+    status = fields.Char(string='狀態')
 
     @api.model
     def create(self, vals):
@@ -76,6 +76,69 @@ class AcsCardSettinglog(models.Model):
                 }
                 self.env['acs.accesscodelog'].sudo().create([codelog])
         return result
+
+    def scan(self):
+        #TODO: build 1 request for api/devices-async
+        # A: build card lists from CRUD operations following up
+        # C: log into logtable
+        # B: build devices-card-action list from card lists
+        #    card --> locker relate group + authorized groups --> relate devices
+        # D: build request by devices-card-action list in delete,add,update order
+        # E: send request
+
+        _logger.warning('scan start at: %s' % (datetime.datetime.now()) )
+        logs = self.env['acs.cardsettinglog'].sudo().search([ 
+            ('cardsetting_type','in',['變更卡號','變更密碼','變更群組','變更合約','作廢']) , 
+            ('status','!=','ok') 
+        ] )
+        cards2delete =[]
+        cards2add=[]
+        cards2update = []
+        for log in logs:
+            
+            cards2delete.append({
+                    "event": "delete",
+                    'uid' : log.card_id,
+                })
+            
+            cards2add.append({ 
+                    "event": "add",
+                    "expire_start": "2020-05-01",
+                    "expire_end": "2030-05-31",
+                    'uid' : log.card_id,
+                    'display' : log.user_name,
+                })
+            
+            cards2update.append({ 
+                "event": "update",
+                "expire_start": "2020-05-01",
+                "expire_end": "2030-05-31",
+                'uid' : log.card_id,
+                'display' :  log.user_name,
+                #'pin': vals['pin'],
+            })            
+
+        logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
+        payload={ "logid": logid, "device": [] }
+
+        # for d in self.device_ids:
+        #     payload["device"].append({
+        #         "device_id": d.device_id,
+        #         "ip": d.device_ip,
+        #         "port": d.device_port,
+        #         "node": d.node_id,
+        #         "card": cards
+        #     })
+
+        # # call api to update locker's devicegroup's devices
+        _logger.warning('sending request: %s' % (json.dumps(payload) ) )
+        deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
+        _logger.warning('deviceserver: %s' % (deviceserver) )
+        # r = requests.post(deviceserver+'/api/devices-async',data=json.dumps(payload))
+        # _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        # if r.status_code != requests.codes.ok:
+        #     message['params']['message'] = 'something goes wrong'
+        _logger.warning('scan end at: %s' % (datetime.datetime.now()) )
 
 class AcsAccessCodelog(models.Model):
     _name = 'acs.accesscodelog'

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 import json
 import requests
-
+import logging
 import datetime
 from datetime import timedelta, date
-
 from odoo import fields, models,api
 from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationError, Warning
 
-import logging
 _logger = logging.getLogger(__name__)
 
 class AcsDevice(models.Model):
@@ -40,7 +38,9 @@ class AcsDevice(models.Model):
         column2='device_id',
     )
     
-#變更部門欄位時顯示部門代碼
+    devicerecord = fields.One2many('acs.devicerecord','device_id')
+
+    #變更部門欄位時顯示部門代碼
     @api.onchange('department_id')
     def _get_department_code(self):
         for record in self:
@@ -114,3 +114,56 @@ class AcsDevice(models.Model):
     def unlink(self):
         #self.write({'devicegroup': False})
         return True
+
+class AcsDeviceRecord(models.Model):
+    _name = 'acs.devicerecord'
+    _description = '卡機暫存'
+    _rec_name = 'uid'
+
+    device_id = fields.Many2one('acs.device',string='卡機')
+    card_id = fields.Many2one('acs.card',string='卡片')
+    uid = fields.Char(string='卡號')
+    pin = fields.Char(string='通關密碼', size=4)
+    display = fields.Char(string='顯示名稱')
+
+    @api.model
+    def create(self, vals):
+        _logger.warning('devicerecord create self: %s' % (self) )
+        _logger.warning('devicerecord create vals: %s' % (vals) )
+        # cards2add=[]
+        # cards2add.append({ 
+        #         "event": "add",
+        #         "expire_start": "2020-05-01",
+        #         "expire_end": "2030-05-31",
+        #         'uid' : vals['uid'],
+        #         'display' : vals['display'],
+        #     })
+        result = super(AcsDeviceRecord, self).create(vals)
+        return result
+
+    def write(self,vals):
+        _logger.warning('devicerecord write self: %s' % (self) )
+        _logger.warning('devicerecord write vals: %s' % (vals) )
+        for record in self:
+            _logger.warning('devicerecord write record: %s' % (record) )
+            # cards2update = []
+            # cards2update.append({ 
+            #     "event": "update",
+            #     "expire_start": "2020-05-01",
+            #     "expire_end": "2030-05-31",
+            #     'uid' : vals['uid'],
+            #     'display' :  vals['display'],
+            #     'pin': vals['pin'],
+            # })            
+            result = super(AcsDeviceRecord, self).write(vals)
+            return result
+
+    def unlink(self):
+        _logger.warning('devicerecord unlink self: %s' % (self) )
+        # cards2delete =[]
+        # cards2delete.append({
+        #         "event": "delete",
+        #         'uid' : self.uid,
+        #     })
+        result = super(AcsDeviceRecord, self).unlink()
+        return result

@@ -128,13 +128,7 @@ def save_card2device(self,cards):
         save_card2device(self,cards2update)
  """
 def call_devices_async(self,cards):    
-    #TODO: build 1 request for api/devices-async
-    # A: build card lists from CRUD operations following up
-    # C: log into logtable
-    # B: build devices-card-action list from card lists
-    #    card --> locker relate group + authorized groups --> relate devices
-    # D: build request by devices-card-action list in delete,add,update order
-    # E: send request
+
 
     logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
     payload={ "logid": logid, "device": [] }
