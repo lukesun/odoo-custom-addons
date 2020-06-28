@@ -9,14 +9,6 @@ from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationE
 
 import logging
 _logger = logging.getLogger(__name__)
-
-class AcsApilog(models.Model):
-    _name = 'acs.apilog'
-    _description = '卡機通訊紀錄'
-    devicelog_id =  fields.Char(string='卡機紀錄編號', size=16 )
-    url = fields.Char(string="網址", required=True)
-    request_data = fields.Char(string='原始資料')
-    response_data = fields.Char(string='回傳資料')
     
 class AcsCardlog(models.Model):
     _name = 'acs.cardlog'
