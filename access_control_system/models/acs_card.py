@@ -65,8 +65,11 @@ class AcsCard(models.Model):
             }
 
     def action_get_pin(self):
-        #raise UserError('Not support yet,action_get_pin.')
         for record in self:
+
+            if len(self.devicegroup_ids) == 0 and len(self.contract_ids) == 0:
+                raise UserError('尚未授權合約或群組，無法設定密碼')
+
             _logger.warning('產生密碼: %s' % (record.uid) )
             new_pin = ''
             while new_pin =='' :
@@ -78,16 +81,8 @@ class AcsCard(models.Model):
                     new_pin = ''
                     continue
                 new_pin = test_pin
-            
+            #確認密碼產生
             record.pin = new_pin
-        #     record.pin = "".join(choice(digits) for i in range(4))
-
-    def action_uid_change(self):
-        #raise UserError('Not support yet,action_uid_change.')
-        for record in self:
-            _logger.warning('換卡: %s' % (record.uid) )
-            #record.status ="換卡"
-            #record.uid.readonly = False
 
     # @api.constrains('uid')
     # def check_uid(self):
@@ -166,7 +161,6 @@ class AcsCard(models.Model):
         result = super(AcsCard, self).create(vals)
         return result
 
-
     def write(self,vals):
         for record in self:
             vals['user_role'] = record.user_role
@@ -185,34 +179,8 @@ class AcsCard(models.Model):
 
     def unlink(self):
         if self.confirmUnlink:
-            write_card_log(self ,{})
             result = super(AcsCard, self).unlink()
             return result
         else:
             raise ValidationError("禁止未確認的刪除")
 
-    # @api.constrains('devicegroup_ids')
-    # def check_devicegroup_ids(self):
-    #     for record in self:
-    #         if record.user_role == '客戶':
-    #             #客戶卡片不能使用門禁群組
-    #             for dg in record.devicegroup_ids:
-    #                 dg.unlink()
-    #             raise ValidationError('客戶卡片無法更改門禁群組授權')
-    #         else:
-    #             #非客戶卡片不能使用合約列表
-    #             for c in record.contract_ids:
-    #                 c.unlink()
-
-    # @api.constrains('contract_ids')
-    # def check_contract_ids(self):
-    #     for record in self:
-    #         if record.user_role == '客戶':
-    #             #客戶卡片不能使用門禁群組
-    #             for dg in record.devicegroup_ids:
-    #                 dg.unlink()
-    #         else:
-    #             #非客戶卡片不能使用合約列表
-    #             for c in record.contract_ids:
-    #                 c.unlink()
-    #             raise ValidationError('只有客戶卡片才能更改合約列表')

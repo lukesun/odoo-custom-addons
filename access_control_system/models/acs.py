@@ -25,6 +25,10 @@ def write_card_log(self ,vals):
         'cardsettinglog_time': datetime.datetime.now(),
         'cardsettinglog_user': self.env.user.name
     }
+    
+    cards2delete =[]
+    cards2add=[]
+    cards2update = []
 
     recordcount = 0
     #for update/delete
@@ -39,14 +43,16 @@ def write_card_log(self ,vals):
             'card_id' : record.uid,
             'pin' : record.pin,
         }
-
-        ldata['data_origin'] = '%s' % (vals_old) #json.dumps(vals_old)
         
         if 'status' in vals:
             if vals['status'] == '作廢':
             #_logger.warning( 'THIS IS DELETE!!!!!' )
                 ldata['cardsetting_type'] = '作廢'
                 ldata['card_id'] = record.uid
+                cards2delete.append({
+                        "event": "delete",
+                        'uid' : record.uid,
+                    })
         else:
             #_logger.warning( 'THIS IS UPDATE!!!!!' )
             ldata['cardsetting_type'] = '修改'
@@ -55,22 +61,66 @@ def write_card_log(self ,vals):
                 #_logger.warning( 'uid change!' )
                 ldata['card_id'] = vals['uid']
                 ldata['cardsetting_type'] = '變更卡號'
+                cards2delete.append({
+                        "event": "delete",
+                        'uid' : record.uid,
+                    })
+                cards2add.append({ 
+                        "event": "add",
+                        "expire_start": "2020-05-01",
+                        "expire_end": "2030-05-31",
+                        'uid' : vals['uid'],
+                        'display' : vals['user_name'],
+                    })
             else:
                 ldata['card_id'] = record.uid
                 # _logger.warning( 'uid no change!' )
+
             if 'pin' in vals:
                 #TODO A3 build update list
                 #_logger.warning( 'pin change!' )
                 ldata['cardsetting_type'] = '變更密碼'
+                cards2update.append({ 
+                    "event": "update",
+                    "expire_start": "2020-05-01",
+                    "expire_end": "2030-05-31",
+                    'uid' : record.uid,
+                    'display' :  record.user_name,
+                    'pin': vals['pin'],
+                })
             # else:
             #     _logger.warning( 'card_pin no change!' )
 
             if 'devicegroup_ids' in vals:
                 ldata['cardsetting_type'] = '變更群組'
-
+                vals_old['devicegroup_ids'] =  '%s' % (record.devicegroup_ids)
+                cards2delete.append({
+                        "event": "delete",
+                        'uid' : record.uid,
+                    })
+                cards2add.append({ 
+                        "event": "add",
+                        "expire_start": "2020-05-01",
+                        "expire_end": "2030-05-31",
+                        'uid' : record.uid,
+                        'display' : record.user_name,
+                    })
             if 'contract_ids' in vals:
                 ldata['cardsetting_type'] = '變更合約'
-            
+                vals_old['contract_ids'] =  '%s' % (record.contract_ids)
+                cards2delete.append({
+                        "event": "delete",
+                        'uid' : record.uid,
+                    })
+                cards2add.append({ 
+                        "event": "add",
+                        "expire_start": "2020-05-01",
+                        "expire_end": "2030-05-31",
+                        'uid' : record.uid,
+                        'display' : record.user_name,
+                    })
+            ldata['data_origin'] = '%s' % (vals_old) #json.dumps(vals_old)
+
         #C1: log into logtable
         ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         self.env['acs.cardsettinglog'].sudo().create([ldata])
@@ -89,33 +139,6 @@ def write_card_log(self ,vals):
         ldata['cardsettinglog_id'] = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
         self.env['acs.cardsettinglog'].sudo().create([ldata])
         #_logger.warning( ldata )
-
-def save_card2device(self,cards):
-
-    _logger.warning('save_card2device, %s' % ( cards ) )
-""" 
-    cards2delete =[]
-    cards2delete.append({
-            "event": "delete",
-            'uid' : record.uid,
-        })
-    cards2add=[]
-    cards2add.append({ 
-            "event": "add",
-            "expire_start": "2020-05-01",
-            "expire_end": "2030-05-31",
-            'uid' : vals['uid'],
-            'display' : vals['user_name'],
-        })
-    cards2update = []
-    cards2update.append({ 
-        "event": "update",
-        "expire_start": "2020-05-01",
-        "expire_end": "2030-05-31",
-        'uid' : vals['uid'],
-        'display' :  record.user_name,
-        'pin': vals['pin'],
-    })
     #D: build request by devices-card-action list in delete,add,update order
     if len(cards2delete) > 0:
         _logger.warning('card delete: %s' % (json.dumps(cards2delete) ) )
@@ -126,9 +149,10 @@ def save_card2device(self,cards):
     if len(cards2update) > 0:
         _logger.warning('card update: %s' % (json.dumps(cards2update) ) )
         save_card2device(self,cards2update)
- """
-def call_devices_async(self,cards):    
 
+def save_card2device(self,cards):
+
+    _logger.warning('save_card2device, %s' % ( cards ) )
 
     logid = (datetime.datetime.now() + timedelta(hours=8)).strftime('%Y%m%d-%H%M-%S-%f')
     payload={ "logid": logid, "device": [] }
@@ -137,11 +161,20 @@ def call_devices_async(self,cards):
         
         searchresult = self.env['acs.card'].sudo().search([['uid','=',card['uid'] ] ])
         if searchresult :
-            # B search authorized groups
+            
             for c in searchresult:
-                for dg in c.devicegroup_ids:
+                for dg in c.devicegroup_ids: #search authorized groups
                     for d in dg.device_ids:
-                        _logger.warning('missing card record for uid: %s' % ( card['uid'] ) )
+                        payload["device"].append({
+                            "device_id": d.code,
+                            "ip": d.ip,
+                            "port": d.port,
+                            "node": d.node,
+                            "card": [ card ]
+                        })
+            
+                for contract in c.contract_ids: #search authorized contract
+                    for d in contract.locker_id.devicegroup_id.device_ids:
                         payload["device"].append({
                             "device_id": d.code,
                             "ip": d.ip,
@@ -154,13 +187,13 @@ def call_devices_async(self,cards):
 
     if len(payload["device"]) > 0:    
         _logger.warning('sending request: %s' % (json.dumps(payload) ) )
-        #deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
-        #_logger.warning('deviceserver: %s' % (deviceserver) )
+        deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
+        _logger.warning('deviceserver: %s' % (deviceserver) )
         
         # E: begin send request to /api/devices-async
         
-        #r = requests.post(deviceserver+'/api/devices-async',data=json.dumps(payload))
-        #_logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
+        r = requests.post(deviceserver+'/api/devices-async',data=json.dumps(payload))
+        _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
         
         #if r.status_code != requests.codes.ok:
         #    'something goes wrong'

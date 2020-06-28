@@ -53,10 +53,6 @@
     <menuitem id="menu_acs_devicegroup" name="門禁群組設定" parent="menu_acs_data" action="action_acs_devicegroup"/>
     <menuitem id="menu_acs_card" name="卡片設定" parent="menu_acs_data" action="action_acs_card"/>
 
-<!--     <menuitem id="menu_acs_card" name="員工卡片設定" parent="menu_acs_data" action="action_acs_card"/>
-    <menuitem id="menu_acs_card2" name="客用卡片設定" parent="menu_acs_data" action="action_acs_card2"/>
-    <menuitem id="menu_acs_card3" name="廠商卡片設定" parent="menu_acs_data" action="action_acs_card3"/> -->
-
     <menuitem id="menu_acs_cardlog" name="門禁刷卡紀錄" parent="menu_acs_log" action="action_acs_cardlog"/>
     <menuitem id="menu_acs_cardsettinglog" name="卡片異動紀錄" parent="menu_acs_log"  action="action_acs_cardsettinglog" />
     
