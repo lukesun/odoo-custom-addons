@@ -38,7 +38,7 @@ class AcsDevice(models.Model):
         column2='device_id',
     )
     
-    devicerecord = fields.One2many('acs.devicerecord','device_id')
+    devicerecord_ids = fields.One2many('acs.devicerecord','device_id')
 
     #變更部門欄位時顯示部門代碼
     @api.onchange('department_id')

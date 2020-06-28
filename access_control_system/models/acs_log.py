@@ -59,17 +59,21 @@ class AcsCardSettinglog(models.Model):
             #json.loads(vals["data_new"])
             if 'pin' in new_vals:
                 card = self.env['acs.card'].sudo().search([ ('uid','=',vals['card_id']) , ('status','=','啟用') ] )
-                devicegroup_names = ''
-                if 'devicegroup_ids' in card:
+                devicegroup_names = []
+                if 'devicegroup_ids' in card: #內部人員
                     for dg in card.devicegroup_ids:
-                        devicegroup_names += dg.code + ','
-
+                        if dg.code not in devicegroup_names:
+                            devicegroup_names.append(dg.code)
+                if 'contract_ids' in card: #客戶
+                    for contract in card.contract_ids:
+                        if contract.locker_id.devicegroup_id.code not in devicegroup_names:
+                            devicegroup_names.append(contract.locker_id.devicegroup_id.code)
                 codelog = {
                     'accesscodelog_id': vals['cardsettinglog_id'],
                     'user_role': vals['user_role'],
                     'user_id': vals['user_id'],
                     'user_name': vals['user_name'],
-                    'devicegroup_name' : devicegroup_names,
+                    'devicegroup_name' : ",".join(devicegroup_names),
                     'create_time': datetime.datetime.now(),
                     'expire_time': datetime.datetime.now() + timedelta(hours=3),
                     'accesscode': new_vals['pin'],
@@ -95,6 +99,7 @@ class AcsCardSettinglog(models.Model):
         cards2add=[]
         cards2update = []
         for log in logs:
+            _logger.warning('log matched: %s' % (log) )
             
             cards2delete.append({
                     "event": "delete",
@@ -131,9 +136,9 @@ class AcsCardSettinglog(models.Model):
         #     })
 
         # # call api to update locker's devicegroup's devices
-        _logger.warning('sending request: %s' % (json.dumps(payload) ) )
-        deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver')
-        _logger.warning('deviceserver: %s' % (deviceserver) )
+        #_logger.warning('sending request: %s' % (json.dumps(payload) ) )
+        deviceserver=self.env['ir.config_parameter'].sudo().get_param('acs.deviceserver') #http://0.0.0.0:9090
+        #_logger.warning('deviceserver: %s' % (deviceserver) )
         # r = requests.post(deviceserver+'/api/devices-async',data=json.dumps(payload))
         # _logger.warning('%s, %s, %s' % (logid,r.status_code, r._content))
         # if r.status_code != requests.codes.ok:
