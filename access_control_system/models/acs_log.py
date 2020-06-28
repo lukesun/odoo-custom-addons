@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+import json
+import requests
+import logging
+import datetime
+from datetime import timedelta, date
 from odoo import fields, models,api
 from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationError, Warning
 
@@ -47,7 +52,38 @@ class AcsCardSettinglog(models.Model):
     data_origin = fields.Char(string='原始')
     data_new = fields.Char(string='變更')
     cardsettinglog_time = fields.Datetime(string='變更時間')
-    cardsettinglog_user = fields.Char(string='變更者')    
+    cardsettinglog_user = fields.Char(string='變更者')
+
+    @api.model
+    def create(self, vals):
+        #_logger.warning('create self: %s' % (self) )
+        #_logger.warning('create vals: %s' % (vals) )
+        result = super(AcsCardSettinglog, self).create(vals)
+        if 'data_new' in vals:
+            new_vals = eval( vals["data_new"] ) #, type( eval(vals["data_new"]) )
+            #_logger.warning('AcsCardSettinglog create vals: %s' % (vals) )
+            #_logger.warning('data_new vals: %s' % (new_vals) )
+
+            #json.loads(vals["data_new"])
+            if 'pin' in new_vals:
+                card = self.env['acs.card'].sudo().search([ ('uid','=',vals['card_id']) , ('status','=','啟用') ] )
+                devicegroup_names = ''
+                if 'devicegroup_ids' in card:
+                    for dg in card.devicegroup_ids:
+                        devicegroup_names += dg.code + ','
+
+                codelog = {
+                    'accesscodelog_id': vals['cardsettinglog_id'],
+                    'user_role': vals['user_role'],
+                    'user_id': vals['user_id'],
+                    'user_name': vals['user_name'],
+                    'devicegroup_name' : devicegroup_names,
+                    'create_time': datetime.datetime.now(),
+                    'expire_time': datetime.datetime.now() + timedelta(hours=3),
+                    'accesscode': new_vals['pin'],
+                }
+                self.env['acs.accesscodelog'].sudo().create([codelog])
+        return result
 
 class AcsAccessCodelog(models.Model):
     _name = 'acs.accesscodelog'

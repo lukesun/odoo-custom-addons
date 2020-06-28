@@ -3,6 +3,7 @@ import json
 import requests
 import logging
 import datetime
+import random
 from datetime import timedelta, date
 from odoo import fields, models,api
 from odoo.exceptions import AccessError, UserError, RedirectWarning, ValidationError, Warning
@@ -67,6 +68,18 @@ class AcsCard(models.Model):
         #raise UserError('Not support yet,action_get_pin.')
         for record in self:
             _logger.warning('產生密碼: %s' % (record.uid) )
+            new_pin = ''
+            while new_pin =='' :
+                test_pin = str( random.randint(1000,9999) )
+                logs = self.env['acs.accesscodelog'].sudo().search(
+                    [ ('accesscode','=', test_pin ) ,('expire_time','>',datetime.datetime.now() ) ] )
+                for log in logs:
+                    _logger.warning('重複的密碼: %s' % (log) )
+                    new_pin = ''
+                    continue
+                new_pin = test_pin
+            
+            record.pin = new_pin
         #     record.pin = "".join(choice(digits) for i in range(4))
 
     def action_uid_change(self):

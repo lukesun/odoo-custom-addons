@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 def write_card_log(self ,vals):
     #_logger.warning( self )
-    #_logger.warning( 'vals:' + json.dumps(vals) )
+    _logger.warning( 'write_card_log vals: %s' % (vals) )
     #use new vals for display
     ldata = {
         'cardsettinglog_id': '',
@@ -37,7 +37,7 @@ def write_card_log(self ,vals):
             'user_id': record.user_code, 
             'user_name': record.user_name,
             'card_id' : record.uid,
-            'card_pin' : record.pin,
+            'pin' : record.pin,
         }
 
         ldata['data_origin'] = '%s' % (vals_old) #json.dumps(vals_old)
